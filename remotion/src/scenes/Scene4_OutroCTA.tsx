@@ -1,139 +1,207 @@
 import React from "react";
 import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
 import { THEME } from "../types";
-import { ThreeCanvasWrapper } from "../components/ThreeCanvasWrapper";
-import { ParticleField3D } from "../components/ParticleField3D";
-import { StealthEmblem3D } from "../components/StealthEmblem3D";
-import { GlassBadge2D } from "../components/GlassBadge2D";
 
 export const Scene4_OutroCTA: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  const opacity = interpolate(frame, [0, 15], [0, 1], {
+  // Opacity transitions (fade in 0-10, stays visible)
+  const opacity = interpolate(frame, [0, 10], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
 
-  const scaleProgress = spring({
+  const scale = spring({
     frame,
     fps,
-    config: { damping: 12, stiffness: 80 },
+    config: { damping: 14, stiffness: 100 },
   });
+
+  const pulse = Math.sin(frame * 0.2) * 0.05 + 1;
 
   return (
     <AbsoluteFill
       style={{
         opacity,
         backgroundColor: THEME.colors.background,
-        overflow: "hidden",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "40px 60px",
+        fontFamily: THEME.typography.fontFamily,
       }}
     >
-      {/* 3D WebGL Layer with rotating StealthEmblem3D */}
-      <ThreeCanvasWrapper cameraPosition={[0, 0, 5]} cameraFov={50}>
-        <ParticleField3D count={150} spread={10} />
-        <StealthEmblem3D scale={1.2} />
-      </ThreeCanvasWrapper>
-
-      {/* 2D Crisp DOM Overlay */}
-      <AbsoluteFill
+      {/* Title */}
+      <div
         style={{
-          padding: "70px 80px",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          alignItems: "center",
           textAlign: "center",
-          pointerEvents: "none",
+          marginBottom: 30,
+          transform: `scale(${interpolate(scale, [0, 1], [0.95, 1])})`,
         }}
       >
-        {/* Top Tagline */}
-        <div>
-          <GlassBadge2D
-            label="100% OPEN SOURCE • MIT LICENSE"
-            icon="⭐"
-            variant="cyan"
-            style={{ fontSize: "14px", padding: "8px 20px" }}
-          />
+        <div
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 8,
+            backgroundColor: "rgba(0, 240, 255, 0.12)",
+            border: "1px solid rgba(0, 240, 255, 0.4)",
+            padding: "6px 18px",
+            borderRadius: 20,
+            color: "#00F0FF",
+            fontSize: 13,
+            fontWeight: 800,
+            letterSpacing: "0.08em",
+            marginBottom: 12,
+          }}
+        >
+          🚀 OPEN SOURCE & 100% PRIVATE
+        </div>
+        <h1
+          style={{
+            margin: 0,
+            fontSize: 48,
+            fontWeight: 900,
+            color: "#FFFFFF",
+            letterSpacing: "-0.02em",
+          }}
+        >
+          Built for Presenters, Engineers & Creators
+        </h1>
+        <p style={{ margin: "10px 0 0 0", fontSize: 20, color: "#94A3B8" }}>
+          Never get caught looking at notes again. Free and open source on GitHub.
+        </p>
+      </div>
+
+      {/* 4 Performance Bento Cards */}
+      <div
+        style={{
+          width: 1280,
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr 1fr 1fr",
+          gap: 20,
+          marginBottom: 36,
+        }}
+      >
+        <div
+          style={{
+            backgroundColor: "rgba(15, 23, 42, 0.7)",
+            border: "1px solid rgba(0, 240, 255, 0.3)",
+            borderRadius: 14,
+            padding: 24,
+            textAlign: "center",
+            boxShadow: "0 10px 30px rgba(0, 0, 0, 0.5)",
+          }}
+        >
+          <div style={{ fontSize: 32, fontWeight: 900, color: "#00F0FF" }}>5.0 MB</div>
+          <div style={{ fontSize: 14, fontWeight: 700, color: "#FFFFFF", marginTop: 4 }}>Lightweight Binary</div>
+          <div style={{ fontSize: 11, color: "#94A3B8", marginTop: 4 }}>Native Rust • 95% smaller than Electron</div>
         </div>
 
-        {/* Center Brand Hero */}
-        <div style={{ transform: `scale(${scaleProgress})` }}>
-          <h1
-            style={{
-              fontSize: "76px",
-              fontWeight: 900,
-              letterSpacing: "0.06em",
-              margin: "0 0 16px 0",
-              background: "linear-gradient(135deg, #FFFFFF 30%, #00F0FF 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              filter: "drop-shadow(0 10px 30px rgba(0, 240, 255, 0.4))",
-            }}
-          >
-            StealthPrompter
-          </h1>
-          <p
-            style={{
-              fontSize: "28px",
-              fontWeight: 600,
-              color: THEME.colors.cyanAccent,
-              margin: "0 0 16px 0",
-              letterSpacing: "0.02em",
-            }}
-          >
-            Invisible. Fast. Lightweight.
-          </p>
-          <p
-            style={{
-              fontSize: "20px",
-              color: THEME.colors.textSecondary,
-              maxWidth: "760px",
-              margin: "0 auto",
-              lineHeight: "1.5",
-            }}
-          >
-            The open-source invisible teleprompter that stays hidden from screen sharing and recordings.
-          </p>
+        <div
+          style={{
+            backgroundColor: "rgba(15, 23, 42, 0.7)",
+            border: "1px solid rgba(16, 185, 129, 0.3)",
+            borderRadius: 14,
+            padding: 24,
+            textAlign: "center",
+            boxShadow: "0 10px 30px rgba(0, 0, 0, 0.5)",
+          }}
+        >
+          <div style={{ fontSize: 32, fontWeight: 900, color: "#10B981" }}>38 MB</div>
+          <div style={{ fontSize: 14, fontWeight: 700, color: "#FFFFFF", marginTop: 4 }}>Idle Memory</div>
+          <div style={{ fontSize: 11, color: "#94A3B8", marginTop: 4 }}>SolidJS zero-VDOM 144Hz scroll</div>
         </div>
 
-        {/* Badges & Call to Action */}
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "24px" }}>
-          <div style={{ display: "flex", gap: "16px", flexWrap: "wrap", justifyContent: "center" }}>
-            <GlassBadge2D label="Tauri 2 + Rust" variant="cyan" />
-            <GlassBadge2D label="WDA_EXCLUDEFROMCAPTURE" variant="emerald" />
-            <GlassBadge2D label="Zero Telemetry" variant="cyan" />
-            <GlassBadge2D label="Windows 10 / 11 Native" variant="emerald" />
-          </div>
+        <div
+          style={{
+            backgroundColor: "rgba(15, 23, 42, 0.7)",
+            border: "1px solid rgba(245, 158, 11, 0.3)",
+            borderRadius: 14,
+            padding: 24,
+            textAlign: "center",
+            boxShadow: "0 10px 30px rgba(0, 0, 0, 0.5)",
+          }}
+        >
+          <div style={{ fontSize: 32, fontWeight: 900, color: "#F59E0B" }}>100%</div>
+          <div style={{ fontSize: 14, fontWeight: 700, color: "#FFFFFF", marginTop: 4 }}>Offline & Local</div>
+          <div style={{ fontSize: 11, color: "#94A3B8", marginTop: 4 }}>Zero telemetry • No cloud sync</div>
+        </div>
 
+        <div
+          style={{
+            backgroundColor: "rgba(15, 23, 42, 0.7)",
+            border: "1px solid rgba(168, 85, 247, 0.3)",
+            borderRadius: 14,
+            padding: 24,
+            textAlign: "center",
+            boxShadow: "0 10px 30px rgba(0, 0, 0, 0.5)",
+          }}
+        >
+          <div style={{ fontSize: 32, fontWeight: 900, color: "#A855F7" }}>0ms</div>
+          <div style={{ fontSize: 14, fontWeight: 700, color: "#FFFFFF", marginTop: 4 }}>Focus Stealing</div>
+          <div style={{ fontSize: 11, color: "#94A3B8", marginTop: 4 }}>Global hotkeys with WS_EX_NOACTIVATE</div>
+        </div>
+      </div>
+
+      {/* GitHub Call to Action Banner */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 24,
+          backgroundColor: "rgba(2, 6, 23, 0.9)",
+          border: "2px solid rgba(0, 240, 255, 0.5)",
+          borderRadius: 20,
+          padding: "18px 40px",
+          boxShadow: "0 20px 50px rgba(0, 0, 0, 0.8), 0 0 35px rgba(0, 240, 255, 0.25)",
+          transform: `scale(${pulse})`,
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
           <div
             style={{
-              padding: "16px 36px",
-              borderRadius: "14px",
-              backgroundColor: "rgba(14, 17, 26, 0.85)",
-              border: "1px solid rgba(0, 240, 255, 0.5)",
-              backdropFilter: "blur(16px)",
-              boxShadow: "0 10px 30px rgba(0, 240, 255, 0.2)",
+              width: 44,
+              height: 44,
+              borderRadius: 12,
+              backgroundColor: "#FFFFFF",
+              color: "#000000",
               display: "flex",
               alignItems: "center",
-              gap: "16px",
+              justifyContent: "center",
+              fontWeight: 900,
+              fontSize: 22,
             }}
           >
-            <span style={{ fontSize: "20px" }}>⭐</span>
-            <span
-              style={{
-                fontFamily: THEME.typography.monoFamily,
-                fontSize: "20px",
-                fontWeight: 700,
-                color: "#FFFFFF",
-                letterSpacing: "0.02em",
-              }}
-            >
-              github.com/StealthPrompter/stealth-prompter
+            ★
+          </div>
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <span style={{ fontSize: 18, fontWeight: 800, color: "#FFFFFF" }}>
+              Star on GitHub • StealthPrompter
+            </span>
+            <span style={{ fontSize: 13, color: "#00F0FF", fontFamily: THEME.typography.monoFamily }}>
+              github.com/stealthprompter/stealthprompter
             </span>
           </div>
         </div>
-      </AbsoluteFill>
+
+        <div
+          style={{
+            backgroundColor: "#10B981",
+            color: "#000000",
+            padding: "10px 24px",
+            borderRadius: 10,
+            fontSize: 14,
+            fontWeight: 800,
+            letterSpacing: "0.05em",
+            boxShadow: "0 0 20px rgba(16, 185, 129, 0.5)",
+          }}
+        >
+          DOWNLOAD RELEASE (WIN 10 / 11)
+        </div>
+      </div>
     </AbsoluteFill>
   );
 };

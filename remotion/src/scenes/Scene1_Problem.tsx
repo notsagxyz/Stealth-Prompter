@@ -1,32 +1,24 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
-import * as THREE from "three";
 import { THEME } from "../types";
-import { ThreeCanvasWrapper } from "../components/ThreeCanvasWrapper";
-import { GlassBadge2D } from "../components/GlassBadge2D";
-import { ParticleField3D } from "../components/ParticleField3D";
 
 export const Scene1_Problem: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  // Opacity transitions (fade in 0-12, fade out 103-115)
-  const opacity = interpolate(frame, [0, 12, 103, 115], [0, 1, 1, 0], {
+  // Opacity transitions (fade in 0-10, fade out 105-115)
+  const opacity = interpolate(frame, [0, 10, 105, 115], [0, 1, 1, 0], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
 
-  const titleProgress = spring({
+  const slideUp = spring({
     frame,
     fps,
     config: { damping: 14, stiffness: 100 },
   });
 
-  const jitterX = Math.sin(frame * 0.8) * 0.03;
-  const jitterY = Math.cos(frame * 0.9) * 0.03;
-
-  const monitorGeo = useMemo(() => new THREE.BoxGeometry(4.2, 2.4, 0.1), []);
-  const monitorEdgesGeo = useMemo(() => new THREE.EdgesGeometry(monitorGeo), [monitorGeo]);
+  const alertPulse = Math.sin(frame * 0.25) * 0.15 + 0.85;
 
   return (
     <AbsoluteFill
@@ -34,173 +26,165 @@ export const Scene1_Problem: React.FC = () => {
         opacity,
         backgroundColor: THEME.colors.background,
         display: "flex",
+        flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
+        padding: "40px 60px",
+        fontFamily: THEME.typography.fontFamily,
       }}
     >
-      {/* 3D WebGL Layer */}
-      <ThreeCanvasWrapper cameraPosition={[0, 0, 5]} cameraFov={50}>
-        <ParticleField3D count={80} spread={8} />
-
-        {/* Tilted virtual monitor mesh floating in space with chaotic shake */}
-        <group position={[jitterX, jitterY, 0]} rotation={[0.1, -0.15, 0]}>
-          <mesh geometry={monitorGeo}>
-            <meshStandardMaterial color="#1a1c26" roughness={0.3} metalness={0.7} />
-          </mesh>
-          <lineSegments geometry={monitorEdgesGeo}>
-            <lineBasicMaterial color="#EF4444" linewidth={2} />
-          </lineSegments>
-        </group>
-
-        {/* 3 Floating warning panels in 3D */}
-        <mesh position={[-1.8, 1.2, 0.4]} rotation={[0, 0.2, 0]}>
-          <boxGeometry args={[1.8, 0.5, 0.05]} />
-          <meshStandardMaterial color="#7F1D1D" roughness={0.4} />
-        </mesh>
-        <mesh position={[1.8, 0.8, 0.6]} rotation={[0, -0.2, 0]}>
-          <boxGeometry args={[2.0, 0.5, 0.05]} />
-          <meshStandardMaterial color="#7F1D1D" roughness={0.4} />
-        </mesh>
-        <mesh position={[0, -1.3, 0.5]} rotation={[0.1, 0, 0]}>
-          <boxGeometry args={[2.2, 0.5, 0.05]} />
-          <meshStandardMaterial color="#991B1B" roughness={0.4} />
-        </mesh>
-      </ThreeCanvasWrapper>
-
-      {/* 2D Crisp DOM Overlay */}
-      <AbsoluteFill
+      {/* Scene Header */}
+      <div
         style={{
-          padding: "80px",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          pointerEvents: "none",
+          textAlign: "center",
+          marginBottom: 30,
+          transform: `translateY(${interpolate(slideUp, [0, 1], [30, 0])}px)`,
         }}
       >
-        {/* Top Warning Banner */}
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <GlassBadge2D
-            label="SCREEN SHARE ACTIVE: ENTIRE DISPLAY"
-            icon="⚠"
-            variant="warning"
-            style={{ fontSize: "14px", padding: "8px 18px" }}
-          />
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "10px",
-              color: THEME.colors.dangerAccent,
-              fontWeight: 700,
-              fontSize: "14px",
-              letterSpacing: "0.08em",
-            }}
-          >
-            <span
-              style={{
-                width: "10px",
-                height: "10px",
-                borderRadius: "50%",
-                backgroundColor: THEME.colors.dangerAccent,
-                boxShadow: "0 0 10px #EF4444",
-              }}
-            />
-            LIVE ON ZOOM / OBS / TEAMS
+        <div
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 8,
+            backgroundColor: "rgba(239, 68, 68, 0.15)",
+            border: "1px solid rgba(239, 68, 68, 0.5)",
+            padding: "6px 16px",
+            borderRadius: 20,
+            color: "#EF4444",
+            fontSize: 13,
+            fontWeight: 800,
+            letterSpacing: "0.08em",
+            marginBottom: 12,
+          }}
+        >
+          ⚠️ THE SCREEN SHARE EMBARRASSMENT
+        </div>
+        <h1
+          style={{
+            margin: 0,
+            fontSize: 48,
+            fontWeight: 900,
+            color: "#FFFFFF",
+            letterSpacing: "-0.02em",
+          }}
+        >
+          Traditional Teleprompters Leak Your Script
+        </h1>
+        <p style={{ margin: "10px 0 0 0", fontSize: 20, color: "#94A3B8" }}>
+          When you share your screen in Zoom, Teams or OBS, your notes are visible to everyone.
+        </p>
+      </div>
+
+      {/* Simulated Screen Share Desktop with Leaked Prompter */}
+      <div
+        style={{
+          width: 1280,
+          height: 640,
+          backgroundColor: "#0F172A",
+          borderRadius: 16,
+          border: "3px solid #10B981", // Zoom screen share border
+          boxShadow: "0 25px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(16, 185, 129, 0.2)",
+          position: "relative",
+          display: "flex",
+          flexDirection: "column",
+          overflow: "hidden",
+        }}
+      >
+        {/* Zoom Screen Share Banner */}
+        <div
+          style={{
+            height: 34,
+            backgroundColor: "#10B981",
+            color: "#000000",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            padding: "0 16px",
+            fontSize: 12,
+            fontWeight: 800,
+            letterSpacing: "0.05em",
+          }}
+        >
+          <span>🔴 ZOOM SCREEN SHARING ACTIVE • YOU ARE SHARING YOUR SCREEN</span>
+          <span>STOP SHARE [Alt+S]</span>
+        </div>
+
+        {/* Desktop Presentation Behind */}
+        <div style={{ flex: 1, padding: 40, display: "flex", flexDirection: "column", justifyContent: "space-between", backgroundColor: "#090D1A" }}>
+          <div>
+            <span style={{ color: "#38BDF8", fontSize: 13, fontWeight: 700 }}>EXECUTIVE PRESENTATION 2026</span>
+            <h2 style={{ fontSize: 42, color: "#FFFFFF", margin: "10px 0" }}>Quarterly Business Review</h2>
+            <p style={{ fontSize: 18, color: "#94A3B8" }}>Confidential strategy slide deck presented live to stakeholders.</p>
+          </div>
+
+          <div style={{ display: "flex", gap: 24 }}>
+            <div style={{ flex: 1, height: 120, backgroundColor: "#1E293B", borderRadius: 8, padding: 16 }}>
+              <div style={{ color: "#94A3B8", fontSize: 13 }}>Revenue Target</div>
+              <div style={{ color: "#38BDF8", fontSize: 28, fontWeight: 800, marginTop: 8 }}>$4.8M (+34%)</div>
+            </div>
+            <div style={{ flex: 1, height: 120, backgroundColor: "#1E293B", borderRadius: 8, padding: 16 }}>
+              <div style={{ color: "#94A3B8", fontSize: 13 }}>New Accounts</div>
+              <div style={{ color: "#10B981", fontSize: 28, fontWeight: 800, marginTop: 8 }}>+1,420 Active</div>
+            </div>
+            <div style={{ flex: 1, height: 120, backgroundColor: "#1E293B", borderRadius: 8, padding: 16 }}>
+              <div style={{ color: "#94A3B8", fontSize: 13 }}>Retention Rate</div>
+              <div style={{ color: "#A855F7", fontSize: 28, fontWeight: 800, marginTop: 8 }}>98.6%</div>
+            </div>
           </div>
         </div>
 
-        {/* Center Warning Cards */}
-        <div style={{ position: "relative", width: "100%", height: "400px" }}>
-          {/* Card 1 */}
-          <div
-            style={{
-              position: "absolute",
-              top: "40px",
-              left: "140px",
-              padding: "16px 24px",
-              borderRadius: "12px",
-              backgroundColor: "rgba(239, 68, 68, 0.15)",
-              border: "1px solid rgba(239, 68, 68, 0.5)",
-              backdropFilter: "blur(12px)",
-              color: "#FCA5A5",
-              fontWeight: 600,
-              fontSize: "16px",
-              transform: `translateY(${Math.sin(frame * 0.1) * 6}px)`,
-              boxShadow: "0 10px 25px rgba(0, 0, 0, 0.5)",
-            }}
-          >
-            ⚠ PRIVATE NOTES EXPOSED TO AUDIENCE
+        {/* Giant Leaked Teleprompter Window Sitting on Top */}
+        <div
+          style={{
+            position: "absolute",
+            top: 70,
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: 780,
+            backgroundColor: "rgba(15, 23, 42, 0.95)",
+            border: "2px solid #EF4444",
+            borderRadius: 14,
+            padding: 24,
+            boxShadow: "0 20px 40px rgba(0, 0, 0, 0.8), 0 0 30px rgba(239, 68, 68, 0.4)",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14, borderBottom: "1px solid rgba(255, 255, 255, 0.1)", paddingBottom: 8 }}>
+            <span style={{ fontSize: 13, fontWeight: 800, color: "#EF4444" }}>
+              GENERIC TELEPROMPTER APP (VISIBLE TO AUDIENCE)
+            </span>
+            <span style={{ fontSize: 11, color: "#94A3B8" }}>Speed: 140 WPM</span>
           </div>
 
-          {/* Card 2 */}
-          <div
-            style={{
-              position: "absolute",
-              top: "120px",
-              right: "160px",
-              padding: "16px 24px",
-              borderRadius: "12px",
-              backgroundColor: "rgba(245, 158, 11, 0.15)",
-              border: "1px solid rgba(245, 158, 11, 0.5)",
-              backdropFilter: "blur(12px)",
-              color: "#FDE68A",
-              fontWeight: 600,
-              fontSize: "16px",
-              transform: `translateY(${Math.cos(frame * 0.12) * 6}px)`,
-              boxShadow: "0 10px 25px rgba(0, 0, 0, 0.5)",
-            }}
-          >
-            ⚠ EYE CONTACT LOST: LOOKING AT 2ND MONITOR
-          </div>
-
-          {/* Card 3 */}
-          <div
-            style={{
-              position: "absolute",
-              bottom: "40px",
-              left: "35%",
-              padding: "16px 24px",
-              borderRadius: "12px",
-              backgroundColor: "rgba(239, 68, 68, 0.2)",
-              border: "1px solid rgba(239, 68, 68, 0.6)",
-              backdropFilter: "blur(12px)",
-              color: "#FCA5A5",
-              fontWeight: 600,
-              fontSize: "16px",
-              transform: `translateY(${Math.sin(frame * 0.15) * 8}px)`,
-              boxShadow: "0 10px 25px rgba(0, 0, 0, 0.5)",
-            }}
-          >
-            ⚠ CLUNKY PROMPTER OVERLAYS BREAK FOCUS
-          </div>
-        </div>
-
-        {/* Bottom Headline */}
-        <div style={{ textAlign: "center", transform: `scale(${titleProgress})` }}>
-          <h1
-            style={{
-              fontSize: "56px",
-              fontWeight: 800,
-              letterSpacing: "-0.02em",
-              margin: "0 0 12px 0",
-              color: THEME.colors.textPrimary,
-              textShadow: "0 4px 20px rgba(0, 0, 0, 0.8)",
-            }}
-          >
-            The Screen Share Dilemma
-          </h1>
-          <p
-            style={{
-              fontSize: "24px",
-              color: THEME.colors.textSecondary,
-              margin: 0,
-              fontWeight: 400,
-            }}
-          >
-            Clunky floating notes. Awkward side glances. Accidental leaks.
+          <p style={{ margin: "0 0 10px 0", fontSize: 22, fontWeight: 700, color: "#FFFFFF" }}>
+            "Good morning investors. Remember: don't mention Q3 churn numbers unless asked directly..."
           </p>
+          <div style={{ color: "#F59E0B", fontSize: 13, fontWeight: 700, fontFamily: THEME.typography.monoFamily }}>
+            [CUE: Pretend to be confident and look at the webcam]
+          </div>
+
+          {/* Red Warning Overlay Stamp */}
+          <div
+            style={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: `translate(-50%, -50%) rotate(-6deg) scale(${alertPulse})`,
+              backgroundColor: "rgba(239, 68, 68, 0.95)",
+              color: "#FFFFFF",
+              padding: "12px 32px",
+              borderRadius: 8,
+              fontSize: 22,
+              fontWeight: 900,
+              letterSpacing: "0.08em",
+              boxShadow: "0 10px 30px rgba(0, 0, 0, 0.6)",
+              textAlign: "center",
+              border: "3px solid #FFFFFF",
+            }}
+          >
+            ❌ YOUR AUDIENCE SEES THIS!
+          </div>
         </div>
-      </AbsoluteFill>
+      </div>
     </AbsoluteFill>
   );
 };
