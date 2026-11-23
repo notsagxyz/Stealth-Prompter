@@ -24,8 +24,11 @@ updated: 2026-11-23
 - **M2 (Core Rust Architecture & WindowPlatform)**: COMPLETADO.
 - **M3 (Tauri 2 App, Multi-Window HUD & Hotkeys)**: COMPLETADO.
 - **M4 (Invisibility & Performance Verification Suite)**: COMPLETADO.
-- **M5 (Launch Video Remotion 3D, Docs & GitHub Release)**: EN FASE DE INTEGRACIÓN FINAL.
-- **E2E Testing Track**: 249/249 pruebas automáticas superadas (100% PASS).
+- **M5 (Launch Video Remotion 3D, Docs & GitHub Release)**: COMPLETADO.
+- **Artefactos Verificados**:
+  - `StealthPrompter.exe` (5.05 MB standalone release con Win32 `WDA_EXCLUDEFROMCAPTURE` y SolidJS frontend integrado).
+  - `launch.mp4` (15.00s Full HD 1080p @ 30fps renderizado determinista en Remotion).
+- **E2E Testing Track**: 270/270 pruebas automáticas superadas (100% PASS).
 
 ---
 

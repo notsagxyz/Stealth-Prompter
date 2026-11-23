@@ -25,6 +25,9 @@ src-tauri/target/
 src-tauri/gen/
 **/*.rs.bk
 *.pdb
+*.exe
+*.dll
+vault/06-Video/*.mp4
 
 # ------------------------------------------------------------------------------
 # 3. Node.js, SolidJS, Vite & Package Managers

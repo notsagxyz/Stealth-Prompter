@@ -9,7 +9,7 @@ tags:
   - rust
 created: 2026-11-22
 updated: 2026-11-23
-status: in-progress
+status: completed
 ---
 
 # 🚀 Teleprompter Invisible (Open Source) — Master Vault Index
@@ -73,5 +73,4 @@ Este proyecto se construye bajo un protocolo riguroso de **ingeniería limpia (C
 | **M2** | Core Rust & `WindowPlatform` Trait | `[[03-Arquitectura/ADR-001-Stack-Tauri2-Rust]]`, `[[03-Arquitectura/ADR-002-Window-Capture-Exclusion]]` | **COMPLETADO (Gate PASS)** |
 | **M3** | Tauri 2 Multi-Ventana & HUD Prompter | `[[04-Diseno/Launcher-UX]]`, `[[04-Diseno/Prompter-HUD]]` | **COMPLETADO (Gate PASS)** |
 | **M4** | Suite de Verificación de Invisibilidad | `[[01-Analisis/OBS-Verification]]`, scripts de verificación y benchmarks | **COMPLETADO (Gate PASS)** |
-| **M5** | Video 3D Remotion, Docs & CI/CD | `[[05-Marketing/Copy-Twitter-X]]`, `[[06-Video/Storyboard-3D]]` | **COMPLETADO (Gate PASS)** |
-| **M5** | Video 3D Remotion & Release GitHub | `[[06-Video/Storyboard-3D]]`, `[[05-Marketing/Copy-Twitter-X]]` | Planificado |
+| **M5** | Video 3D Remotion, Binario Release & CI/CD | `[[05-Marketing/Copy-Twitter-X]]`, `[[06-Video/Storyboard-3D]]`, `[[Log]]` | **COMPLETADO (Gate PASS)** |
