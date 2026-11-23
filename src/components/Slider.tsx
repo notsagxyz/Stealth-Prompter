@@ -16,8 +16,8 @@ export function Slider(props: SliderProps): JSX.Element {
     <div class={`flex flex-col gap-1.5 ${props.class || ''}`}>
       <div class="flex justify-between items-center text-xs">
         <span class="text-slate-300 font-medium">{props.label}</span>
-        <span class="text-cyber-cyan font-mono font-semibold">
-          {props.value}
+        <span class="text-white font-mono font-medium bg-white/[0.06] px-2 py-0.5 rounded border border-white/10">
+          {typeof props.value === 'number' && props.step && props.step < 1 ? props.value.toFixed(1) : props.value}
           {props.unit || ''}
         </span>
       </div>
@@ -28,7 +28,7 @@ export function Slider(props: SliderProps): JSX.Element {
         step={props.step || 1}
         value={props.value}
         onInput={(e) => props.onChange(parseFloat(e.currentTarget.value))}
-        class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-cyber-cyan focus:outline-none focus:ring-1 focus:ring-cyber-cyan"
+        class="w-full h-1.5 bg-white/10 rounded-lg appearance-none cursor-pointer accent-white focus:outline-none"
       />
     </div>
   );

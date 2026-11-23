@@ -1,8 +1,8 @@
 import type { JSX } from 'solid-js';
 
 export interface ButtonProps {
-  variant?: 'cyber' | 'emerald' | 'ghost' | 'danger';
-  size?: 'sm' | 'md' | 'lg';
+  variant?: 'primary' | 'secondary' | 'ghost' | 'danger' | 'cyber' | 'emerald';
+  size?: 'sm' | 'md' | 'lg' | 'icon';
   disabled?: boolean;
   class?: string;
   onClick?: (e: MouseEvent) => void;
@@ -11,27 +11,29 @@ export interface ButtonProps {
 }
 
 export function Button(props: ButtonProps): JSX.Element {
-  const variant = props.variant || 'cyber';
+  const rawVariant = props.variant || 'secondary';
+  const variant = rawVariant === 'cyber' || rawVariant === 'emerald' ? 'primary' : rawVariant;
   const size = props.size || 'md';
 
   const baseStyles =
-    'inline-flex items-center justify-center font-medium rounded-lg transition-all duration-150 focus:outline-none focus:ring-2 disabled:opacity-40 disabled:cursor-not-allowed select-none cursor-pointer';
+    'inline-flex items-center justify-center font-medium transition-all duration-150 focus:outline-none focus:ring-1 focus:ring-white/30 disabled:opacity-30 disabled:cursor-not-allowed select-none cursor-pointer';
 
   const sizeStyles = {
-    sm: 'text-xs px-2.5 py-1.5 gap-1.5',
-    md: 'text-sm px-3.5 py-2 gap-2',
-    lg: 'text-base px-5 py-2.5 gap-2.5',
+    sm: 'text-xs px-2.5 py-1.5 rounded-lg gap-1.5',
+    md: 'text-sm px-3.5 py-2 rounded-xl gap-2',
+    lg: 'text-base px-5 py-2.5 rounded-xl gap-2.5',
+    icon: 'p-1.5 rounded-lg',
   }[size];
 
   const variantStyles = {
-    cyber:
-      'border border-cyber-cyan/40 text-cyber-cyan bg-cyber-cyan/10 hover:bg-cyber-cyan/20 hover:border-cyber-cyan focus:ring-cyber-cyan/50 shadow-cyber',
-    emerald:
-      'border border-stealth-emerald/40 text-stealth-emerald bg-stealth-emerald/10 hover:bg-stealth-emerald/20 hover:border-stealth-emerald focus:ring-stealth-emerald/50 shadow-emerald',
+    primary:
+      'bg-white text-black hover:bg-neutral-200 font-semibold shadow-sm active:scale-[0.98]',
+    secondary:
+      'bg-white/[0.06] hover:bg-white/[0.12] text-white border border-white/10 active:scale-[0.98]',
     ghost:
-      'border border-obsidian-border text-slate-300 hover:text-white hover:bg-white/5 focus:ring-white/20',
+      'text-white/70 hover:text-white hover:bg-white/[0.06] active:bg-white/[0.1]',
     danger:
-      'border border-rose-500/40 text-rose-400 bg-rose-500/10 hover:bg-rose-500/20 hover:border-rose-500 focus:ring-rose-500/50',
+      'text-red-400 hover:text-red-300 hover:bg-red-500/10 border border-red-500/20',
   }[variant];
 
   return (

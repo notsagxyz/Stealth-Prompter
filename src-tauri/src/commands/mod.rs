@@ -173,7 +173,26 @@ pub async fn delete_script(
 mod tests {
     use super::*;
     use crate::platform::MockWindowPlatform;
-    use tempfile::tempdir;
+
+    struct TempDir(std::path::PathBuf);
+    impl TempDir {
+        fn new() -> Self {
+            let p = std::env::temp_dir().join(format!("sp_cmd_test_{}", std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_nanos()));
+            let _ = std::fs::create_dir_all(&p);
+            Self(p)
+        }
+        fn path(&self) -> &std::path::Path {
+            &self.0
+        }
+    }
+    impl Drop for TempDir {
+        fn drop(&mut self) {
+            let _ = std::fs::remove_dir_all(&self.0);
+        }
+    }
+    fn tempdir() -> std::io::Result<TempDir> {
+        Ok(TempDir::new())
+    }
 
     #[test]
     fn test_platform_commands_logic_with_mock() {

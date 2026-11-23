@@ -82,5 +82,15 @@ pub fn setup_shortcuts(
         });
     }
 
+    // Register Alt+L (Toggle Click-Through / Unlock)
+    if let Ok(shortcut) = "alt+l".parse::<Shortcut>() {
+        let h = app_handle.clone();
+        let _ = app.global_shortcut().on_shortcut(shortcut, move |_app, _shortcut, event| {
+            if event.state() == tauri_plugin_global_shortcut::ShortcutState::Pressed {
+                let _ = h.emit("prompter:toggle_lock", serde_json::json!({}));
+            }
+        });
+    }
+
     Ok(())
 }

@@ -9,22 +9,22 @@ export interface ReadingMarkerProps {
 
 export function ReadingMarker(props: ReadingMarkerProps): JSX.Element {
   const top = () => `${props.topPercent ?? 35}%`;
-  const height = () => `${props.heightPx ?? 2}px`;
-  const color = () => props.color ?? 'rgba(56, 189, 248, 0.4)';
 
   return (
     <div
-      class="pointer-events-none fixed left-0 right-0 z-30 transition-all duration-150"
+      class="pointer-events-none fixed left-0 right-0 z-20 flex items-center justify-between px-6 transition-all duration-200"
       style={{
         top: top(),
-        height: height(),
-        'background-color': color(),
-        'box-shadow': props.glow !== false ? '0 0 8px rgba(0, 240, 255, 0.5)' : 'none',
       }}
     >
-      {/* Visual eye-line indicator pills on edges */}
-      <div class="absolute left-2 -top-1 w-2 h-2 rounded-full bg-cyber-cyan opacity-80" />
-      <div class="absolute right-2 -top-1 w-2 h-2 rounded-full bg-cyber-cyan opacity-80" />
+      {/* Left visual eye-line pip */}
+      <div class="w-1.5 h-1.5 rounded-full bg-white/40 shadow-sm" />
+
+      {/* Subtle hairline gradient across reading plane */}
+      <div class="flex-1 mx-3 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+
+      {/* Right visual eye-line pip */}
+      <div class="w-1.5 h-1.5 rounded-full bg-white/40 shadow-sm" />
     </div>
   );
 }

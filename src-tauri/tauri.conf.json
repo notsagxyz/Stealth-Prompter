@@ -18,9 +18,10 @@
         "minHeight": 450,
         "resizable": true,
         "fullscreen": false,
-        "transparent": false,
+        "transparent": true,
         "center": true,
-        "decorations": true
+        "decorations": false,
+        "shadow": true
       },
       {
         "label": "prompter",

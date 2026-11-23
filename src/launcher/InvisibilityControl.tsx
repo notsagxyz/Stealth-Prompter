@@ -1,5 +1,5 @@
 import type { JSX } from 'solid-js';
-import { GlassCard } from '../components/GlassCard';
+import { ShieldCheckIcon, EyeOffIcon } from '../components/Icons';
 import { Switch } from '../components/Switch';
 
 export interface InvisibilityControlProps {
@@ -10,47 +10,40 @@ export interface InvisibilityControlProps {
 
 export function InvisibilityControl(props: InvisibilityControlProps): JSX.Element {
   return (
-    <GlassCard class="p-3 bg-obsidian-surface/80 border-stealth-emerald/30 shadow-emerald">
-      <div class="flex items-center justify-between gap-3">
-        <div class="flex items-center gap-2.5">
-          <div
-            class={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
-              props.enabled
-                ? 'bg-stealth-emerald shadow-emerald animate-pulse'
-                : 'bg-slate-600'
-            }`}
-          />
-          <div class="flex flex-col">
-            <div class="flex items-center gap-1.5">
-              <span class="text-xs font-bold text-slate-100">
-                Capture Invisibility Shield
-              </span>
-              <span
-                class={`text-[10px] font-mono px-1.5 py-0.2 rounded font-semibold uppercase ${
-                  props.enabled
-                    ? 'bg-stealth-emerald/20 text-stealth-emerald border border-stealth-emerald/40'
-                    : 'bg-slate-800 text-slate-400 border border-slate-700'
-                }`}
-              >
-                {props.enabled ? 'ACTIVE' : 'OFF'}
-              </span>
-            </div>
-            <span class="text-[11px] text-slate-400">
-              {props.enabled
-                ? 'Prompter HUD is 100% hidden from Zoom, Teams, OBS & Screen Capture (Win32 affinity 0x11)'
-                : 'Prompter HUD will be visible in screen sharing'}
+    <div class="flex items-center justify-between px-3.5 py-2 rounded-xl bg-white/[0.03] border border-white/[0.07] text-xs">
+      <div class="flex items-center gap-2.5">
+        <div class="p-1 rounded-md bg-white/[0.06] text-white/80">
+          {props.enabled ? <ShieldCheckIcon class="w-4 h-4" /> : <EyeOffIcon class="w-4 h-4" />}
+        </div>
+        <div class="flex flex-col">
+          <div class="flex items-center gap-2">
+            <span class="font-medium text-slate-200">
+              Screen Capture Exclusion
+            </span>
+            <span
+              class={`text-[10px] px-1.5 py-0.2 rounded font-mono ${
+                props.enabled
+                  ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30'
+                  : 'bg-white/[0.06] text-slate-400 border border-white/10'
+              }`}
+            >
+              {props.enabled ? 'Protected' : 'Visible'}
             </span>
           </div>
+          <span class="text-[11px] text-slate-400">
+            {props.enabled
+              ? 'Prompter is hidden from Zoom, Teams, Meet, OBS & screen recording'
+              : 'Prompter will be visible on shared screens'}
+          </span>
         </div>
-
-        <Switch
-          label=""
-          checked={props.enabled}
-          onChange={props.onToggle}
-          variant="emerald"
-          disabled={props.disabled}
-        />
       </div>
-    </GlassCard>
+
+      <Switch
+        label=""
+        checked={props.enabled}
+        onChange={props.onToggle}
+        disabled={props.disabled}
+      />
+    </div>
   );
 }

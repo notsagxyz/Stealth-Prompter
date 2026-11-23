@@ -356,7 +356,26 @@ impl StorageEngine {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use tempfile::tempdir;
+
+    struct TempDir(std::path::PathBuf);
+    impl TempDir {
+        fn new() -> Self {
+            let p = std::env::temp_dir().join(format!("sp_engine_test_{}", std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_nanos()));
+            let _ = std::fs::create_dir_all(&p);
+            Self(p)
+        }
+        fn path(&self) -> &std::path::Path {
+            &self.0
+        }
+    }
+    impl Drop for TempDir {
+        fn drop(&mut self) {
+            let _ = std::fs::remove_dir_all(&self.0);
+        }
+    }
+    fn tempdir() -> std::io::Result<TempDir> {
+        Ok(TempDir::new())
+    }
 
     #[test]
     fn test_atomic_write_and_read_settings() {

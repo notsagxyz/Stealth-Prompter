@@ -1,16 +1,31 @@
-import { createSignal, onMount, onCleanup, type JSX } from 'solid-js';
+import { createSignal, onMount, onCleanup, Show, type JSX } from 'solid-js';
+import { getCurrentWindow } from '@tauri-apps/api/window';
 import { ScrollEngine } from './ScrollEngine';
 import { ReadingMarker } from './ReadingMarker';
 import { HudOverlayControls } from './HudOverlayControls';
-import { loadSettings, loadScript } from '../lib/ipc';
-import { onPrompterAction, onUpdateScript, emitStateSync } from '../lib/eventBus';
+import { loadSettings, saveSettings, loadScript, setClickThrough } from '../lib/ipc';
+import { onPrompterAction, onUpdateScript, emitStateSync, onToggleLock } from '../lib/eventBus';
 import type { Script, Settings } from '../lib/types';
+
+const stepSpeed = (current: number, direction: 'up' | 'down'): number => {
+  if (direction === 'up') {
+    if (current < 1.0) return Math.round((current + 0.1) * 10) / 10;
+    if (current < 3.0) return Math.round((current + 0.2) * 10) / 10;
+    if (current < 6.0) return Math.round((current + 0.5) * 10) / 10;
+    return Math.min(15.0, Math.round(current + 1.0));
+  } else {
+    if (current <= 1.0) return Math.max(0.2, Math.round((current - 0.1) * 10) / 10);
+    if (current <= 3.0) return Math.round((current - 0.2) * 10) / 10;
+    if (current <= 6.0) return Math.round((current - 0.5) * 10) / 10;
+    return Math.round(current - 1.0);
+  }
+};
 
 export default function HudApp(): JSX.Element {
   const [script, setScript] = createSignal<Script>({
     id: 'default',
-    title: 'Welcome Script',
-    content: 'Welcome to StealthPrompter.\nYour invisible prompter overlay is active.\nUse Alt+Space to Play/Pause, Alt+Up/Down for Speed, and Alt+H to hide.',
+    title: 'Welcome Speech',
+    content: 'Welcome to StealthPrompter.\n\nYour prompter is running and completely hidden from screen recording and video calls.\n\nUse Alt+Space to Play/Pause, Alt+Up/Down for Speed, and Alt+H to show or hide this window.',
     last_position: 0,
     speed: 3.0,
     created_at: new Date().toISOString(),
@@ -44,6 +59,7 @@ export default function HudApp(): JSX.Element {
 
   let unlistenAction: (() => void) | null = null;
   let unlistenUpdate: (() => void) | null = null;
+  let unlistenLock: (() => void) | null = null;
 
   const engine = new ScrollEngine({
     speed: 3.0,
@@ -110,11 +126,11 @@ export default function HudApp(): JSX.Element {
           }
           break;
         case 'speed_up':
-          engine.setSpeed(Math.min(10, engine.speed + 1));
+          engine.setSpeed(stepSpeed(engine.speed, 'up'));
           syncState();
           break;
         case 'speed_down':
-          engine.setSpeed(Math.max(1, engine.speed - 1));
+          engine.setSpeed(stepSpeed(engine.speed, 'down'));
           syncState();
           break;
         case 'rewind':
@@ -137,58 +153,157 @@ export default function HudApp(): JSX.Element {
         }
       }
     });
+
+    unlistenLock = await onToggleLock(async () => {
+      await handleToggleClickThrough();
+    });
   });
 
   onCleanup(() => {
     engine.pause();
     if (unlistenAction) unlistenAction();
     if (unlistenUpdate) unlistenUpdate();
+    if (unlistenLock) unlistenLock();
   });
+
+  const handleToggleClickThrough = async () => {
+    const nextVal = !settings().click_through;
+    const updated = { ...settings(), click_through: nextVal };
+    setSettings(updated);
+    await setClickThrough(nextVal);
+    await saveSettings(updated);
+  };
+
+  const handleClose = async () => {
+    try {
+      engine.pause();
+      syncState();
+      await getCurrentWindow().hide();
+    } catch (err) {
+      console.warn('Error hiding window:', err);
+    }
+  };
+
+  const handleResize = (direction: 'East' | 'North' | 'NorthEast' | 'NorthWest' | 'South' | 'SouthEast' | 'SouthWest' | 'West') => (e: MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    try {
+      getCurrentWindow().startResizeDragging(direction);
+    } catch (err) {
+      console.warn('startResizeDragging error:', err);
+    }
+  };
 
   return (
     <div
-      class="w-screen h-screen bg-transparent overflow-hidden select-none pointer-events-none relative font-sans"
-      style={{
-        opacity: settings().window_opacity,
-      }}
+      class={`w-screen h-screen overflow-hidden select-none relative font-sans p-1 box-border ${
+        settings().click_through ? 'pointer-events-none' : 'pointer-events-auto'
+      }`}
     >
-      <HudOverlayControls
-        isPlaying={isPlaying()}
-        speed={speed()}
-        clickThrough={settings().click_through}
-        onTogglePlay={() => {
-          engine.toggle();
-          syncState();
+      {/* Outer Frosted Glass Container */}
+      <div
+        class="w-full h-full rounded-2xl relative overflow-hidden transition-opacity duration-200 border border-white/10 shadow-hud"
+        style={{
+          background: `rgba(12, 14, 18, ${Math.max(0.2, settings().window_opacity)})`,
+          'backdrop-filter': 'blur(28px)',
+          '-webkit-backdrop-filter': 'blur(28px)',
         }}
-        onRewind={() => {
-          engine.rewind(120);
-          syncState();
-        }}
-        onSpeedUp={() => {
-          engine.setSpeed(Math.min(10, engine.speed + 1));
-          syncState();
-        }}
-        onSpeedDown={() => {
-          engine.setSpeed(Math.max(1, engine.speed - 1));
-          syncState();
-        }}
-      />
-
-      <ReadingMarker topPercent={35} heightPx={2} glow={true} />
-
-      {/* Prompter Scrolling Canvas */}
-      <main class="w-full h-full pt-[35vh] px-12 box-border">
-        <div
-          class="will-change-transform text-white font-medium whitespace-pre-wrap transition-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"
-          style={{
-            transform: cssTransform(),
-            'font-size': `${settings().font_size}px`,
-            'line-height': `${settings().line_height}`,
+      >
+        {/* Top Control Bar with Drag Support */}
+        <HudOverlayControls
+          isPlaying={isPlaying()}
+          speed={speed()}
+          clickThrough={settings().click_through}
+          onTogglePlay={() => {
+            engine.toggle();
+            syncState();
           }}
-        >
-          {script().content}
-        </div>
-      </main>
+          onRewind={() => {
+            engine.rewind(120);
+            syncState();
+          }}
+          onSpeedUp={() => {
+            engine.setSpeed(stepSpeed(engine.speed, 'up'));
+            syncState();
+          }}
+          onSpeedDown={() => {
+            engine.setSpeed(stepSpeed(engine.speed, 'down'));
+            syncState();
+          }}
+          onToggleClickThrough={handleToggleClickThrough}
+          onClose={handleClose}
+        />
+
+        {/* Subtle Horizontal Eye-line Reading Marker */}
+        <ReadingMarker topPercent={35} heightPx={1} />
+
+        {/* Prompter Scrolling Canvas */}
+        <main class="w-full h-full pt-[35vh] px-10 box-border pointer-events-none">
+          <div
+            class="will-change-transform text-slate-100 font-normal whitespace-pre-wrap transition-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.85)] max-w-4xl mx-auto"
+            style={{
+              transform: cssTransform(),
+              'font-size': `${settings().font_size}px`,
+              'line-height': `${settings().line_height}`,
+            }}
+          >
+            {script().content}
+          </div>
+        </main>
+
+        {/* Native Win32 Window Resize Dragging Zones (Active when click-through is false) */}
+        <Show when={!settings().click_through}>
+          {/* Edges */}
+          <div
+            onMouseDown={handleResize('North')}
+            class="absolute top-0 left-4 right-4 h-2 cursor-n-resize z-50 hover:bg-white/5"
+            title="Resize Top"
+          />
+          <div
+            onMouseDown={handleResize('South')}
+            class="absolute bottom-0 left-4 right-4 h-2 cursor-s-resize z-50 hover:bg-white/5"
+            title="Resize Bottom"
+          />
+          <div
+            onMouseDown={handleResize('West')}
+            class="absolute left-0 top-4 bottom-4 w-2 cursor-w-resize z-50 hover:bg-white/5"
+            title="Resize Left"
+          />
+          <div
+            onMouseDown={handleResize('East')}
+            class="absolute right-0 top-4 bottom-4 w-2 cursor-e-resize z-50 hover:bg-white/5"
+            title="Resize Right"
+          />
+
+          {/* Corners */}
+          <div
+            onMouseDown={handleResize('NorthWest')}
+            class="absolute top-0 left-0 w-4 h-4 cursor-nw-resize z-50"
+            title="Resize Top-Left"
+          />
+          <div
+            onMouseDown={handleResize('NorthEast')}
+            class="absolute top-0 right-0 w-4 h-4 cursor-ne-resize z-50"
+            title="Resize Top-Right"
+          />
+          <div
+            onMouseDown={handleResize('SouthWest')}
+            class="absolute bottom-0 left-0 w-4 h-4 cursor-sw-resize z-50"
+            title="Resize Bottom-Left"
+          />
+
+          {/* SouthEast (Bottom-Right) Corner with Visible Diagonal Resize Grip */}
+          <div
+            onMouseDown={handleResize('SouthEast')}
+            class="absolute bottom-1 right-1 w-6 h-6 cursor-se-resize z-50 flex items-end justify-end p-1 group"
+            title="Drag to resize window"
+          >
+            <svg class="w-3.5 h-3.5 text-white/30 group-hover:text-white/70 transition-colors" viewBox="0 0 16 16" fill="none">
+              <path d="M14 14L8 14M14 10L10 14M14 6L6 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+            </svg>
+          </div>
+        </Show>
+      </div>
     </div>
   );
 }

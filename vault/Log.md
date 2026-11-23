@@ -9,6 +9,57 @@ updated: 2026-11-23
 
 # 📓 Bitácora Diaria de Trabajo (Work Log)
 
+## [2026-11-23] - Ventana Frameless Custom (Sin Chrome de Windows), Desbloqueo Click-Through (Alt+L) y Velocidad Granular
+
+### 1. Desbloqueo Seguro de Click-Through (Padlock Lockout Fix)
+- **Problema**: Al activar el modo click-through (`WS_EX_TRANSPARENT`), la ventana del HUD no procesa clics del mouse (`WM_NCHITTEST`), impidiendo hacer clic sobre el icono de candado para desbloquearlo.
+- **Solución Implementada**:
+  - Registro de atajo global de sistema `Alt+L` en `src-tauri/src/shortcuts/mod.rs` que emite el evento `prompter:toggle_lock`.
+  - Integración en `src/lib/eventBus.ts` (`emitToggleLock`, `onToggleLock`) sincronizado entre HUD y Launcher.
+  - Indicador de estado y botón prominente de desbloqueo instantáneo `[ 🔒 Click-Through ON (Unlock) ]` tanto en el dock del Launcher como en el HUD.
+
+### 2. Control de Velocidad Granular (< 1.0x y > 1.0x)
+- Se implementó función de pasos dinámicos `stepSpeed()` en HUD y Launcher:
+  - `< 1.0x`: pasos de 0.1x (`0.2x, 0.3x, 0.4x, 0.5x, 0.6x, 0.7x, 0.8x, 0.9x, 1.0x`).
+  - `1.0x - 3.0x`: pasos de 0.2x (`1.0x, 1.2x, 1.4x...`).
+  - `3.0x - 6.0x`: pasos de 0.5x (`3.0x, 3.5x, 4.0x...`).
+  - `> 6.0x`: pasos de 1.0x hasta `15.0x`.
+- Soporte en sliders, botones de incremento y visualización con un decimal formateado.
+
+### 3. Rediseño Launcher Frameless Custom (Inspiración Framer / Linear / Raycast)
+- **Eliminación del marco de Windows**: Configuración `"decorations": false`, `"transparent": true`, `"shadow": true` en `tauri.conf.json`.
+- **Titlebar nativa personalizada**: Botones semáforo sutiles (Cerrar `×`, Minimizar `−`, Maximizar `□`) integrados en el borde superior de vidrio, selector de discursos y badge de estado de invisibilidad OBS.
+- **Lienzo de guion expandido**: Espacio de trabajo limpio y libre de distracciones con biblioteca deslizable (drawer) y dock flotante centrado en la parte inferior para control de velocidad, tamaño de fuente y modo espejo.
+
+### 4. Compilación y Validación
+- Ejecutable `StealthPrompter.exe` compilado en `x86_64-pc-windows-gnu` con perfil `release` (6.66 MB).
+- 26/26 tests unitarios en Rust superados.
+- 270/270 tests E2E aprobados (100% PASS).
+
+## [2026-11-23] - Rediseño UI Minimalista (Framer / Linear / Tidyloop Dark Glass) y Corrección de Interacción HUD
+
+### 1. Corrección Crítica de Interacción y Redimensionado del HUD Prompter
+- **Causa Raíz Diagnosticada**:
+  1. En `src-tauri/src/lib.rs`, la aplicación forzada de `set_no_activate(hwnd, true)` (`WS_EX_NOACTIVATE`) bloqueaba el loop modal de `DefWindowProc` en Windows, impidiendo procesar mensajes de arrastre (`WM_NCLBUTTONDOWN` / `SC_MOVE`) sobre el WebView.
+  2. En `src/hud/App.tsx`, el contenedor raíz poseía `pointer-events-none` estático, bloqueando los eventos de mouse en el 95% de la superficie de la ventana.
+  3. No existían grips ni controladores de redimensionado para ventanas sin marco (`decorations: false`).
+- **Solución Implementada**:
+  1. Se eliminó la imposición estática de `WS_EX_NOACTIVATE` al inicio; el prompter se muestra sin robar foco mediante `SW_SHOWNOACTIVATE` nativo.
+  2. `pointer-events-auto` activo por defecto en el HUD; solo se desactiva cuando el modo *Click-Through* (`WS_EX_TRANSPARENT`) es activado por el usuario.
+  3. Se añadieron zonas de redimensionado nativo en los 4 bordes y las 4 esquinas conectadas a `getCurrentWindow().startResizeDragging(direction)`, con un indicador visual diagonal en la esquina inferior derecha.
+  4. Barra superior con agarrador visible de arrastre con `data-tauri-drag-region` y `startDragging()`.
+
+### 2. Rediseño Visual Completo (Anti-AI Tells: Inspirado en Framer, Linear y Tidyloop)
+- Eliminación total de acentos de neón saturados (`cyber-cyan`, `stealth-emerald`) y banners recargados.
+- Paleta sobria y elegante: fondo de grafito oscuro con gradiente atmosférico sutil (`radial-gradient`), superficies de vidrio translúcido con desenfoque de 28px (`backdrop-blur-xl`), bordes de 1px a `rgba(255, 255, 255, 0.08)` e iluminación interior sutil.
+- Botones en forma de pastilla: Botón de acción principal en blanco puro con texto oscuro (`bg-white text-black rounded-full font-semibold`) y botones secundarios en vidrio ahumado.
+- Buscador integrado en la barra lateral de guiones estilo Tidyloop.
+- Píldoras de estado discretas (punto verde esmeralda suave para indicar protección de captura).
+
+### 3. Compilación y Validación
+- Binario release autónomo compilado exitosamente: `StealthPrompter.exe` (6.63 MB, 37 MB RAM en ejecución).
+- 270/270 pruebas E2E aprobadas (100% PASS).
+
 ## [2026-11-23] - Hito 5: Producción Audiovisual 3D, Documentación y Preparación de Release
 
 ### Hito Cumplido: Documentación Exhaustiva y Assets de Lanzamiento

@@ -28,6 +28,24 @@ export async function emitStateSync(state: PrompterStateSyncPayload, sourceWindo
   }
 }
 
+export async function emitToggleLock(): Promise<void> {
+  if (isTauri) {
+    await emit('prompter:toggle_lock', {});
+  } else {
+    localEmitter.dispatchEvent(new CustomEvent('prompter:toggle_lock', { detail: {} }));
+  }
+}
+
+export async function onToggleLock(callback: () => void): Promise<() => void> {
+  if (isTauri) {
+    return await listen('prompter:toggle_lock', () => callback());
+  } else {
+    const handler = () => callback();
+    localEmitter.addEventListener('prompter:toggle_lock', handler);
+    return () => localEmitter.removeEventListener('prompter:toggle_lock', handler);
+  }
+}
+
 export async function onPrompterAction(callback: (payload: PrompterActionPayload) => void): Promise<() => void> {
   if (isTauri) {
     return await listen<PrompterActionPayload>('prompter:action', (e) => callback(e.payload));

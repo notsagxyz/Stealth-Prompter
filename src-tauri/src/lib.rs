@@ -69,8 +69,6 @@ pub fn run() {
                             hwnd_isize,
                             DisplayAffinity::ExcludeFromCapture,
                         );
-                        // Ensure it has WS_EX_NOACTIVATE style
-                        let _ = platform_for_setup.set_no_activate(hwnd_isize, true);
                     }
                     let _ = prompter_win.hide();
                 }
