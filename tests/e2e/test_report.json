@@ -1,11 +1,11 @@
 {
-    "timestamp":  "2026-11-23T12:10:57Z",
+    "timestamp":  "2026-11-23T18:48:00Z",
     "tier":  "All",
     "total":  270,
     "passed":  270,
     "failed":  0,
     "skipped":  0,
-    "duration_ms":  12893.35,
+    "duration_ms":  22849.6,
     "status":  "PASS",
     "results":  [
                     {
@@ -16,7 +16,7 @@
                         "passed":  5,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  238.79
+                        "duration_ms":  4042.58
                     },
                     {
                         "tier":  "1",
@@ -26,7 +26,7 @@
                         "passed":  5,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  142.83
+                        "duration_ms":  230.95
                     },
                     {
                         "tier":  "1",
@@ -36,7 +36,7 @@
                         "passed":  5,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  146.47
+                        "duration_ms":  222.75
                     },
                     {
                         "tier":  "1",
@@ -46,7 +46,7 @@
                         "passed":  5,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  146.39
+                        "duration_ms":  211.6
                     },
                     {
                         "tier":  "1",
@@ -56,7 +56,7 @@
                         "passed":  5,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  143.33
+                        "duration_ms":  259.17
                     },
                     {
                         "tier":  "1",
@@ -66,7 +66,7 @@
                         "passed":  5,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  158.46
+                        "duration_ms":  227.48
                     },
                     {
                         "tier":  "1",
@@ -76,7 +76,7 @@
                         "passed":  5,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  144.8
+                        "duration_ms":  198.86
                     },
                     {
                         "tier":  "1",
@@ -86,7 +86,7 @@
                         "passed":  5,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  140.41
+                        "duration_ms":  197.94
                     },
                     {
                         "tier":  "1",
@@ -96,7 +96,7 @@
                         "passed":  5,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  144.61
+                        "duration_ms":  276.03
                     },
                     {
                         "tier":  "1",
@@ -106,7 +106,7 @@
                         "passed":  5,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  142.03
+                        "duration_ms":  226.05
                     },
                     {
                         "tier":  "1",
@@ -116,7 +116,7 @@
                         "passed":  5,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  150.98
+                        "duration_ms":  240.18
                     },
                     {
                         "tier":  "1",
@@ -126,7 +126,7 @@
                         "passed":  5,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  145.7
+                        "duration_ms":  244.41
                     },
                     {
                         "tier":  "1",
@@ -136,7 +136,7 @@
                         "passed":  5,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  147.73
+                        "duration_ms":  496.07
                     },
                     {
                         "tier":  "1",
@@ -146,7 +146,7 @@
                         "passed":  5,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  140.53
+                        "duration_ms":  355.94
                     },
                     {
                         "tier":  "1",
@@ -156,7 +156,7 @@
                         "passed":  5,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  144.36
+                        "duration_ms":  214.9
                     },
                     {
                         "tier":  "2",
@@ -166,7 +166,7 @@
                         "passed":  5,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  140.97
+                        "duration_ms":  217.25
                     },
                     {
                         "tier":  "2",
@@ -176,7 +176,7 @@
                         "passed":  5,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  145.95
+                        "duration_ms":  215.8
                     },
                     {
                         "tier":  "2",
@@ -186,7 +186,7 @@
                         "passed":  5,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  150.14
+                        "duration_ms":  206.74
                     },
                     {
                         "tier":  "2",
@@ -196,7 +196,7 @@
                         "passed":  5,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  141.11
+                        "duration_ms":  198.22
                     },
                     {
                         "tier":  "2",
@@ -206,7 +206,7 @@
                         "passed":  5,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  138.68
+                        "duration_ms":  180.42
                     },
                     {
                         "tier":  "2",
@@ -216,7 +216,7 @@
                         "passed":  5,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  160.57
+                        "duration_ms":  205.83
                     },
                     {
                         "tier":  "2",
@@ -226,7 +226,7 @@
                         "passed":  5,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  139.57
+                        "duration_ms":  185.65
                     },
                     {
                         "tier":  "2",
@@ -236,7 +236,7 @@
                         "passed":  5,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  163.16
+                        "duration_ms":  185.93
                     },
                     {
                         "tier":  "2",
@@ -246,7 +246,7 @@
                         "passed":  5,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  142.34
+                        "duration_ms":  218.95
                     },
                     {
                         "tier":  "2",
@@ -256,7 +256,7 @@
                         "passed":  5,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  141.26
+                        "duration_ms":  186.03
                     },
                     {
                         "tier":  "2",
@@ -266,7 +266,7 @@
                         "passed":  5,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  138.48
+                        "duration_ms":  186.9
                     },
                     {
                         "tier":  "2",
@@ -276,7 +276,7 @@
                         "passed":  5,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  152.09
+                        "duration_ms":  196.79
                     },
                     {
                         "tier":  "2",
@@ -286,7 +286,7 @@
                         "passed":  5,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  142.66
+                        "duration_ms":  160.65
                     },
                     {
                         "tier":  "2",
@@ -296,7 +296,7 @@
                         "passed":  5,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  149.48
+                        "duration_ms":  204.3
                     },
                     {
                         "tier":  "2",
@@ -306,7 +306,7 @@
                         "passed":  5,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  141.31
+                        "duration_ms":  180.68
                     },
                     {
                         "tier":  "3",
@@ -316,7 +316,7 @@
                         "passed":  5,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  159.07
+                        "duration_ms":  197.17
                     },
                     {
                         "tier":  "3",
@@ -326,7 +326,7 @@
                         "passed":  5,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  142.17
+                        "duration_ms":  215.58
                     },
                     {
                         "tier":  "3",
@@ -336,7 +336,7 @@
                         "passed":  5,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  220.38
+                        "duration_ms":  348.76
                     },
                     {
                         "tier":  "3",
@@ -346,7 +346,7 @@
                         "passed":  5,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  138.92
+                        "duration_ms":  205.45
                     },
                     {
                         "tier":  "3",
@@ -356,7 +356,7 @@
                         "passed":  5,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  140.66
+                        "duration_ms":  217.12
                     },
                     {
                         "tier":  "3",
@@ -366,7 +366,7 @@
                         "passed":  5,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  141.21
+                        "duration_ms":  186.83
                     },
                     {
                         "tier":  "3",
@@ -376,7 +376,7 @@
                         "passed":  5,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  141.21
+                        "duration_ms":  277.26
                     },
                     {
                         "tier":  "3",
@@ -386,7 +386,7 @@
                         "passed":  5,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  142.85
+                        "duration_ms":  392.86
                     },
                     {
                         "tier":  "3",
@@ -396,7 +396,7 @@
                         "passed":  5,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  144.82
+                        "duration_ms":  203.29
                     },
                     {
                         "tier":  "3",
@@ -406,7 +406,7 @@
                         "passed":  5,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  146.23
+                        "duration_ms":  250.98
                     },
                     {
                         "tier":  "3",
@@ -416,7 +416,7 @@
                         "passed":  5,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  142.22
+                        "duration_ms":  176.88
                     },
                     {
                         "tier":  "3",
@@ -426,7 +426,7 @@
                         "passed":  5,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  140.73
+                        "duration_ms":  196.53
                     },
                     {
                         "tier":  "3",
@@ -436,7 +436,7 @@
                         "passed":  5,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  139.81
+                        "duration_ms":  179.47
                     },
                     {
                         "tier":  "3",
@@ -446,7 +446,7 @@
                         "passed":  5,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  140.44
+                        "duration_ms":  180.16
                     },
                     {
                         "tier":  "3",
@@ -456,7 +456,7 @@
                         "passed":  5,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  530.81
+                        "duration_ms":  725.64
                     },
                     {
                         "tier":  "3",
@@ -466,7 +466,7 @@
                         "passed":  5,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  198.3
+                        "duration_ms":  231.77
                     },
                     {
                         "tier":  "4",
@@ -476,7 +476,7 @@
                         "passed":  2,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  138.84
+                        "duration_ms":  205.26
                     },
                     {
                         "tier":  "4",
@@ -486,7 +486,7 @@
                         "passed":  2,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  3908.19
+                        "duration_ms":  5407.46
                     },
                     {
                         "tier":  "4",
@@ -496,7 +496,7 @@
                         "passed":  2,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  191.02
+                        "duration_ms":  223.66
                     },
                     {
                         "tier":  "4",
@@ -506,7 +506,7 @@
                         "passed":  1,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  136.43
+                        "duration_ms":  272.3
                     },
                     {
                         "tier":  "4",
@@ -516,7 +516,7 @@
                         "passed":  3,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  170.51
+                        "duration_ms":  204.28
                     },
                     {
                         "tier":  "4",
@@ -526,7 +526,7 @@
                         "passed":  1,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  140.32
+                        "duration_ms":  170.95
                     },
                     {
                         "tier":  "4",
@@ -536,7 +536,7 @@
                         "passed":  3,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  163.9
+                        "duration_ms":  194.74
                     },
                     {
                         "tier":  "4",
@@ -546,7 +546,7 @@
                         "passed":  5,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  142.57
+                        "duration_ms":  273.09
                     },
                     {
                         "tier":  "5",
@@ -556,7 +556,7 @@
                         "passed":  11,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  176.42
+                        "duration_ms":  240.61
                     },
                     {
                         "tier":  "5",
@@ -566,7 +566,7 @@
                         "passed":  10,
                         "failed":  0,
                         "status":  "PASS",
-                        "duration_ms":  360.13
+                        "duration_ms":  771.98
                     }
                 ]
 }
