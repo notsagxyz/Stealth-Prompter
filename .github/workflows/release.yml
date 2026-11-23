@@ -1,0 +1,130 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Build without creating a published GitHub release'
+        required: false
+        default: false
+        type: boolean
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  publish-windows:
+    name: Build & Release (Windows x64)
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Validate Semantic Versioning
+        shell: pwsh
+        run: |
+          $tag = "${{ github.ref_name }}"
+          if ($tag -notmatch '^v?(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$') {
+            Write-Error "Invalid SemVer tag: $tag. Tags must follow Semantic Versioning (e.g., v0.1.0)."
+            exit 1
+          }
+          Write-Host "Valid SemVer tag confirmed: $tag"
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: pwsh
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $env:GITHUB_OUTPUT
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install Rust Stable (x86_64-pc-windows-msvc)
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-pc-windows-msvc
+
+      - name: Setup Rust cache
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: './src-tauri -> target'
+          prefix-key: 'stealth-prompter-v2'
+
+      - name: Install Frontend Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run Backend Unit Tests
+        run: cargo test --manifest-path src-tauri/Cargo.toml --lib
+
+      - name: Build and Release Tauri App
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_KEY_PASSWORD }}
+        with:
+          tagName: ${{ github.ref_name }}
+          releaseName: 'StealthPrompter v__VERSION__'
+          releaseBody: |
+            ## StealthPrompter v__VERSION__
+            *The open-source invisible desktop teleprompter that stays hidden from screen sharing and recordings.*
+
+            ### 📦 Download Assets
+            - **Windows Setup Installer (`.exe`)**: Standalone NSIS installer with desktop shortcut and uninstaller.
+            - **Windows MSI Package (`.msi`)**: Enterprise Windows Installer package (WiX Toolset).
+
+            ### 🛡️ Verified Screen Capture Invisibility
+            - Utilizes Windows Display Affinity (`WDA_EXCLUDEFROMCAPTURE = 0x11`) to prevent window capture in Zoom, OBS Studio, Microsoft Teams, Discord, Google Meet, and desktop recorders.
+            - Non-focus-stealing global shortcuts for smooth presentation control.
+
+            ### 🔒 Integrity Checksums
+            Cryptographic SHA-256 checksums are attached below in `SHA256SUMS.txt`.
+          releaseDraft: false
+          prerelease: false
+
+      - name: Generate and Upload SHA-256 Checksums
+        shell: pwsh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          $bundleDir = "src-tauri/target/release/bundle"
+          if (Test-Path $bundleDir) {
+            $files = Get-ChildItem -Path $bundleDir -Recurse -Include *.msi, *.exe, *.zip | Where-Object { $_.Length -gt 0 }
+            $checksumFile = "SHA256SUMS.txt"
+            "" > $checksumFile
+            foreach ($file in $files) {
+              $hash = (Get-FileHash -Path $file.FullName -Algorithm SHA256).Hash.ToLower()
+              "$hash  $($file.Name)" | Out-File -FilePath $checksumFile -Append -Encoding ascii
+              Write-Host "Hashed: $($file.Name) -> $hash"
+            }
+            # Upload checksum file to the release using gh CLI
+            if (Test-Path $checksumFile) {
+              gh release upload "${{ github.ref_name }}" $checksumFile --clobber
+            }
+          }

@@ -1,0 +1,572 @@
+{
+    "timestamp":  "2026-11-23T12:10:57Z",
+    "tier":  "All",
+    "total":  270,
+    "passed":  270,
+    "failed":  0,
+    "skipped":  0,
+    "duration_ms":  12893.35,
+    "status":  "PASS",
+    "results":  [
+                    {
+                        "tier":  "1",
+                        "file":  "f01_cleanroom_vault.test.js",
+                        "path":  "tests/e2e/tier1_features/f01_cleanroom_vault.test.js",
+                        "tests":  5,
+                        "passed":  5,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  238.79
+                    },
+                    {
+                        "tier":  "1",
+                        "file":  "f02_naming_branding.test.js",
+                        "path":  "tests/e2e/tier1_features/f02_naming_branding.test.js",
+                        "tests":  5,
+                        "passed":  5,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  142.83
+                    },
+                    {
+                        "tier":  "1",
+                        "file":  "f03_toolchain_git.test.js",
+                        "path":  "tests/e2e/tier1_features/f03_toolchain_git.test.js",
+                        "tests":  5,
+                        "passed":  5,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  146.47
+                    },
+                    {
+                        "tier":  "1",
+                        "file":  "f04_window_platform_trait.test.js",
+                        "path":  "tests/e2e/tier1_features/f04_window_platform_trait.test.js",
+                        "tests":  5,
+                        "passed":  5,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  146.39
+                    },
+                    {
+                        "tier":  "1",
+                        "file":  "f05_win32_platform.test.js",
+                        "path":  "tests/e2e/tier1_features/f05_win32_platform.test.js",
+                        "tests":  5,
+                        "passed":  5,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  143.33
+                    },
+                    {
+                        "tier":  "1",
+                        "file":  "f06_json_persistence.test.js",
+                        "path":  "tests/e2e/tier1_features/f06_json_persistence.test.js",
+                        "tests":  5,
+                        "passed":  5,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  158.46
+                    },
+                    {
+                        "tier":  "1",
+                        "file":  "f07_tauri_multiwindow.test.js",
+                        "path":  "tests/e2e/tier1_features/f07_tauri_multiwindow.test.js",
+                        "tests":  5,
+                        "passed":  5,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  144.8
+                    },
+                    {
+                        "tier":  "1",
+                        "file":  "f08_launcher_ui.test.js",
+                        "path":  "tests/e2e/tier1_features/f08_launcher_ui.test.js",
+                        "tests":  5,
+                        "passed":  5,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  140.41
+                    },
+                    {
+                        "tier":  "1",
+                        "file":  "f09_hud_prompter.test.js",
+                        "path":  "tests/e2e/tier1_features/f09_hud_prompter.test.js",
+                        "tests":  5,
+                        "passed":  5,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  144.61
+                    },
+                    {
+                        "tier":  "1",
+                        "file":  "f10_global_hotkeys.test.js",
+                        "path":  "tests/e2e/tier1_features/f10_global_hotkeys.test.js",
+                        "tests":  5,
+                        "passed":  5,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  142.03
+                    },
+                    {
+                        "tier":  "1",
+                        "file":  "f11_invisibility_probe.test.js",
+                        "path":  "tests/e2e/tier1_features/f11_invisibility_probe.test.js",
+                        "tests":  5,
+                        "passed":  5,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  150.98
+                    },
+                    {
+                        "tier":  "1",
+                        "file":  "f12_obs_verification.test.js",
+                        "path":  "tests/e2e/tier1_features/f12_obs_verification.test.js",
+                        "tests":  5,
+                        "passed":  5,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  145.7
+                    },
+                    {
+                        "tier":  "1",
+                        "file":  "f13_resource_benchmarks.test.js",
+                        "path":  "tests/e2e/tier1_features/f13_resource_benchmarks.test.js",
+                        "tests":  5,
+                        "passed":  5,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  147.73
+                    },
+                    {
+                        "tier":  "1",
+                        "file":  "f14_remotion_video.test.js",
+                        "path":  "tests/e2e/tier1_features/f14_remotion_video.test.js",
+                        "tests":  5,
+                        "passed":  5,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  140.53
+                    },
+                    {
+                        "tier":  "1",
+                        "file":  "f15_github_ci_docs.test.js",
+                        "path":  "tests/e2e/tier1_features/f15_github_ci_docs.test.js",
+                        "tests":  5,
+                        "passed":  5,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  144.36
+                    },
+                    {
+                        "tier":  "2",
+                        "file":  "b01_vault_corruption_boundary.test.js",
+                        "path":  "tests/e2e/tier2_boundaries/b01_vault_corruption_boundary.test.js",
+                        "tests":  5,
+                        "passed":  5,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  140.97
+                    },
+                    {
+                        "tier":  "2",
+                        "file":  "b02_naming_collision_boundary.test.js",
+                        "path":  "tests/e2e/tier2_boundaries/b02_naming_collision_boundary.test.js",
+                        "tests":  5,
+                        "passed":  5,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  145.95
+                    },
+                    {
+                        "tier":  "2",
+                        "file":  "b03_git_unclean_env_boundary.test.js",
+                        "path":  "tests/e2e/tier2_boundaries/b03_git_unclean_env_boundary.test.js",
+                        "tests":  5,
+                        "passed":  5,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  150.14
+                    },
+                    {
+                        "tier":  "2",
+                        "file":  "b04_platform_invalid_hwnd_boundary.test.js",
+                        "path":  "tests/e2e/tier2_boundaries/b04_platform_invalid_hwnd_boundary.test.js",
+                        "tests":  5,
+                        "passed":  5,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  141.11
+                    },
+                    {
+                        "tier":  "2",
+                        "file":  "b05_win32_affinity_extremes_boundary.test.js",
+                        "path":  "tests/e2e/tier2_boundaries/b05_win32_affinity_extremes_boundary.test.js",
+                        "tests":  5,
+                        "passed":  5,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  138.68
+                    },
+                    {
+                        "tier":  "2",
+                        "file":  "b06_storage_concurrency_boundary.test.js",
+                        "path":  "tests/e2e/tier2_boundaries/b06_storage_concurrency_boundary.test.js",
+                        "tests":  5,
+                        "passed":  5,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  160.57
+                    },
+                    {
+                        "tier":  "2",
+                        "file":  "b07_tauri_display_metrics_boundary.test.js",
+                        "path":  "tests/e2e/tier2_boundaries/b07_tauri_display_metrics_boundary.test.js",
+                        "tests":  5,
+                        "passed":  5,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  139.57
+                    },
+                    {
+                        "tier":  "2",
+                        "file":  "b08_ui_extreme_scripts_boundary.test.js",
+                        "path":  "tests/e2e/tier2_boundaries/b08_ui_extreme_scripts_boundary.test.js",
+                        "tests":  5,
+                        "passed":  5,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  163.16
+                    },
+                    {
+                        "tier":  "2",
+                        "file":  "b09_scroll_speed_extremes_boundary.test.js",
+                        "path":  "tests/e2e/tier2_boundaries/b09_scroll_speed_extremes_boundary.test.js",
+                        "tests":  5,
+                        "passed":  5,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  142.34
+                    },
+                    {
+                        "tier":  "2",
+                        "file":  "b10_hotkey_storm_clash_boundary.test.js",
+                        "path":  "tests/e2e/tier2_boundaries/b10_hotkey_storm_clash_boundary.test.js",
+                        "tests":  5,
+                        "passed":  5,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  141.26
+                    },
+                    {
+                        "tier":  "2",
+                        "file":  "b11_capture_probe_edge_colors_boundary.test.js",
+                        "path":  "tests/e2e/tier2_boundaries/b11_capture_probe_edge_colors_boundary.test.js",
+                        "tests":  5,
+                        "passed":  5,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  138.48
+                    },
+                    {
+                        "tier":  "2",
+                        "file":  "b12_obs_verification_boundary.test.js",
+                        "path":  "tests/e2e/tier2_boundaries/b12_obs_verification_boundary.test.js",
+                        "tests":  5,
+                        "passed":  5,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  152.09
+                    },
+                    {
+                        "tier":  "2",
+                        "file":  "b13_resource_spike_limits_boundary.test.js",
+                        "path":  "tests/e2e/tier2_boundaries/b13_resource_spike_limits_boundary.test.js",
+                        "tests":  5,
+                        "passed":  5,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  142.66
+                    },
+                    {
+                        "tier":  "2",
+                        "file":  "b14_remotion_render_crash_boundary.test.js",
+                        "path":  "tests/e2e/tier2_boundaries/b14_remotion_render_crash_boundary.test.js",
+                        "tests":  5,
+                        "passed":  5,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  149.48
+                    },
+                    {
+                        "tier":  "2",
+                        "file":  "b15_ci_missing_secrets_boundary.test.js",
+                        "path":  "tests/e2e/tier2_boundaries/b15_ci_missing_secrets_boundary.test.js",
+                        "tests":  5,
+                        "passed":  5,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  141.31
+                    },
+                    {
+                        "tier":  "3",
+                        "file":  "p01_affinity_and_transparency.test.js",
+                        "path":  "tests/e2e/tier3_combinations/p01_affinity_and_transparency.test.js",
+                        "tests":  5,
+                        "passed":  5,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  159.07
+                    },
+                    {
+                        "tier":  "3",
+                        "file":  "p02_hotkeys_and_focus_preservation.test.js",
+                        "path":  "tests/e2e/tier3_combinations/p02_hotkeys_and_focus_preservation.test.js",
+                        "tests":  5,
+                        "passed":  5,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  142.17
+                    },
+                    {
+                        "tier":  "3",
+                        "file":  "p03_storage_atomic_and_hud_live_reload.test.js",
+                        "path":  "tests/e2e/tier3_combinations/p03_storage_atomic_and_hud_live_reload.test.js",
+                        "tests":  5,
+                        "passed":  5,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  220.38
+                    },
+                    {
+                        "tier":  "3",
+                        "file":  "p04_multiwindow_state_sync_and_scrolling.test.js",
+                        "path":  "tests/e2e/tier3_combinations/p04_multiwindow_state_sync_and_scrolling.test.js",
+                        "tests":  5,
+                        "passed":  5,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  138.92
+                    },
+                    {
+                        "tier":  "3",
+                        "file":  "p05_mirror_mode_and_hardware_acceleration.test.js",
+                        "path":  "tests/e2e/tier3_combinations/p05_mirror_mode_and_hardware_acceleration.test.js",
+                        "tests":  5,
+                        "passed":  5,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  140.66
+                    },
+                    {
+                        "tier":  "3",
+                        "file":  "p06_clickthrough_toggle_and_drag_position.test.js",
+                        "path":  "tests/e2e/tier3_combinations/p06_clickthrough_toggle_and_drag_position.test.js",
+                        "tests":  5,
+                        "passed":  5,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  141.21
+                    },
+                    {
+                        "tier":  "3",
+                        "file":  "p07_speed_scrubbing_and_progress_retention.test.js",
+                        "path":  "tests/e2e/tier3_combinations/p07_speed_scrubbing_and_progress_retention.test.js",
+                        "tests":  5,
+                        "passed":  5,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  141.21
+                    },
+                    {
+                        "tier":  "3",
+                        "file":  "p08_panic_hide_and_unfocused_restore.test.js",
+                        "path":  "tests/e2e/tier3_combinations/p08_panic_hide_and_unfocused_restore.test.js",
+                        "tests":  5,
+                        "passed":  5,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  142.85
+                    },
+                    {
+                        "tier":  "3",
+                        "file":  "p09_cleanroom_vault_and_readme_consistency.test.js",
+                        "path":  "tests/e2e/tier3_combinations/p09_cleanroom_vault_and_readme_consistency.test.js",
+                        "tests":  5,
+                        "passed":  5,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  144.82
+                    },
+                    {
+                        "tier":  "3",
+                        "file":  "p10_tauri_bundle_and_resource_benchmark.test.js",
+                        "path":  "tests/e2e/tier3_combinations/p10_tauri_bundle_and_resource_benchmark.test.js",
+                        "tests":  5,
+                        "passed":  5,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  146.23
+                    },
+                    {
+                        "tier":  "3",
+                        "file":  "p11_remotion_assets_and_branding_alignment.test.js",
+                        "path":  "tests/e2e/tier3_combinations/p11_remotion_assets_and_branding_alignment.test.js",
+                        "tests":  5,
+                        "passed":  5,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  142.22
+                    },
+                    {
+                        "tier":  "3",
+                        "file":  "p12_win32_display_affinity_and_dpi_change.test.js",
+                        "path":  "tests/e2e/tier3_combinations/p12_win32_display_affinity_and_dpi_change.test.js",
+                        "tests":  5,
+                        "passed":  5,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  140.73
+                    },
+                    {
+                        "tier":  "3",
+                        "file":  "p13_multi_monitor_and_window_placement.test.js",
+                        "path":  "tests/e2e/tier3_combinations/p13_multi_monitor_and_window_placement.test.js",
+                        "tests":  5,
+                        "passed":  5,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  139.81
+                    },
+                    {
+                        "tier":  "3",
+                        "file":  "p14_keyboard_playback_and_script_switching.test.js",
+                        "path":  "tests/e2e/tier3_combinations/p14_keyboard_playback_and_script_switching.test.js",
+                        "tests":  5,
+                        "passed":  5,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  140.44
+                    },
+                    {
+                        "tier":  "3",
+                        "file":  "p15_invisibility_probe_under_mock_stream.test.js",
+                        "path":  "tests/e2e/tier3_combinations/p15_invisibility_probe_under_mock_stream.test.js",
+                        "tests":  5,
+                        "passed":  5,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  530.81
+                    },
+                    {
+                        "tier":  "3",
+                        "file":  "p16_ci_matrix_and_release_artifacts.test.js",
+                        "path":  "tests/e2e/tier3_combinations/p16_ci_matrix_and_release_artifacts.test.js",
+                        "tests":  5,
+                        "passed":  5,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  198.3
+                    },
+                    {
+                        "tier":  "4",
+                        "file":  "s01_live_keynote_presentation_workflow.test.js",
+                        "path":  "tests/e2e/tier4_scenarios/s01_live_keynote_presentation_workflow.test.js",
+                        "tests":  2,
+                        "passed":  2,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  138.84
+                    },
+                    {
+                        "tier":  "4",
+                        "file":  "s02_video_conference_screen_share_audit.test.js",
+                        "path":  "tests/e2e/tier4_scenarios/s02_video_conference_screen_share_audit.test.js",
+                        "tests":  2,
+                        "passed":  2,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  3908.19
+                    },
+                    {
+                        "tier":  "4",
+                        "file":  "s03_emergency_hotkey_evasion_and_recovery.test.js",
+                        "path":  "tests/e2e/tier4_scenarios/s03_emergency_hotkey_evasion_and_recovery.test.js",
+                        "tests":  2,
+                        "passed":  2,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  191.02
+                    },
+                    {
+                        "tier":  "4",
+                        "file":  "s04_rapid_teleprompter_script_rehearsal.test.js",
+                        "path":  "tests/e2e/tier4_scenarios/s04_rapid_teleprompter_script_rehearsal.test.js",
+                        "tests":  1,
+                        "passed":  1,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  136.43
+                    },
+                    {
+                        "tier":  "4",
+                        "file":  "s05_cold_boot_to_active_hud_restoration.test.js",
+                        "path":  "tests/e2e/tier4_scenarios/s05_cold_boot_to_active_hud_restoration.test.js",
+                        "tests":  3,
+                        "passed":  3,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  170.51
+                    },
+                    {
+                        "tier":  "4",
+                        "file":  "s06_high_dpi_multi_screen_streamer_setup.test.js",
+                        "path":  "tests/e2e/tier4_scenarios/s06_high_dpi_multi_screen_streamer_setup.test.js",
+                        "tests":  1,
+                        "passed":  1,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  140.32
+                    },
+                    {
+                        "tier":  "4",
+                        "file":  "s07_clean_install_and_offline_first_run.test.js",
+                        "path":  "tests/e2e/tier4_scenarios/s07_clean_install_and_offline_first_run.test.js",
+                        "tests":  3,
+                        "passed":  3,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  163.9
+                    },
+                    {
+                        "tier":  "4",
+                        "file":  "s08_release_pipeline_and_marketing_pack_audit.test.js",
+                        "path":  "tests/e2e/tier4_scenarios/s08_release_pipeline_and_marketing_pack_audit.test.js",
+                        "tests":  5,
+                        "passed":  5,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  142.57
+                    },
+                    {
+                        "tier":  "5",
+                        "file":  "frontend_integration_adversarial.test.js",
+                        "path":  "tests/e2e/tier5_adversarial/frontend_integration_adversarial.test.js",
+                        "tests":  11,
+                        "passed":  11,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  176.42
+                    },
+                    {
+                        "tier":  "5",
+                        "file":  "rust_backend_adversarial.test.js",
+                        "path":  "tests/e2e/tier5_adversarial/rust_backend_adversarial.test.js",
+                        "tests":  10,
+                        "passed":  10,
+                        "failed":  0,
+                        "status":  "PASS",
+                        "duration_ms":  360.13
+                    }
+                ]
+}

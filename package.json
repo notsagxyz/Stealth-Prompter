@@ -1,0 +1,26 @@
+{
+  "name": "stealthprompter",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Open-source invisible teleprompter that stays hidden from screen sharing and recordings (Tauri 2 + Rust + SolidJS).",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^2.1.1",
+    "@tauri-apps/plugin-global-shortcut": "^2.1.1",
+    "solid-js": "^1.9.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.0",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.11",
+    "vite-plugin-solid": "^2.11.0"
+  }
+}

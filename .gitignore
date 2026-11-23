@@ -1,0 +1,122 @@
+# ==============================================================================
+# Clean-Room Desktop Teleprompter (Tauri 2 + Rust + SolidJS)
+# .gitignore Configuration
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# 1. Clean-Room Quarantine (Legacy FlowPrompter Artifacts)
+# ------------------------------------------------------------------------------
+# Strict clean-room enforcement: isolate all reverse-engineering artifacts,
+# decompiled JavaScript bundles, Electron distributions, and legacy manifests.
+temp_analysis/
+temp_analysis/**
+legacy/
+legacy_analysis/
+dist-electron/
+*.asar
+package.legacy.json
+
+# ------------------------------------------------------------------------------
+# 2. Rust & Cargo Artifacts
+# ------------------------------------------------------------------------------
+/target/
+**/target/
+src-tauri/target/
+src-tauri/gen/
+**/*.rs.bk
+*.pdb
+
+# ------------------------------------------------------------------------------
+# 3. Node.js, SolidJS, Vite & Package Managers
+# ------------------------------------------------------------------------------
+node_modules/
+dist/
+dist-ssr/
+.vite/
+.pnpm-store/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ------------------------------------------------------------------------------
+# 4. Remotion Video Project
+# ------------------------------------------------------------------------------
+remotion/out/
+remotion/.remotion/
+remotion/node_modules/
+remotion/dist/
+
+# ------------------------------------------------------------------------------
+# 5. Environment & Sensitive Data
+# ------------------------------------------------------------------------------
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.cert
+
+# ------------------------------------------------------------------------------
+# 6. Operating System Files
+# ------------------------------------------------------------------------------
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+
+# ------------------------------------------------------------------------------
+# 7. IDE & Editor Files
+# ------------------------------------------------------------------------------
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+*.swo
+
+# Visual Studio Code: ignore all except recommended shared settings
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# ------------------------------------------------------------------------------
+# 8. Testing, Verification & Metrics Output
+# ------------------------------------------------------------------------------
+coverage/
+.nyc_output/
+test-results/
+playwright-report/
+*.log
+benchmark_results.json
+invisibility_test_capture.png
+invisibility_test_capture.bmp
+
+# ------------------------------------------------------------------------------
+# 9. Internal Teamwork & Agent State
+# ------------------------------------------------------------------------------
+.agents/

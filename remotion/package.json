@@ -1,0 +1,27 @@
+{
+  "name": "stealthprompter-launch-video",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Remotion 3D launch video for StealthPrompter",
+  "scripts": {
+    "start": "remotion preview src/index.ts",
+    "build": "remotion render src/index.ts LaunchVideo out/launch.mp4",
+    "render": "remotion render src/index.ts LaunchVideo out/launch.mp4",
+    "preview": "remotion preview src/index.ts"
+  },
+  "dependencies": {
+    "@react-three/fiber": "^8.17.10",
+    "@remotion/cli": "^4.0.545",
+    "@remotion/three": "^4.0.545",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remotion": "^4.0.545",
+    "three": "^0.170.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@types/three": "^0.170.0",
+    "typescript": "^5.4.5"
+  }
+}
