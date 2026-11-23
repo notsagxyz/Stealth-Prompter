@@ -69,8 +69,9 @@ Este proyecto se construye bajo un protocolo riguroso de **ingeniería limpia (C
 
 | Hito | Requisito Principal | Documento Clave en Vault | Estado |
 |---|---|---|---|
-| **M1** | Clean-Room Vault, Naming & Entorno | `[[00-Index]]`, `[[Log]]`, `[[01-Analisis/Clean-Room-Analysis]]`, `[[02-Naming/Candidate-Names]]` | En Progreso |
-| **M2** | Core Rust & `WindowPlatform` Trait | `[[03-Arquitectura/ADR-001-Stack-Tauri2-Rust]]`, `[[03-Arquitectura/ADR-002-Window-Capture-Exclusion]]` | Planificado |
-| **M3** | Tauri 2 Multi-Ventana & HUD Prompter | `[[04-Diseno/Launcher-UX]]`, `[[04-Diseno/Prompter-HUD]]` | Planificado |
-| **M4** | Suite de Verificación de Invisibilidad | `[[01-Analisis/OBS-Verification]]`, scripts de verificación y benchmarks | COMPLETADO |
+| **M1** | Clean-Room Vault, Naming & Entorno | `[[00-Index]]`, `[[Log]]`, `[[01-Analisis/Clean-Room-Analysis]]`, `[[02-Naming/Candidate-Names]]` | **COMPLETADO (Gate PASS)** |
+| **M2** | Core Rust & `WindowPlatform` Trait | `[[03-Arquitectura/ADR-001-Stack-Tauri2-Rust]]`, `[[03-Arquitectura/ADR-002-Window-Capture-Exclusion]]` | **COMPLETADO (Gate PASS)** |
+| **M3** | Tauri 2 Multi-Ventana & HUD Prompter | `[[04-Diseno/Launcher-UX]]`, `[[04-Diseno/Prompter-HUD]]` | **COMPLETADO (Gate PASS)** |
+| **M4** | Suite de Verificación de Invisibilidad | `[[01-Analisis/OBS-Verification]]`, scripts de verificación y benchmarks | **COMPLETADO (Gate PASS)** |
+| **M5** | Video 3D Remotion, Docs & CI/CD | `[[05-Marketing/Copy-Twitter-X]]`, `[[06-Video/Storyboard-3D]]` | **COMPLETADO (Gate PASS)** |
 | **M5** | Video 3D Remotion & Release GitHub | `[[06-Video/Storyboard-3D]]`, `[[05-Marketing/Copy-Twitter-X]]` | Planificado |
