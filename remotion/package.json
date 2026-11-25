@@ -2,7 +2,7 @@
   "name": "stealthprompter-launch-video",
   "version": "1.0.0",
   "private": true,
-  "description": "Remotion 3D launch video for StealthPrompter",
+  "description": "Remotion 3D launch video for Stealth Prompter",
   "scripts": {
     "start": "remotion preview src/index.ts",
     "build": "remotion render src/index.ts LaunchVideo out/launch.mp4",

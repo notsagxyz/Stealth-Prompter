@@ -74,7 +74,7 @@ jobs:
         uses: Swatinem/rust-cache@v2
         with:
           workspaces: './src-tauri -> target'
-          prefix-key: 'stealth-prompter-v2'
+          prefix-key: 'stealthprompter-v2'
 
       - name: Install Frontend Dependencies
         run: pnpm install --frozen-lockfile
@@ -90,9 +90,9 @@ jobs:
           TAURI_SIGNING_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_KEY_PASSWORD }}
         with:
           tagName: ${{ github.ref_name }}
-          releaseName: 'StealthPrompter v__VERSION__'
+          releaseName: 'Stealth Prompter v__VERSION__'
           releaseBody: |
-            ## StealthPrompter v__VERSION__
+            ## Stealth Prompter v__VERSION__
             *The open-source invisible desktop teleprompter that stays hidden from screen sharing and recordings.*
 
             ### 📦 Download Assets

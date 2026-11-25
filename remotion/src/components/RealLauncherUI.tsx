@@ -13,7 +13,7 @@ export const RealLauncherUI: React.FC<RealLauncherUIProps> = ({
   scale = 1,
   highlightInvisibility = false,
   highlightToggleHUD = false,
-  activeScriptTitle = "Keynote 2026 - StealthPrompter Launch",
+  activeScriptTitle = "Keynote 2026 - Stealth Prompter Launch",
   speed = 3.0,
 }) => {
   return (
@@ -68,7 +68,7 @@ export const RealLauncherUI: React.FC<RealLauncherUIProps> = ({
           <div style={{ display: "flex", flexDirection: "column" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
               <span style={{ fontSize: 13, fontWeight: 700, color: "#FFFFFF", letterSpacing: "-0.01em" }}>
-                StealthPrompter
+                Stealth
               </span>
               <span
                 style={{
@@ -406,7 +406,7 @@ export const RealLauncherUI: React.FC<RealLauncherUIProps> = ({
               [CUE: Look directly into camera lens]
             </div>
             <p style={{ margin: "0 0 12px 0", color: "#F8FAFC" }}>
-              Welcome everyone. Today, I'm thrilled to introduce <strong>StealthPrompter</strong> — the fast, open-source teleprompter designed for presenters who refuse to compromise.
+              Welcome everyone. Today, I'm thrilled to introduce <strong>Stealth Prompter</strong> — the fast, open-source teleprompter designed for presenters who refuse to compromise.
             </p>
             <p style={{ margin: "0 0 12px 0", color: "#94A3B8" }}>
               Have you ever shared your screen on Zoom or Teams and worried your audience would see your notes?

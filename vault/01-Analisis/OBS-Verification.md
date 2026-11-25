@@ -17,7 +17,7 @@ status: approved
 
 ## 1. Marco de Referencia e Ingeniería Limpia (Clean-Room)
 
-El desarrollo de **StealthPrompter** se ejecuta bajo un estricto protocolo ético de **ingeniería limpia (Clean-Room Engineering)** con separación formal tipo "Chinese Wall":
+El desarrollo de **Stealth** se ejecuta bajo un estricto protocolo ético de **ingeniería limpia (Clean-Room Engineering)** con separación formal tipo "Chinese Wall":
 - **Cero código o activos copiados**: Ninguna porción de código fuente, script, binario, hoja de estilo o recurso de FlowPrompter u otra solución comercial privativa ha sido incorporada al proyecto.
 - **Fundamentación en documentación pública y estándares abiertos**: Toda la arquitectura de invisibilidad descansa en especificaciones públicas de Microsoft para la API Win32 del Desktop Window Manager (DWM) y la arquitectura de captura de código abierto de OBS Studio 30+.
 - **Auditoría continua de aislamiento**: Se asegura la trazabilidad técnica mediante registros de pruebas automatizadas y bitácoras en este vault de Obsidian.
@@ -53,11 +53,11 @@ En la implementación Rust (`src-tauri/src/platform/windows.rs`), se aplican dos
 
 ## 3. Matriz Técnica de Métodos de Captura en OBS Studio
 
-OBS Studio 30+ ofrece múltiples fuentes de captura de video en Windows. A continuación se analiza la respuesta determinista de StealthPrompter ante cada una:
+OBS Studio 30+ ofrece múltiples fuentes de captura de video en Windows. A continuación se analiza la respuesta determinista de Stealth ante cada una:
 
 ### 3.1 Display Capture (DXGI Desktop Duplication)
 - **Mecanismo**: OBS solicita duplicación de pantalla mediante la interfaz Direct3D `IDXGIOutputDuplication::AcquireNextFrame`.
-- **Comportamiento DWM**: DWM compone el fotograma de escritorio excluyendo la superficie de StealthPrompter.
+- **Comportamiento DWM**: DWM compone el fotograma de escritorio excluyendo la superficie de Stealth.
 - **Resultado**: **100% Invisible**. El fondo de escritorio, navegadores, diapositivas y editores se graban limpiamente sin la presencia del teleprompter.
 
 ### 3.2 Display Capture (Windows Graphics Capture - WGC)
@@ -67,8 +67,8 @@ OBS Studio 30+ ofrece múltiples fuentes de captura de video en Windows. A conti
 
 ### 3.3 Window Capture (Captura de Ventana)
 - **Método BitBlt (GDI)**:
-  - Al capturar una aplicación de fondo (e.g. PowerPoint o VS Code): StealthPrompter es una ventana de nivel superior independiente (`WS_EX_TOPMOST`), por lo que no forma parte de la jerarquía ni del Device Context (DC) de la aplicación capturada.
-  - Al intentar capturar directamente el HWND del HUD de StealthPrompter: DWM bloquea la lectura o entrega un fotograma vacío/negro.
+  - Al capturar una aplicación de fondo (e.g. PowerPoint o VS Code): Stealth es una ventana de nivel superior independiente (`WS_EX_TOPMOST`), por lo que no forma parte de la jerarquía ni del Device Context (DC) de la aplicación capturada.
+  - Al intentar capturar directamente el HWND del HUD de Stealth: DWM bloquea la lectura o entrega un fotograma vacío/negro.
 - **Método Windows Graphics Capture (WGC)**:
   - Aísla estrictamente el árbol visual del proceso seleccionado, ignorando cualquier ventana flotante superpuesta.
 - **Resultado**: **100% Invisible** al compartir ventanas de trabajo.
@@ -82,7 +82,7 @@ OBS Studio 30+ ofrece múltiples fuentes de captura de video en Windows. A conti
 
 ## 4. Matriz de Comportamiento en Aplicaciones de Videoconferencia
 
-StealthPrompter ha sido diseñado y verificado para garantizar privacidad absoluta en las principales plataformas de trabajo colaborativo:
+Stealth ha sido diseñado y verificado para garantizar privacidad absoluta en las principales plataformas de trabajo colaborativo:
 
 | Plataforma | Modo de Compartición | Mecanismo de Captura Subyacente | Comportamiento Observado | Estado de Invisibilidad |
 |---|---|---|---|---|
@@ -104,7 +104,7 @@ StealthPrompter ha sido diseñado y verificado para garantizar privacidad absolu
 Para auditar y certificar la invisibilidad en entornos locales de producción, se establece el checklist canónico de 5 pasos (alineado con la prueba automatizada `tests/e2e/tier1_features/f12_obs_verification.test.js`):
 
 1. **Paso 1: Lanzar Teleprompter y Posicionar el HUD**:
-   - Iniciar **StealthPrompter** y abrir la ventana de proyección (HUD).
+   - Iniciar **Stealth** y abrir la ventana de proyección (HUD).
    - Ubicar el HUD sobre un fondo de escritorio de alto contraste o ventana de presentación clara.
    - Confirmar que el texto del guion es legible a simple vista en el monitor.
 2. **Paso 2: Lanzar OBS Studio y Añadir Fuente Display Capture**:
@@ -126,10 +126,10 @@ Para auditar y certificar la invisibilidad en entornos locales de producción, s
 ## 6. Casos Borde y Factores de Entorno Críticos
 
 ### 6.1 Programación de GPU Acelerada por Hardware (HAGS)
-En Windows 10/11 con GPU múltiple (e.g. portátiles con gráficos integrados Intel/AMD y GPU dedicada NVIDIA con tecnología Optimus), habilitar HAGS opera de forma nativa en controladores modernos (WDDM 3.0+). Para un rendimiento óptimo de latencia, se recomienda asignar tanto OBS Studio como StealthPrompter al procesador gráfico de alto rendimiento en la configuración de gráficos de Windows.
+En Windows 10/11 con GPU múltiple (e.g. portátiles con gráficos integrados Intel/AMD y GPU dedicada NVIDIA con tecnología Optimus), habilitar HAGS opera de forma nativa en controladores modernos (WDDM 3.0+). Para un rendimiento óptimo de latencia, se recomienda asignar tanto OBS Studio como Stealth al procesador gráfico de alto rendimiento en la configuración de gráficos de Windows.
 
 ### 6.2 Entornos Multi-Monitor y Variaciones de DPI (Per-Monitor DPI V2)
-La propiedad de afinidad de visualización está vinculada en el kernel de Windows al `HWND`. Cuando el usuario arrastra la ventana del HUD entre monitores con distinta escala de DPI (e.g. monitor 4K a 150% hacia monitor 1080p a 100%), Windows despacha el mensaje `WM_DPICHANGED`. StealthPrompter recalcula tipografías y velocidades de scroll de forma adaptativa sin recrear la ventana, manteniendo `WDA_EXCLUDEFROMCAPTURE = 17` de manera invariante.
+La propiedad de afinidad de visualización está vinculada en el kernel de Windows al `HWND`. Cuando el usuario arrastra la ventana del HUD entre monitores con distinta escala de DPI (e.g. monitor 4K a 150% hacia monitor 1080p a 100%), Windows despacha el mensaje `WM_DPICHANGED`. Stealth recalcula tipografías y velocidades de scroll de forma adaptativa sin recrear la ventana, manteniendo `WDA_EXCLUDEFROMCAPTURE = 17` de manera invariante.
 
 ### 6.3 Captura de Cursor y Modo Click-Through (`WS_EX_TRANSPARENT`)
 Si en OBS Studio se encuentra activada la opción "Capturar cursor", el puntero del mouse del sistema será visible en la transmisión. Al habilitar el modo Click-Through (`Alt+C`), los clics del mouse atraviesan el teleprompter interactuando directamente con las diapositivas o ventanas situadas debajo, permitiendo al presentador controlar su presentación en vivo sin que el teleprompter interfiera ni en los clics ni en la señal de video.

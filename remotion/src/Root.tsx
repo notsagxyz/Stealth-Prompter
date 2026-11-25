@@ -15,7 +15,7 @@ export const Root: React.FC = () => {
         height={COMPOSITION_CONFIG.height}
       />
       <Composition
-        id="StealthPrompterLaunch"
+        id="StealthLaunch"
         component={MainComposition}
         durationInFrames={COMPOSITION_CONFIG.totalFrames}
         fps={COMPOSITION_CONFIG.fps}

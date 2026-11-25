@@ -3,8 +3,8 @@ import { getCurrentWindow } from '@tauri-apps/api/window';
 import { ScrollEngine } from './ScrollEngine';
 import { ReadingMarker } from './ReadingMarker';
 import { HudOverlayControls } from './HudOverlayControls';
-import { loadSettings, saveSettings, loadScript, setClickThrough } from '../lib/ipc';
-import { onPrompterAction, onUpdateScript, emitStateSync, onToggleLock } from '../lib/eventBus';
+import { loadSettings, loadScript, setClickThrough, togglePrompterWindow } from '../lib/ipc';
+import { onPrompterAction, onUpdateScript, emitStateSync, onSettingsSync } from '../lib/eventBus';
 import type { Script, Settings } from '../lib/types';
 
 const stepSpeed = (current: number, direction: 'up' | 'down'): number => {
@@ -25,7 +25,7 @@ export default function HudApp(): JSX.Element {
   const [script, setScript] = createSignal<Script>({
     id: 'default',
     title: 'Welcome Speech',
-    content: 'Welcome to StealthPrompter.\n\nYour prompter is running and completely hidden from screen recording and video calls.\n\nUse Alt+Space to Play/Pause, Alt+Up/Down for Speed, and Alt+H to show or hide this window.',
+    content: 'Welcome to Stealth.\n\nYour prompter is running and completely hidden from screen recording and video calls.\n\nUse Alt+Space to Play/Pause, Alt+Up/Down for Speed, and Alt+H to show or hide this window.',
     last_position: 0,
     speed: 3.0,
     created_at: new Date().toISOString(),
@@ -59,7 +59,7 @@ export default function HudApp(): JSX.Element {
 
   let unlistenAction: (() => void) | null = null;
   let unlistenUpdate: (() => void) | null = null;
-  let unlistenLock: (() => void) | null = null;
+  let unlistenSettings: (() => void) | null = null;
 
   const engine = new ScrollEngine({
     speed: 3.0,
@@ -154,8 +154,12 @@ export default function HudApp(): JSX.Element {
       }
     });
 
-    unlistenLock = await onToggleLock(async () => {
-      await handleToggleClickThrough();
+    unlistenSettings = await onSettingsSync((s) => {
+      setSettings(s);
+      engine.setSpeed(s.scroll_speed);
+      engine.setMirror(s.mirror_mode);
+      setSpeed(s.scroll_speed);
+      setCssTransform(engine.getCssTransform());
     });
   });
 
@@ -163,22 +167,20 @@ export default function HudApp(): JSX.Element {
     engine.pause();
     if (unlistenAction) unlistenAction();
     if (unlistenUpdate) unlistenUpdate();
-    if (unlistenLock) unlistenLock();
+    if (unlistenSettings) unlistenSettings();
   });
 
   const handleToggleClickThrough = async () => {
     const nextVal = !settings().click_through;
-    const updated = { ...settings(), click_through: nextVal };
-    setSettings(updated);
+    setSettings({ ...settings(), click_through: nextVal });
     await setClickThrough(nextVal);
-    await saveSettings(updated);
   };
 
   const handleClose = async () => {
     try {
       engine.pause();
       syncState();
-      await getCurrentWindow().hide();
+      await togglePrompterWindow();
     } catch (err) {
       console.warn('Error hiding window:', err);
     }

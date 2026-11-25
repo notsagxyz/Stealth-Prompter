@@ -3157,7 +3157,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ff7589a1859b09232522bb9edf076ca7fcf14ded96685d3fa629db73023ffbb7"
 
 [[package]]
-name = "stealth-prompter"
+name = "stealthprompter"
 version = "0.1.0"
 dependencies = [
  "raw-window-handle",

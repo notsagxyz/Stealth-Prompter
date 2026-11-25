@@ -1,4 +1,4 @@
-//! StealthPrompter Core Rust Backend Library
+//! Stealth Core Rust Backend Library
 //!
 //! Exposes platform abstraction (WindowPlatform trait, Win32 backend, mock platform),
 //! persistence engine (atomic JSON storage for settings and scripts),
@@ -37,6 +37,7 @@ pub fn run() {
     let storage_arc = Arc::new(storage);
 
     let platform_for_setup = platform_arc.clone();
+    let storage_for_setup = storage_arc.clone();
 
     tauri::Builder::default()
         .plugin(tauri_plugin_global_shortcut::Builder::new().build())
@@ -55,8 +56,20 @@ pub fn run() {
             commands::delete_script,
         ])
         .setup(move |app| {
+            // Reset click-through lock on cold boot so the user never starts locked out
+            if let Ok(mut s) = storage_for_setup.load_settings() {
+                if s.click_through {
+                    s.click_through = false;
+                    let _ = storage_for_setup.save_settings(&s);
+                }
+            }
+
             // Setup global shortcuts
-            let _ = shortcuts::setup_shortcuts(&app.handle(), platform_for_setup.clone());
+            let _ = shortcuts::setup_shortcuts(
+                app.handle(),
+                platform_for_setup.clone(),
+                storage_for_setup.clone(),
+            );
 
             // Initialize prompter window on startup
             #[cfg(windows)]
@@ -77,5 +90,5 @@ pub fn run() {
             Ok(())
         })
         .run(tauri::generate_context!())
-        .expect("error while running StealthPrompter application");
+        .expect("error while running Stealth application");
 }

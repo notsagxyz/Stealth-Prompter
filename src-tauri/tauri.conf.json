@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "StealthPrompter",
+  "productName": "Stealth",
   "version": "0.1.0",
-  "identifier": "com.stealthprompter.desktop",
+  "identifier": "com.stealth.desktop",
   "build": {
     "frontendDist": "../dist"
   },
@@ -10,12 +10,12 @@
     "windows": [
       {
         "label": "launcher",
-        "title": "StealthPrompter",
+        "title": "Stealth",
         "url": "index.html",
-        "width": 900,
-        "height": 650,
-        "minWidth": 600,
-        "minHeight": 450,
+        "width": 980,
+        "height": 640,
+        "minWidth": 740,
+        "minHeight": 480,
         "resizable": true,
         "fullscreen": false,
         "transparent": true,
@@ -25,7 +25,7 @@
       },
       {
         "label": "prompter",
-        "title": "StealthPrompter HUD",
+        "title": "Stealth HUD",
         "url": "hud.html",
         "width": 1000,
         "height": 350,

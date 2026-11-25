@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Automated Invisibility & Screen Capture Exclusion Verification Script for StealthPrompter.
+    Automated Invisibility & Screen Capture Exclusion Verification Script for Stealth.
 .DESCRIPTION
     Verifies pixel-level window invisibility under Windows Desktop Window Manager (DWM)
     using the Win32 SetWindowDisplayAffinity API with WDA_EXCLUDEFROMCAPTURE = 0x00000011 (17).
@@ -18,7 +18,7 @@
 .PARAMETER Hwnd
     Target window handle (for AttachWindow mode).
 .PARAMETER ProcessName
-    Target process name to discover window handle (default "StealthPrompter").
+    Target process name to discover window handle (default "stealth").
 .PARAMETER CanaryHex
     Canary color hex string (default "#FF00FF").
 .PARAMETER Tolerance
@@ -44,7 +44,7 @@ param(
 
     [IntPtr]$Hwnd = [IntPtr]::Zero,
 
-    [string]$ProcessName = "StealthPrompter",
+    [string]$ProcessName = "stealth",
 
     [string]$CanaryHex = "#FF00FF",
 
@@ -61,7 +61,7 @@ if ($Canary) {
 }
 
 Write-Host "================================================================================" -ForegroundColor Cyan
-Write-Host "   StealthPrompter Invisibility Verification Suite (WDA_EXCLUDEFROMCAPTURE)     " -ForegroundColor Cyan
+Write-Host "      Stealth Invisibility Verification Suite (WDA_EXCLUDEFROMCAPTURE)          " -ForegroundColor Cyan
 Write-Host "================================================================================" -ForegroundColor Cyan
 Write-Host "Mode:        $Mode" -ForegroundColor Gray
 Write-Host "Engine:      $Engine" -ForegroundColor Gray
@@ -75,13 +75,13 @@ Add-Type -AssemblyName System.Drawing
 Add-Type -AssemblyName System.Windows.Forms
 
 # Define Win32 P/Invoke Native Type if not already loaded in session
-if (-not ([System.Management.Automation.PSTypeName]'StealthPrompter.InvisibilityNative').Type) {
+if (-not ([System.Management.Automation.PSTypeName]'Stealth.InvisibilityNative').Type) {
     $nativeSource = @"
 using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
 
-namespace StealthPrompter {
+namespace Stealth {
     [StructLayout(LayoutKind.Sequential)]
     public struct RECT {
         public int Left;
@@ -211,7 +211,7 @@ function Capture-WindowBitmap([IntPtr]$targetHwnd, [System.Drawing.Rectangle]$bo
     if ($effectiveEngine -eq "PrintWindow" -or $effectiveEngine -eq "Auto") {
         $g = [System.Drawing.Graphics]::FromImage($bmp)
         $hdc = $g.GetHdc()
-        $pwSuccess = [StealthPrompter.InvisibilityNative]::PrintWindow($targetHwnd, $hdc, [StealthPrompter.InvisibilityNative]::PW_RENDERFULLCONTENT)
+        $pwSuccess = [Stealth.InvisibilityNative]::PrintWindow($targetHwnd, $hdc, [Stealth.InvisibilityNative]::PW_RENDERFULLCONTENT)
         $g.ReleaseHdc($hdc)
         $g.Dispose()
 
@@ -219,7 +219,7 @@ function Capture-WindowBitmap([IntPtr]$targetHwnd, [System.Drawing.Rectangle]$bo
             # Fallback attempt with default flags (0)
             $g = [System.Drawing.Graphics]::FromImage($bmp)
             $hdc = $g.GetHdc()
-            [StealthPrompter.InvisibilityNative]::PrintWindow($targetHwnd, $hdc, 0) | Out-Null
+            [Stealth.InvisibilityNative]::PrintWindow($targetHwnd, $hdc, 0) | Out-Null
             $g.ReleaseHdc($hdc)
             $g.Dispose()
         }
@@ -298,10 +298,10 @@ function Analyze-BitmapForCanary([System.Drawing.Bitmap]$bmp, [System.Drawing.Co
 
 # --- Step 1: Environment & Kernel Prerequisites Check ---
 Write-Host "[1/5] Checking OS Build and DWM Composition..." -ForegroundColor Yellow
-$osBuild = [StealthPrompter.InvisibilityNative]::GetOsBuild()
+$osBuild = [Stealth.InvisibilityNative]::GetOsBuild()
 $dwmEnabled = $false
 try {
-    [StealthPrompter.InvisibilityNative]::DwmIsCompositionEnabled([ref]$dwmEnabled) | Out-Null
+    [Stealth.InvisibilityNative]::DwmIsCompositionEnabled([ref]$dwmEnabled) | Out-Null
 } catch {
     $dwmEnabled = $true
 }
@@ -334,7 +334,7 @@ $windowBounds = [System.Drawing.Rectangle]::Empty
 
 if ($Mode -eq "Canary" -or $Mode -eq "SelfTest") {
     $probeForm = New-Object System.Windows.Forms.Form
-    $probeForm.Text = "StealthPrompter Invisibility Canary Probe"
+    $probeForm.Text = "Stealth Invisibility Canary Probe"
     $probeForm.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::None
     $probeForm.BackColor = $canaryColor
     $probeForm.Size = New-Object System.Drawing.Size(250, 150)
@@ -360,22 +360,22 @@ if ($Mode -eq "Canary" -or $Mode -eq "SelfTest") {
         }
     }
 
-    if ($targetHwnd -eq [IntPtr]::Zero -or -not [StealthPrompter.InvisibilityNative]::IsWindow($targetHwnd)) {
+    if ($targetHwnd -eq [IntPtr]::Zero -or -not [Stealth.InvisibilityNative]::IsWindow($targetHwnd)) {
         Write-Host "ERROR: Target window not found or invalid HWND." -ForegroundColor Red
         exit 2
     }
 
-    $rect = New-Object StealthPrompter.RECT
-    [StealthPrompter.InvisibilityNative]::GetWindowRect($targetHwnd, [ref]$rect) | Out-Null
+    $rect = New-Object Stealth.RECT
+    [Stealth.InvisibilityNative]::GetWindowRect($targetHwnd, [ref]$rect) | Out-Null
     $windowBounds = New-Object System.Drawing.Rectangle($rect.Left, $rect.Top, $rect.Width, $rect.Height)
     Write-Host "  -> Attached to target window HWND: $targetHwnd (Bounds: $($windowBounds.ToString()))" -ForegroundColor Green
 }
 
 # --- Step 3: Control Phase (Affinity = 0 / WDA_NONE) ---
 Write-Host "[3/5] Running Control Phase (Affinity = 0 / WDA_NONE)..." -ForegroundColor Yellow
-$setAffinity0 = [StealthPrompter.InvisibilityNative]::SetWindowDisplayAffinity($targetHwnd, [StealthPrompter.InvisibilityNative]::WDA_NONE)
+$setAffinity0 = [Stealth.InvisibilityNative]::SetWindowDisplayAffinity($targetHwnd, [Stealth.InvisibilityNative]::WDA_NONE)
 [uint32]$queryAffinity0 = 999
-[StealthPrompter.InvisibilityNative]::GetWindowDisplayAffinity($targetHwnd, [ref]$queryAffinity0) | Out-Null
+[Stealth.InvisibilityNative]::GetWindowDisplayAffinity($targetHwnd, [ref]$queryAffinity0) | Out-Null
 
 if ($probeForm) { [System.Windows.Forms.Application]::DoEvents() }
 Start-Sleep -Milliseconds 100
@@ -397,9 +397,9 @@ if (-not $controlPassed) {
 
 # --- Step 4: Test Phase (Affinity = 17 / WDA_EXCLUDEFROMCAPTURE) ---
 Write-Host "[4/5] Running Test Phase (Affinity = 17 / WDA_EXCLUDEFROMCAPTURE)..." -ForegroundColor Yellow
-$setAffinity17 = [StealthPrompter.InvisibilityNative]::SetWindowDisplayAffinity($targetHwnd, [StealthPrompter.InvisibilityNative]::WDA_EXCLUDEFROMCAPTURE)
+$setAffinity17 = [Stealth.InvisibilityNative]::SetWindowDisplayAffinity($targetHwnd, [Stealth.InvisibilityNative]::WDA_EXCLUDEFROMCAPTURE)
 [uint32]$queryAffinity17 = 999
-[StealthPrompter.InvisibilityNative]::GetWindowDisplayAffinity($targetHwnd, [ref]$queryAffinity17) | Out-Null
+[Stealth.InvisibilityNative]::GetWindowDisplayAffinity($targetHwnd, [ref]$queryAffinity17) | Out-Null
 
 if ($probeForm) { [System.Windows.Forms.Application]::DoEvents() }
 Start-Sleep -Milliseconds 150

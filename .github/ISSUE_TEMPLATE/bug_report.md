@@ -10,7 +10,7 @@ assignees: ""
 A clear and concise description of what the bug is.
 
 ### Environment & Operating System
-- **StealthPrompter Version**: [e.g. 0.1.0]
+- **Stealth Version**: [e.g. 0.1.0]
 - **Windows OS Version**: [e.g. Windows 11 23H2 (Build 22631.4460) / Windows 10 22H2]
 - **Display Resolution & Scaling**: [e.g. 1920x1080 @ 100% / 3840x2160 @ 150%]
 - **Multi-Monitor Setup**: [e.g. Single monitor / Dual monitor (Prompter on Display 2)]
@@ -39,10 +39,10 @@ A clear and concise description of what the bug is.
 - **Active Foreground App during hotkey**: [e.g. PowerPoint in Presentation Mode, VS Code]
 - **Focus Behavior**:
   - [ ] Focus remained on foreground app (Expected)
-  - [ ] Focus was stolen by StealthPrompter
+  - [ ] Focus was stolen by Stealth
 
 ### Steps to Reproduce
-1. Launch StealthPrompter launcher.
+1. Launch Stealth launcher.
 2. Click 'Launch HUD Prompter' or press hotkey.
 3. Open screen sharing / recording software and select the monitor.
 4. Observe the issue.

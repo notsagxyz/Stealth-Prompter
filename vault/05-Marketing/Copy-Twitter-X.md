@@ -9,9 +9,9 @@ created: 2026-11-23
 updated: 2026-11-23
 ---
 
-# 📢 Hilo de Lanzamiento Oficial en X / Twitter: StealthPrompter
+# 📢 Hilo de Lanzamiento Oficial en X / Twitter: Stealth Prompter
 
-> **Objetivo:** Anunciar el lanzamiento open-source de **StealthPrompter** en X/Twitter destacando su característica estrella: la invisibilidad física al compartir pantalla o grabar con OBS/Zoom/Teams/Meet.
+> **Objetivo:** Anunciar el lanzamiento open-source de **Stealth Prompter** en X/Twitter destacando su característica estrella: la invisibilidad física al compartir pantalla o grabar con OBS/Zoom/Teams/Meet.
 
 ---
 
@@ -20,7 +20,7 @@ updated: 2026-11-23
 ### Tweet 1 (Hook con impacto visual / Video adjunto)
 I got tired of proprietary teleprompters using 300MB of RAM and showing up on screen shares.
 
-So I built **StealthPrompter**: an open-source, ultralight desktop teleprompter in Tauri 2 + Rust that is **100% invisible** to screen recording and sharing.
+So I built **Stealth Prompter**: an open-source, ultralight desktop teleprompter in Tauri 2 + Rust that is **100% invisible** to screen recording and sharing.
 
 You see your script. Your audience never will. 🧵👇
 
@@ -63,19 +63,19 @@ Everything you need for flawless delivery:
 ### Tweet 5 (Nota de Uso Responsable)
 A quick note on ethics & responsible use:
 
-StealthPrompter is designed for creators, keynote speakers, educators, and professionals who want natural eye contact with their camera while referencing their talking points.
+Stealth Prompter is designed for creators, keynote speakers, educators, and professionals who want natural eye contact with their camera while referencing their talking points.
 
 It’s built to elevate genuine human communication, not to deceive.
 
 ---
 
 ### Tweet 6 (100% Open Source en GitHub)
-StealthPrompter is 100% free and open-source under the MIT License.
+Stealth Prompter is 100% free and open-source under the MIT License.
 
 No subscriptions. No account required. Zero telemetry or network tracking.
 
 ⭐ Star the repo on GitHub:
-👉 https://github.com/notsagxyz/StealthPrompter
+👉 https://github.com/stealthprompter/stealthprompter
 
 *(Issue templates, PRs, and cross-platform architecture ready for macOS/Linux).*
 

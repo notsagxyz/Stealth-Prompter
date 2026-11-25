@@ -14,7 +14,7 @@ status: completed
 
 # 🎬 Storyboard y Guion Técnico: Video 3D de Lanzamiento (Remotion)
 
-Este documento detalla la planificación audiovisual, desglose de escenas, parámetros de cámara, iluminación en Three.js y copy narrativo para el video de presentación oficial de **StealthPrompter**, implementado en **Remotion 4.x + `@remotion/three`**.
+Este documento detalla la planificación audiovisual, desglose de escenas, parámetros de cámara, iluminación en Three.js y copy narrativo para el video de presentación oficial de **Stealth Prompter**, implementado en **Remotion 4.x + `@remotion/three`**.
 
 ---
 
@@ -90,12 +90,12 @@ Este documento detalla la planificación audiovisual, desglose de escenas, pará
   - Secuencia 15s (450 frames): `Frames 226 – 337` (3.75 segundos)
   - Secuencia 30s (900 frames): `Frames 451 – 675` (7.5 segundos)
 - **Concepto Visual**:
-  Demostración acelerada de la ingeniería interna de StealthPrompter:
+  Demostración acelerada de la ingeniería interna de Stealth Prompter:
   1. **Scroll a 144Hz**: El texto del guion se desliza con fluidez milimétrica sin caídas de cuadros (*zero frame drops*).
   2. **Atajos Globales Sin Robo de Foco**: Pulsaciones visuales de teclas (`Alt + Space`, `Alt + Up/Down`, `Alt + H`) interactúan con el prompter mientras una ventana de código en segundo plano permanece con foco activo.
   3. **Gráfico Comparativo de Memoria 3D**: Dos columnas 3D crecen en pantalla:
      - Barra roja inflada: *Electron Teleprompter (240 MB RAM)*.
-     - Barra esbelta cyan: *StealthPrompter (38 MB RAM)* -> **~85% menor consumo**.
+     - Barra esbelta cyan: *Stealth Prompter (38 MB RAM)* -> **~85% menor consumo**.
 - **Acción & Movimiento 3D**:
   - Rotación orbital fluida de la cámara alrededor del modelo 3D del launcher de vidrio oscuro con desenfoque de profundidad de campo (*bokeh*).
 - **Copy en Pantalla (Typography)**:
@@ -110,7 +110,7 @@ Este documento detalla la planificación audiovisual, desglose de escenas, pará
   - Secuencia 15s (450 frames): `Frames 338 – 450` (3.75 segundos)
   - Secuencia 30s (900 frames): `Frames 676 – 900` (7.5 segundos)
 - **Concepto Visual**:
-  Los halos Cyber Cyan y Stealth Emerald convergen en el centro de la pantalla formando el emblema 3D definitivo de **StealthPrompter** (marco HUD con líneas de guion desvanecidas en transparencia).
+  Los halos Cyber Cyan y Stealth Emerald convergen en el centro de la pantalla formando el emblema 3D definitivo de **Stealth Prompter** (marco HUD con líneas de guion desvanecidas en transparencia).
 - **Acción & Movimiento 3D**:
   - El isotipo extruido en metal cepillado y cristal brilla con un destello especular.
   - Alrededor emergen los sellos distintivos:
@@ -118,9 +118,9 @@ Este documento detalla la planificación audiovisual, desglose de escenas, pará
     - `Tauri 2 + Rust + SolidJS`
     - `Windows 10 / 11 Native`
 - **Copy en Pantalla (Typography)**:
-  > **StealthPrompter**  
+  > **Stealth Prompter**  
   > *"The open-source invisible teleprompter."*  
-  > `github.com/StealthPrompter/stealth-prompter`
+  > `github.com/stealthprompter/stealthprompter`
 - **Diseño Sonoro**:
   - Acorde final triunfal con sintetizador analógico de baja reverberación (*sub bass drop*).
 

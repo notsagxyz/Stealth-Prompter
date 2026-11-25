@@ -13,6 +13,10 @@ use super::models::{Script, ScriptSummary, Settings};
 
 static TMP_COUNTER: AtomicUsize = AtomicUsize::new(1);
 
+pub const CURRENT_APP_ID: &str = "com.stealth.desktop";
+pub const LEGACY_APP_ID: &str = "com.stealthprompter.desktop";
+const MIGRATION_MARKER: &str = ".migrated_from_legacy";
+
 // ============================================================================
 // Storage Errors
 // ============================================================================
@@ -61,22 +65,92 @@ impl StorageEngine {
         }
     }
 
-    /// Default production storage path: %APPDATA%\com.stealthprompter.desktop\
-    pub fn default_path() -> Result<PathBuf, StorageError> {
-        let app_data = std::env::var("APPDATA")
+    fn app_data_root() -> PathBuf {
+        std::env::var("APPDATA")
             .map(PathBuf::from)
             .or_else(|_| {
                 std::env::var("USERPROFILE")
                     .map(|p| PathBuf::from(p).join("AppData").join("Roaming"))
             })
-            .unwrap_or_else(|_| PathBuf::from("."));
-
-        Ok(app_data.join("com.stealthprompter.desktop"))
+            .unwrap_or_else(|_| PathBuf::from("."))
     }
 
-    /// Convenience constructor with default production directory
+    /// Default production storage path: %APPDATA%\com.stealth.desktop\
+    pub fn default_path() -> Result<PathBuf, StorageError> {
+        Ok(Self::app_data_root().join(CURRENT_APP_ID))
+    }
+
+    /// Legacy storage path used prior to the Stealth rebrand
+    pub fn legacy_default_path() -> Result<PathBuf, StorageError> {
+        Ok(Self::app_data_root().join(LEGACY_APP_ID))
+    }
+
+    fn has_user_data(dir: &Path) -> bool {
+        if dir.join("settings.json").is_file() {
+            return true;
+        }
+        let scripts_dir = dir.join("scripts");
+        if scripts_dir.is_dir() {
+            if let Ok(entries) = fs::read_dir(scripts_dir) {
+                for entry in entries.flatten() {
+                    let p = entry.path();
+                    if p.is_file() && p.extension().and_then(|s| s.to_str()) == Some("json") {
+                        return true;
+                    }
+                }
+            }
+        }
+        false
+    }
+
+    /// Migrates `settings.json` and `scripts/*.json` from a legacy directory into `target_dir`
+    /// once on startup without overwriting existing user data.
+    pub fn migrate_legacy_dir(legacy_dir: &Path, target_dir: &Path) -> Result<bool, StorageError> {
+        if legacy_dir == target_dir || !legacy_dir.exists() || !Self::has_user_data(legacy_dir) {
+            return Ok(false);
+        }
+
+        if target_dir.join(MIGRATION_MARKER).exists() || Self::has_user_data(target_dir) {
+            return Ok(false);
+        }
+
+        fs::create_dir_all(target_dir)?;
+
+        let legacy_settings = legacy_dir.join("settings.json");
+        let target_settings = target_dir.join("settings.json");
+        if legacy_settings.is_file() && !target_settings.exists() {
+            fs::copy(&legacy_settings, &target_settings)?;
+        }
+
+        let legacy_scripts = legacy_dir.join("scripts");
+        if legacy_scripts.is_dir() {
+            let target_scripts = target_dir.join("scripts");
+            fs::create_dir_all(&target_scripts)?;
+            for entry in fs::read_dir(&legacy_scripts)? {
+                let entry = entry?;
+                let src = entry.path();
+                if src.is_file() && src.extension().and_then(|s| s.to_str()) == Some("json") {
+                    if let Some(file_name) = src.file_name() {
+                        let dst = target_scripts.join(file_name);
+                        if !dst.exists() {
+                            fs::copy(&src, &dst)?;
+                        }
+                    }
+                }
+            }
+        }
+
+        fs::write(target_dir.join(MIGRATION_MARKER), b"migrated\n")?;
+        Ok(true)
+    }
+
+    /// Convenience constructor with default production directory and automatic one-time legacy migration
     pub fn default_engine() -> Result<Self, StorageError> {
-        Ok(Self::new(Self::default_path()?))
+        let target = Self::default_path()?;
+        if let Ok(legacy) = Self::legacy_default_path() {
+            let _ = Self::migrate_legacy_dir(&legacy, &target);
+        }
+        Ok(Self::new(target))
     }
 
     pub fn base_dir(&self) -> &Path {
@@ -660,5 +734,139 @@ mod tests {
         assert!((settings.window_opacity - 1.0).abs() < f64::EPSILON);
         assert!((settings.line_height - 5.0).abs() < f64::EPSILON);
         assert!(settings.validate().is_ok());
+    }
+
+    #[test]
+    fn test_migrate_legacy_copies_settings_and_scripts() {
+        let root = tempdir().unwrap();
+        let legacy_dir = root.path().join(LEGACY_APP_ID);
+        let target_dir = root.path().join(CURRENT_APP_ID);
+
+        let legacy_engine = StorageEngine::new(&legacy_dir);
+        let mut settings = Settings::default();
+        settings.scroll_speed = 4.2;
+        legacy_engine.save_settings(&settings).unwrap();
+
+        let script = Script::new("script-1", "Keynote", "Hello Stealth", "2026-11-25T00:00:00Z");
+        legacy_engine.save_script(&script).unwrap();
+
+        let migrated = StorageEngine::migrate_legacy_dir(&legacy_dir, &target_dir).unwrap();
+        assert!(migrated);
+        assert!(target_dir.join(MIGRATION_MARKER).exists());
+
+        let target_engine = StorageEngine::new(&target_dir);
+        let loaded_settings = target_engine.load_settings().unwrap();
+        assert!((loaded_settings.scroll_speed - 4.2).abs() < f64::EPSILON);
+
+        let loaded_script = target_engine.load_script("script-1").unwrap();
+        assert_eq!(loaded_script.title, "Keynote");
+        assert_eq!(loaded_script.content, "Hello Stealth");
+        // Legacy files remain intact as a safe backup
+        assert!(legacy_engine.settings_path().exists());
+    }
+
+    #[test]
+    fn test_migrate_legacy_when_target_dir_exists_without_user_data() {
+        let root = tempdir().unwrap();
+        let legacy_dir = root.path().join(LEGACY_APP_ID);
+        let target_dir = root.path().join(CURRENT_APP_ID);
+
+        // Simulate Tauri/WebView2 creating EBWebView/ before migration runs
+        fs::create_dir_all(target_dir.join("EBWebView")).unwrap();
+
+        let legacy_engine = StorageEngine::new(&legacy_dir);
+        let script = Script::new("script-wv", "Demo", "Body", "2026-11-25T00:00:00Z");
+        legacy_engine.save_script(&script).unwrap();
+
+        let migrated = StorageEngine::migrate_legacy_dir(&legacy_dir, &target_dir).unwrap();
+        assert!(migrated);
+
+        let target_engine = StorageEngine::new(&target_dir);
+        assert_eq!(target_engine.load_script("script-wv").unwrap().title, "Demo");
+        assert!(target_dir.join("EBWebView").is_dir());
+    }
+
+    #[test]
+    fn test_migrate_skips_when_target_already_has_settings() {
+        let root = tempdir().unwrap();
+        let legacy_dir = root.path().join(LEGACY_APP_ID);
+        let target_dir = root.path().join(CURRENT_APP_ID);
+
+        let legacy_engine = StorageEngine::new(&legacy_dir);
+        let mut legacy_settings = Settings::default();
+        legacy_settings.scroll_speed = 6.0;
+        legacy_engine.save_settings(&legacy_settings).unwrap();
+
+        let target_engine = StorageEngine::new(&target_dir);
+        let mut target_settings = Settings::default();
+        target_settings.scroll_speed = 2.0;
+        target_engine.save_settings(&target_settings).unwrap();
+
+        let migrated = StorageEngine::migrate_legacy_dir(&legacy_dir, &target_dir).unwrap();
+        assert!(!migrated);
+        assert!((target_engine.load_settings().unwrap().scroll_speed - 2.0).abs() < f64::EPSILON);
+    }
+
+    #[test]
+    fn test_migrate_skips_when_target_already_has_scripts() {
+        let root = tempdir().unwrap();
+        let legacy_dir = root.path().join(LEGACY_APP_ID);
+        let target_dir = root.path().join(CURRENT_APP_ID);
+
+        let legacy_engine = StorageEngine::new(&legacy_dir);
+        legacy_engine
+            .save_script(&Script::new("old-1", "Old", "Old body", "2026-11-24T00:00:00Z"))
+            .unwrap();
+
+        let target_engine = StorageEngine::new(&target_dir);
+        target_engine
+            .save_script(&Script::new("new-1", "New", "New body", "2026-11-25T00:00:00Z"))
+            .unwrap();
+
+        let migrated = StorageEngine::migrate_legacy_dir(&legacy_dir, &target_dir).unwrap();
+        assert!(!migrated);
+        let list = target_engine.list_scripts().unwrap();
+        assert_eq!(list.len(), 1);
+        assert_eq!(list[0].id, "new-1");
+    }
+
+    #[test]
+    fn test_migrate_skips_when_legacy_missing_or_empty() {
+        let root = tempdir().unwrap();
+        let missing_legacy = root.path().join("missing_legacy");
+        let empty_legacy = root.path().join(LEGACY_APP_ID);
+        let target_dir = root.path().join(CURRENT_APP_ID);
+
+        assert!(!StorageEngine::migrate_legacy_dir(&missing_legacy, &target_dir).unwrap());
+
+        fs::create_dir_all(empty_legacy.join("scripts")).unwrap();
+        assert!(!StorageEngine::migrate_legacy_dir(&empty_legacy, &target_dir).unwrap());
+        assert!(!target_dir.exists());
+    }
+
+    #[test]
+    fn test_migrate_idempotent_with_marker_after_user_deletes_data() {
+        let root = tempdir().unwrap();
+        let legacy_dir = root.path().join(LEGACY_APP_ID);
+        let target_dir = root.path().join(CURRENT_APP_ID);
+
+        let legacy_engine = StorageEngine::new(&legacy_dir);
+        let settings = Settings::default();
+        legacy_engine.save_settings(&settings).unwrap();
+        legacy_engine
+            .save_script(&Script::new("s1", "First", "Text", "2026-11-25T00:00:00Z"))
+            .unwrap();
+
+        assert!(StorageEngine::migrate_legacy_dir(&legacy_dir, &target_dir).unwrap());
+
+        // User intentionally deletes migrated data
+        let target_engine = StorageEngine::new(&target_dir);
+        fs::remove_file(target_engine.settings_path()).unwrap();
+        target_engine.delete_script("s1").unwrap();
+
+        // Subsequent startup migration must NOT re-copy deleted data
+        assert!(!StorageEngine::migrate_legacy_dir(&legacy_dir, &target_dir).unwrap());
+        assert!(!target_engine.settings_path().exists());
+        assert!(target_engine.list_scripts().unwrap().is_empty());
     }
 }

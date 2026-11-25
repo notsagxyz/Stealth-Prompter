@@ -51,7 +51,7 @@ export const RealPrompterHUD: React.FC<RealPrompterHUDProps> = ({
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <div style={{ width: 8, height: 8, borderRadius: "50%", backgroundColor: "#10B981", boxShadow: "0 0 8px #10B981" }} />
           <span style={{ fontSize: 11, fontWeight: 700, color: "#00F0FF", letterSpacing: "0.05em" }}>
-            STEALTHPROMPTER HUD • 144Hz SMOOTH SCROLL
+            STEALTH HUD • 144Hz SMOOTH SCROLL
           </span>
         </div>
 
@@ -126,7 +126,7 @@ export const RealPrompterHUD: React.FC<RealPrompterHUDProps> = ({
           </div>
 
           <p style={{ margin: 0, fontSize: 28, fontWeight: 700, color: "#FFFFFF", lineHeight: 1.4 }}>
-            Today I'm thrilled to unveil <strong>StealthPrompter</strong>.
+            Today I'm thrilled to unveil <strong>Stealth Prompter</strong>.
           </p>
 
           <p style={{ margin: 0, fontSize: 26, fontWeight: 600, color: "#E2E8F0", lineHeight: 1.4 }}>

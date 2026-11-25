@@ -70,7 +70,7 @@ export async function loadScript(id: string): Promise<Script> {
     return {
       id,
       title: 'Default Demo Script',
-      content: 'Welcome to StealthPrompter.\nInvisible teleprompter for presentations.',
+      content: 'Welcome to Stealth.\nInvisible teleprompter for presentations.',
       last_position: 0,
       speed: 3.0,
       created_at: new Date().toISOString(),

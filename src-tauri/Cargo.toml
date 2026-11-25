@@ -1,13 +1,17 @@
 [package]
-name = "stealth-prompter"
+name = "stealthprompter"
 version = "0.1.0"
 description = "The open-source invisible teleprompter that stays hidden from screen sharing and recordings."
-authors = ["StealthPrompter Team"]
+authors = ["Stealth Team"]
 edition = "2021"
 
 [lib]
-name = "stealth_prompter_lib"
+name = "stealthprompter_lib"
 crate-type = ["staticlib", "rlib"]
+
+[[bin]]
+name = "stealth"
+path = "src/main.rs"
 
 [dependencies]
 tauri = { version = "2.0.0", features = ["custom-protocol"] }

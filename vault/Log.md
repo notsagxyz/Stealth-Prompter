@@ -4,10 +4,33 @@ tags:
   - log
   - progress
 created: 2026-11-22
-updated: 2026-11-23
+updated: 2026-11-25
 ---
 
 # 📓 Bitácora Diaria de Trabajo (Work Log)
+
+## [2026-11-25] - M1: Renombre a Stealth, Dependencias, Skills y Documentación de Diseño
+
+### 1. Capturas de Línea Base (*Before-Screenshots*)
+- Generadas y verificadas visualmente las capturas iniciales previas al rediseño en `vault/04-Diseno/screenshots/`:
+  - `before_launcher.png` (`980×640`, interfaz previa de 3 columnas con botón `"Show HUD"`).
+  - `before_hud.png` (`1000×350`, barra superior fija y texto de bienvenida legado).
+
+### 2. Dependencias y Skills Instaladas
+- Instalados en `package.json`: `@fontsource/inter`, `@fontsource/jetbrains-mono`, `lucide-solid`, `@tauri-apps/cli` (`2.12.6`) y `@resvg/resvg-js` (`2.6.2`), además del script `"tauri": "tauri"`.
+- Instaladas y copiadas a `C:\Users\gasto\.gemini\config\skills\` las colecciones de skills de **Remotion** (`remotion-best-practices` + 13 skills) y **HyperFrames** (`hyperframes` + 14 skills) para la evaluación y producción audiovisual en M6.
+
+### 3. Documentación de Diseño y Estudio de Naming
+- Completados los 4 documentos en `vault/04-Diseno/`: [[04-Diseno/Design-System|Design-System.md]] (13 tokens CSS `:root`, 6 presets de acento con Violet `#7c6cff` por defecto, fuentes locales, `:focus-visible`, `prefers-reduced-motion`, matriz WCAG AA), [[04-Diseno/Referencias-Visuales|Referencias-Visuales.md]], [[04-Diseno/Launcher-UX|Launcher-UX.md]] y [[04-Diseno/Prompter-HUD|Prompter-HUD.md]].
+- Limpiados los enlaces rotos de `vault/00-Index.md` y actualizada la hoja de ruta M1–M7.
+- Actualizados `vault/02-Naming/Candidate-Names.md` y `vault/02-Naming/Decision.md` con la verificación en vivo (`2026-11-25T23:11:10Z`): slug unificado `stealthprompter` 100% libre en GitHub, npm, Crates.io, X y `.com/.dev/.app/.io`, junto con identidad dual (**Stealth** dentro de la app / **Stealth Prompter** comercial / `com.stealth.desktop`).
+
+### 4. Renombre Global R4, Migración de Datos y Correcciones Base
+- Barrido completo R4 en código Rust, frontend SolidJS/HTML, `Cargo.toml` (`name = "stealthprompter"`, `[[bin]] name = "stealth"`), `tauri.conf.json` (`productName: "Stealth"`, `identifier: "com.stealth.desktop"`), `.github/`, `scripts/`, `README.md`, `remotion/` y `vault/`.
+- Implementada migración automática de arranque en `src-tauri/src/storage/engine.rs` (`migrate_legacy_dir` desde el identificador previo hacia `%APPDATA%\com.stealth.desktop\` con marcador `.migrated_from_legacy` y 6 tests unitarios).
+- Corregido el error de TypeScript en `ScriptList.tsx:22` (`ScriptSummary.snippet?: string` en `src/lib/types.ts`) y los 5 warnings previos de `cargo clippy -- -D warnings` (`platform/mock.rs` y `lib.rs`).
+
+---
 
 ## [2026-11-23] - Ventana Frameless Custom (Sin Chrome de Windows), Desbloqueo Click-Through (Alt+L) y Velocidad Granular
 
@@ -32,7 +55,7 @@ updated: 2026-11-23
 - **Lienzo de guion expandido**: Espacio de trabajo limpio y libre de distracciones con biblioteca deslizable (drawer) y dock flotante centrado en la parte inferior para control de velocidad, tamaño de fuente y modo espejo.
 
 ### 4. Compilación y Validación
-- Ejecutable `StealthPrompter.exe` compilado en `x86_64-pc-windows-gnu` con perfil `release` (6.66 MB).
+- Ejecutable `stealth.exe` compilado en `x86_64-pc-windows-gnu` con perfil `release` (6.66 MB).
 - 26/26 tests unitarios en Rust superados.
 - 270/270 tests E2E aprobados (100% PASS).
 
@@ -57,7 +80,7 @@ updated: 2026-11-23
 - Píldoras de estado discretas (punto verde esmeralda suave para indicar protección de captura).
 
 ### 3. Compilación y Validación
-- Binario release autónomo compilado exitosamente: `StealthPrompter.exe` (6.63 MB, 37 MB RAM en ejecución).
+- Binario release autónomo compilado exitosamente: `stealth.exe` (6.63 MB, 37 MB RAM en ejecución).
 - 270/270 pruebas E2E aprobadas (100% PASS).
 
 ## [2026-11-23] - Hito 5: Producción Audiovisual 3D, Documentación y Preparación de Release
@@ -77,7 +100,7 @@ updated: 2026-11-23
 - **M4 (Invisibility & Performance Verification Suite)**: COMPLETADO.
 - **M5 (Launch Video Remotion 3D, Docs & GitHub Release)**: COMPLETADO.
 - **Artefactos Verificados**:
-  - `StealthPrompter.exe` (5.05 MB standalone release con Win32 `WDA_EXCLUDEFROMCAPTURE` y SolidJS frontend integrado).
+  - `stealth.exe` (5.05 MB standalone release con Win32 `WDA_EXCLUDEFROMCAPTURE` y SolidJS frontend integrado).
   - `launch.mp4` (15.00s Full HD 1080p @ 30fps renderizado determinista en Remotion).
 - **E2E Testing Track**: 270/270 pruebas automáticas superadas (100% PASS).
 
@@ -129,7 +152,7 @@ updated: 2026-11-23
 ## [2026-11-23] - Fase 2: Elección de Nombre y Marca Definitiva
 
 ### Hito Cumplido: Nombre Seleccionado
-- [x] El usuario evaluó las propuestas y seleccionó por unanimidad: **`StealthPrompter`**.
+- [x] El usuario evaluó las propuestas y seleccionó por unanimidad: **`Stealth`**.
 - [x] Verificada y confirmada la disponibilidad libre en GitHub, Twitter/X, Crates.io y npm.
 - [x] Definido tagline en inglés y español, descripción corta de GitHub (<120 caracteres), paleta cromática (Cyber Cyan `#00F0FF` sobre Dark Obsidian `#090A0F`) y concepto de isotipo HUD.
 - [x] Documentada la decisión en [[02-Naming/Decision|Decisión de Naming]].
@@ -137,7 +160,7 @@ updated: 2026-11-23
 ### Estado de Pistas de Trabajo (Teamwork)
 - **Pista E2E (Testing)**: 247 pruebas automáticas completadas con 100% de éxito (Niveles 1 al 4) verificando aislamientos, límites de recursos y exclusión de captura.
 - **Hito 1 (Clean-Room & Vault)**: Finalizado por implementadores y auditado.
-- **Hito 2 (Arquitectura Core Rust & Trait WindowPlatform)**: Despachándose con el nombre definitivo `StealthPrompter`.
+- **Hito 2 (Arquitectura Core Rust & Trait WindowPlatform)**: Despachándose con el nombre definitivo `Stealth`.
 
 ---
 

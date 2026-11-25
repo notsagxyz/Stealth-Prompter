@@ -51,7 +51,7 @@ export function HudOverlayControls(props: HudOverlayControlsProps): JSX.Element 
         title="Drag to reposition teleprompter"
       >
         <GripIcon class="w-3.5 h-3.5 opacity-60" />
-        <span class="text-xs font-medium tracking-tight text-white/80">Stealth Prompter</span>
+        <span class="text-xs font-medium tracking-tight text-white/80">Stealth</span>
       </div>
 
       {/* Center: Playback & Speed Controls */}

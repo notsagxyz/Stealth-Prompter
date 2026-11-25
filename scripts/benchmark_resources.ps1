@@ -1,6 +1,6 @@
 ﻿<#
 .SYNOPSIS
-    Automated Resource & Performance Benchmark Suite for StealthPrompter vs FlowPrompter Electron.
+    Automated Resource & Performance Benchmark Suite for Stealth Prompter vs FlowPrompter Electron.
 .DESCRIPTION
     Measures RAM working set (MB), private memory bytes (MB), CPU usage during 144Hz scrolling,
     cold startup time (ms), and binary footprint. Compares measurements against FlowPrompter
@@ -8,7 +8,7 @@
     Supports live process attachment, cold boot launch measurement, and synthetic mock mode
     for headless CI/CD and build validation.
 .PARAMETER AppPath
-    Path to the compiled StealthPrompter executable (optional; auto-detected if omitted).
+    Path to the compiled Stealth executable (optional; auto-detected if omitted).
 .PARAMETER DurationSeconds
     Duration of resource sampling window in seconds (default 5).
 .PARAMETER SampleIntervalMs
@@ -44,7 +44,7 @@ param(
 )
 
 Write-Host "================================================================================" -ForegroundColor Cyan
-Write-Host "      StealthPrompter Resource & Performance Benchmark vs Electron              " -ForegroundColor Cyan
+Write-Host "      Stealth Prompter Resource & Performance Benchmark vs Electron             " -ForegroundColor Cyan
 Write-Host "================================================================================" -ForegroundColor Cyan
 Write-Host "Duration:     $DurationSeconds seconds" -ForegroundColor Gray
 Write-Host "Interval:     $SampleIntervalMs ms" -ForegroundColor Gray
@@ -69,7 +69,7 @@ $electronBaseline = [PSCustomObject]@{
 
 # Default Target Calibrations for Tauri 2 + Rust + SolidJS (ADR-001)
 $tauriTarget = [PSCustomObject]@{
-    Platform        = "Tauri 2 + Rust + SolidJS (StealthPrompter)"
+    Platform        = "Tauri 2 + Rust + SolidJS (Stealth Prompter)"
     RamIdleMb       = 38.4
     RamPrivateMb    = 28.1
     RamScrollMb     = 54.2
@@ -120,15 +120,15 @@ $isSyntheticRun = $Synthetic.IsPresent
 
 if (-not $isSyntheticRun) {
     # Check if process is already running
-    $liveProcess = Get-Process -Name "stealth-prompter" -ErrorAction SilentlyContinue | Select-Object -First 1
+    $liveProcess = Get-Process -Name "stealth" -ErrorAction SilentlyContinue | Select-Object -First 1
 
     # Check if executable path is provided or found
     if (-not $liveProcess -and [string]::IsNullOrWhiteSpace($AppPath)) {
         $candidates = @(
-            "target\release\stealth-prompter.exe",
-            "src-tauri\target\release\stealth-prompter.exe",
-            "target\debug\stealth-prompter.exe",
-            "src-tauri\target\debug\stealth-prompter.exe"
+            "target\release\stealth.exe",
+            "src-tauri\target\release\stealth.exe",
+            "target\debug\stealth.exe",
+            "src-tauri\target\debug\stealth.exe"
         )
         foreach ($c in $candidates) {
             if (Test-Path $c) {
@@ -139,7 +139,7 @@ if (-not $isSyntheticRun) {
     }
 
     if ($liveProcess) {
-        Write-Host "Attaching to running process 'stealth-prompter' (PID: $($liveProcess.Id))..." -ForegroundColor Green
+        Write-Host "Attaching to running process 'stealth' (PID: $($liveProcess.Id))..." -ForegroundColor Green
         $family = Get-ProcessFamily -rootPid $liveProcess.Id
         Write-Host "  -> Discovered process family with $($family.Count) processes (Root + WebView2 renderers)." -ForegroundColor Gray
 
@@ -342,13 +342,13 @@ Write-Host "JSON Report saved: $resolvedReportPath" -ForegroundColor Green
 # Generate Markdown Summary
 # -----------------------------------------------------------------------------
 $summaryMd = @"
-# ⚡ StealthPrompter vs FlowPrompter (Electron) Resource Benchmark
+# ⚡ Stealth Prompter vs FlowPrompter (Electron) Resource Benchmark
 
 Benchmark executed on **$isoTimestamp** under **Windows 11 x64** (Mode: **$($reportData.mode)**).
 
 ## Executive Comparison
 
-| Dimension | StealthPrompter (Tauri 2 + Rust) | FlowPrompter (Electron Legacy) | Advantage / Savings |
+| Dimension | Stealth Prompter (Tauri 2 + Rust) | FlowPrompter (Electron Legacy) | Advantage / Savings |
 |---|---|---|---|
 | **RAM (Working Set Idle)** | **$measuredRamMb MB** | $($electronBaseline.RamIdleMb) MB | **-${ramSavingsPct}%** (${ramMultiplier}x lighter) |
 | **RAM (Private Bytes)** | **$measuredPrivateRamMb MB** | $($electronBaseline.RamPrivateMb) MB | Eliminates V8 heap bloat |
@@ -358,9 +358,9 @@ Benchmark executed on **$isoTimestamp** under **Windows 11 x64** (Mode: **$($rep
 
 ## Architectural Analysis
 
-1. **Memory Efficiency**: StealthPrompter leverages the OS-native Microsoft Edge WebView2 runtime combined with a lightweight native Rust kernel, reducing idle memory by over **$ramSavingsPct%** compared to bundling an independent Chromium browser and Node.js runtime.
+1. **Memory Efficiency**: Stealth Prompter leverages the OS-native Microsoft Edge WebView2 runtime combined with a lightweight native Rust kernel, reducing idle memory by over **$ramSavingsPct%** compared to bundling an independent Chromium browser and Node.js runtime.
 2. **Smooth Scrolling with Negligible CPU**: The SolidJS reactive rendering pipeline drives 144Hz smooth hardware-accelerated transforms without Virtual DOM reconciliation, dropping continuous CPU usage to **$measuredCpuPct%**.
-3. **Instant Launch**: Bypassing Node.js V8 initialization and Chromium bootstrapping allows StealthPrompter to reach an interactive state in **$measuredStartupMs ms**.
+3. **Instant Launch**: Bypassing Node.js V8 initialization and Chromium bootstrapping allows Stealth Prompter to reach an interactive state in **$measuredStartupMs ms**.
 4. **Compact Distribution**: At only **$measuredBinaryMb MB**, installers and portable packages download and deploy in seconds.
 
 *Generated automatically by `scripts/benchmark_resources.ps1`.*

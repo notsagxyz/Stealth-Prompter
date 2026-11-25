@@ -1,11 +1,11 @@
-# StealthPrompter
+# Stealth Prompter
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Rust](https://img.shields.io/badge/rust-2021_edition-orange.svg)](https://www.rust-lang.org/)
 [![Tauri 2](https://img.shields.io/badge/tauri-v2.0-24C8DB.svg)](https://v2.tauri.app/)
 [![Windows DWM Invisibility](https://img.shields.io/badge/Windows_DWM-WDA__EXCLUDEFROMCAPTURE-0078D6.svg)](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowdisplayaffinity)
-[![Release](https://img.shields.io/github/v/release/StealthPrompter/stealth-prompter?color=10B981)](https://github.com/StealthPrompter/stealth-prompter/releases)
-[![GitHub Stars](https://img.shields.io/github/stars/StealthPrompter/stealth-prompter?style=social)](https://github.com/StealthPrompter/stealth-prompter)
+[![Release](https://img.shields.io/github/v/release/stealthprompter/stealthprompter?color=10B981)](https://github.com/stealthprompter/stealthprompter/releases)
+[![GitHub Stars](https://img.shields.io/github/stars/stealthprompter/stealthprompter?style=social)](https://github.com/stealthprompter/stealthprompter)
 
 > **The open-source invisible teleprompter that stays hidden from screen sharing and recordings.**  
 > Built with **Tauri 2**, **Rust**, and **SolidJS**. Engineered for zero latency, minimal memory usage, and true OS-level screen capture exclusion on Windows.
@@ -35,7 +35,7 @@ Modern presentations, technical demos, and video conferences demand flawless del
 3. **Fragile Invisibility Hacks**: Black-box overlays, virtual camera gymnastics, or complex chroma-key filters add friction and often fail during urgent screen shares.
 4. **Proprietary Lock-in & Telemetry**: Monthly subscription paywalls for basic features and constant cloud telemetry.
 
-**StealthPrompter solves this permanently:**
+**Stealth Prompter solves this permanently:**
 - **Native OS-Level Invisibility**: Leverages the Windows Desktop Window Manager (DWM) display affinity API (`WDA_EXCLUDEFROMCAPTURE = 0x00000011` / 17) to completely eliminate the teleprompter window from screen captures, desktop shares, and recording streams.
 - **Blazing Performance**: Native Rust core + SolidJS fine-grained reactivity uses **under 40 MB of RAM** and **<2% CPU** during active 144Hz scrolling.
 - **Non-Focus-Stealing Operation**: Control your script while remaining actively focused on PowerPoint, VS Code, or a terminal.
@@ -62,7 +62,7 @@ Modern presentations, technical demos, and video conferences demand flawless del
 ## Invisibility
 
 ### How Windows DWM Invisibility Works
-StealthPrompter achieves invisibility by directly invoking the Win32 API:
+Stealth achieves invisibility by directly invoking the Win32 API:
 
 ```rust
 SetWindowDisplayAffinity(hwnd, WDA_EXCLUDEFROMCAPTURE);
@@ -86,13 +86,13 @@ SetWindowDisplayAffinity(hwnd, WDA_EXCLUDEFROMCAPTURE);
   - ✅ **Discord** (Screen Share / Stream)
   - ✅ **Slack, Webex, Loom, Camtasia**
 
-> **Note on OS Compatibility**: If executed on a Windows build earlier than 19041, StealthPrompter's `WindowsPlatform` automatically detects the OS build via `RtlGetVersion` and provides a controlled fallback to `WDA_MONITOR` with explicit logging.
+> **Note on OS Compatibility**: If executed on a Windows build earlier than 19041, Stealth's `WindowsPlatform` automatically detects the OS build via `RtlGetVersion` and provides a controlled fallback to `WDA_MONITOR` with explicit logging.
 
 ---
 
 ## Comparison vs Alternatives
 
-| Technical Metric | StealthPrompter | FlowPrompter Desktop | Generic Teleprompters |
+| Technical Metric | Stealth Prompter | FlowPrompter Desktop | Generic Teleprompters |
 |---|---|---|---|
 | **Core Architecture** | **Tauri 2 + Rust + SolidJS** | Electron + React (Node.js) | Electron / Web / Python |
 | **Idle RAM Footprint** | **25 – 45 MB** | 180 – 280 MB | 150 – 250 MB |
@@ -112,7 +112,7 @@ SetWindowDisplayAffinity(hwnd, WDA_EXCLUDEFROMCAPTURE);
 
 ## Architecture
 
-StealthPrompter employs a strictly decoupled, modular architecture adhering to clean-room engineering:
+Stealth Prompter employs a strictly decoupled, modular architecture adhering to clean-room engineering:
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -160,7 +160,7 @@ Synchronizes playback state and content seamlessly:
 - `prompter:state_sync`: Emits current playback status, velocity, and scroll percentage.
 
 ### 4. Atomic JSON Persistence (`src-tauri/src/storage/engine.rs`)
-Ensures corruption-proof storage in `%APPDATA%\com.stealthprompter.desktop\`:
+Ensures corruption-proof storage in `%APPDATA%\com.stealth.desktop\`:
 - Writes new state to a randomized temporary file (`.tmp`).
 - Flushes buffers to disk with `sync_all()`.
 - Atomically replaces the target file via filesystem `rename()`.
@@ -169,7 +169,7 @@ Ensures corruption-proof storage in `%APPDATA%\com.stealthprompter.desktop\`:
 
 ## Keyboard Shortcuts
 
-StealthPrompter intercepts hotkeys globally using `tauri-plugin-global-shortcut`. Commands execute immediately without transferring window focus away from your active presentation:
+Stealth intercepts hotkeys globally using `tauri-plugin-global-shortcut`. Commands execute immediately without transferring window focus away from your active presentation:
 
 | Shortcut | Action | Scope | Focus Retained? |
 |---|---|---|---|
@@ -189,7 +189,7 @@ StealthPrompter intercepts hotkeys globally using `tauri-plugin-global-shortcut`
 
 ## Verification & Testing
 
-StealthPrompter includes automated verification tools and manual testing checklists.
+Stealth Prompter includes automated verification tools and manual testing checklists.
 
 ### Automated Invisibility Canary Probe
 The automated test probe (`scripts/verify_invisibility.ps1`) verifies exclusion at the raw pixel level:
@@ -201,7 +201,7 @@ The automated test probe (`scripts/verify_invisibility.ps1`) verifies exclusion 
 
 ### OBS Studio Manual Verification Protocol
 Follow these 5 steps to verify invisibility in OBS Studio:
-1. **Launch StealthPrompter**: Open the prompter HUD and position it over a colorful or high-contrast desktop background.
+1. **Launch Stealth**: Open the prompter HUD and position it over a colorful or high-contrast desktop background.
 2. **Launch OBS Studio**: In your active scene, add a **Display Capture** source targeting your main display.
 3. **Inspect OBS Preview**: Verify that the desktop background and wallpaper are rendered, but the prompter text and HUD overlay are **completely absent** from the OBS canvas.
 4. **Record Test Video**: Start a 10-second test recording in OBS while speaking and scrolling text in the prompter.
@@ -220,8 +220,8 @@ Follow these 5 steps to verify invisibility in OBS Studio:
 
 ### Clone & Install Dependencies
 ```bash
-git clone https://github.com/StealthPrompter/stealth-prompter.git
-cd stealth-prompter
+git clone https://github.com/stealthprompter/stealthprompter.git
+cd stealthprompter
 pnpm install
 ```
 
@@ -236,7 +236,7 @@ This spins up the Vite development server for both the `launcher` and `hud` mult
 pnpm tauri build
 ```
 The optimized binaries and installers will be generated under:
-- `src-tauri/target/release/stealth-prompter.exe` (Standalone executable)
+- `src-tauri/target/release/stealth.exe` (Standalone executable)
 - `src-tauri/target/release/bundle/nsis/` (`.exe` NSIS Installer)
 - `src-tauri/target/release/bundle/msi/` (`.msi` Windows Installer)
 
@@ -294,13 +294,13 @@ g:\Teleprompter\
 
 ## Clean-Room Engineering & Ethics
 
-StealthPrompter was built adhering to strict **Clean-Room Software Engineering** principles:
+Stealth Prompter was built adhering to strict **Clean-Room Software Engineering** principles:
 - **Zero Proprietary Code**: No code, assets, styles, or binary blobs were copied from FlowPrompter or any other proprietary teleprompter.
 - **Specification-Driven**: Implementation was designed from clean functional requirements and public Microsoft Win32 DWM documentation.
-- **Responsible Use**: StealthPrompter is designed to assist public speakers, educators, content creators, and remote professionals in delivering clear, confident presentations while maintaining natural eye contact.
+- **Responsible Use**: Stealth Prompter is designed to assist public speakers, educators, content creators, and remote professionals in delivering clear, confident presentations while maintaining natural eye contact.
 
 ---
 
 ## License
 
-StealthPrompter is 100% open-source software licensed under the **[MIT License](LICENSE)**.
+Stealth Prompter is 100% open-source software licensed under the **[MIT License](LICENSE)**.

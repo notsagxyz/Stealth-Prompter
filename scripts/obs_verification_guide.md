@@ -1,11 +1,11 @@
-# StealthPrompter: Comprehensive OBS Studio & Video Conferencing Verification Guide
+# Stealth Prompter: Comprehensive OBS Studio & Video Conferencing Verification Guide
 
 ## 1. Executive Summary & Invisibility Guarantee
 
-**StealthPrompter** guarantees zero-leakage invisibility during live presentations, remote screen shares, and video recordings. While the speaker sees a high-readability HUD prompter overlay hovering on their display, the teleprompter window is mathematically and graphically excluded from screen capture streams.
+**Stealth** (**Stealth Prompter**) guarantees zero-leakage invisibility during live presentations, remote screen shares, and video recordings. While the speaker sees a high-readability HUD prompter overlay hovering on their display, the teleprompter window is mathematically and graphically excluded from screen capture streams.
 
 ### Core Architectural Mechanism
-- **Win32 DWM Display Affinity**: StealthPrompter configures its overlay window handle (`HWND`) with:
+- **Win32 DWM Display Affinity**: Stealth configures its overlay window handle (`HWND`) with:
   ```c
   SetWindowDisplayAffinity(hwnd, WDA_EXCLUDEFROMCAPTURE); // dwAffinity = 0x00000011 (17 decimal)
   ```
@@ -18,7 +18,7 @@
 
 ### 2.1 OBS Studio Capture Methods
 
-OBS Studio 30+ provides multiple capture sources on Windows. StealthPrompter is designed and verified to behave deterministically across each method:
+OBS Studio 30+ provides multiple capture sources on Windows. Stealth is designed and verified to behave deterministically across each method:
 
 #### A. Display Capture (DXGI Desktop Duplication Engine)
 - **Technical Operation**: OBS queries `IDXGIOutputDuplication::AcquireNextFrame` to duplicate the composited desktop frame directly from video memory (VRAM).
@@ -28,13 +28,13 @@ OBS Studio 30+ provides multiple capture sources on Windows. StealthPrompter is 
 #### B. Display Capture (Windows Graphics Capture - WGC Engine)
 - **Technical Operation**: Uses the modern WinRT `Windows.Graphics.Capture.GraphicsCaptureItem` API introduced in Windows 10 (Build 1903+).
 - **DWM Behavior**: WGC respects window display affinity natively at the kernel driver boundary.
-- **Yellow Capture Border**: In Windows 10/11, WGC may display an optional thin yellow safety border around the captured display monitor. StealthPrompter remains 100% invisible inside the capture stream regardless of the border status.
+- **Yellow Capture Border**: In Windows 10/11, WGC may display an optional thin yellow safety border around the captured display monitor. Stealth remains 100% invisible inside the capture stream regardless of the border status.
 - **Result**: **100% Invisible**.
 
 #### C. Window Capture (BitBlt Method vs WGC Method)
 - **BitBlt Method (GDI / PrintWindow)**:
-  - When capturing an underlying application (e.g. PowerPoint, Visual Studio Code, Chrome): The prompter is an independent top-level `HWND` with extended styles `WS_EX_TOPMOST` and `WS_EX_NOACTIVATE`. It is not part of the target application's child window hierarchy. GDI BitBlt captures only the target window DC, naturally omitting StealthPrompter.
-  - When targeting the StealthPrompter HUD window directly: Win32 DWM enforces affinity exclusion, resulting in a black/empty frame or GDI access rejection.
+  - When capturing an underlying application (e.g. PowerPoint, Visual Studio Code, Chrome): The prompter is an independent top-level `HWND` with extended styles `WS_EX_TOPMOST` and `WS_EX_NOACTIVATE`. It is not part of the target application's child window hierarchy. GDI BitBlt captures only the target window DC, naturally omitting Stealth.
+  - When targeting the Stealth HUD window directly: Win32 DWM enforces affinity exclusion, resulting in a black/empty frame or GDI access rejection.
 - **Windows Graphics Capture (WGC Method)**:
   - Captures the isolated visual tree of the selected target application. Any floating overlay windows above it are omitted by design.
 - **Result**: **100% Invisible** when sharing applications.
@@ -48,7 +48,7 @@ OBS Studio 30+ provides multiple capture sources on Windows. StealthPrompter is 
 
 ### 2.2 Major Video Conferencing Platforms
 
-StealthPrompter has been audited across all major enterprise conferencing suites:
+Stealth Prompter has been audited across all major enterprise conferencing suites:
 
 | Application | Capture Architecture | Screen Share Mode | Observed Behavior | Invisibility Status |
 |---|---|---|---|---|
@@ -70,7 +70,7 @@ StealthPrompter has been audited across all major enterprise conferencing suites
 Follow this standardized protocol to independently confirm zero-pixel leakage before live broadcasts or client presentations:
 
 ### Step 1: Launch Teleprompter and Position HUD
-- Launch **StealthPrompter** via the executable or launcher.
+- Launch **Stealth** via the executable or launcher.
 - Load or write a test script with clear text.
 - Position the transparent HUD prompter overlay over a high-contrast desktop background (e.g. bright colorful desktop wallpaper or white document).
 - Confirm the prompter text is clearly visible to your eyes.
@@ -101,16 +101,16 @@ Follow this standardized protocol to independently confirm zero-pixel leakage be
 
 ## 4. Multi-Monitor & High-DPI Verification Protocol
 
-StealthPrompter supports complex multi-screen setups (e.g. 4K primary monitor at 150% DPI paired with 1080p secondary monitor at 100% DPI):
+Stealth supports complex multi-screen setups (e.g. 4K primary monitor at 150% DPI paired with 1080p secondary monitor at 100% DPI):
 
 1. **Per-Monitor DPI V2 Invariance**:
    - Win32 `SetWindowDisplayAffinity(hwnd, 17)` is an OS kernel attribute tied to the window handle.
-   - When dragging the HUD from a 4K display (`DPI = 144 / 150%`) to a 1080p display (`DPI = 96 / 100%`), Windows sends `WM_DPICHANGED`. StealthPrompter scales font size and line height smoothly without re-creating the window handle, preserving capture exclusion continuously.
+   - When dragging the HUD from a 4K display (`DPI = 144 / 150%`) to a 1080p display (`DPI = 96 / 100%`), Windows sends `WM_DPICHANGED`. Stealth scales font size and line height smoothly without re-creating the window handle, preserving capture exclusion continuously.
 2. **Multi-Monitor Display Capture in OBS**:
    - In OBS Studio, create two separate Display Capture sources (one for `Display 1`, one for `Display 2`).
    - Move the teleprompter HUD between monitors. Verify that in both display capture feeds, the prompter remains completely invisible.
 3. **Off-Screen & Virtual Monitor Clamping**:
-   - If a secondary display is disconnected during use, StealthPrompter's window placement guard detects that coordinates are outside accessible bounds and smoothly clamps the HUD to the primary display.
+   - If a secondary display is disconnected during use, Stealth's window placement guard detects that coordinates are outside accessible bounds and smoothly clamps the HUD to the primary display.
 
 ---
 
@@ -118,7 +118,7 @@ StealthPrompter supports complex multi-screen setups (e.g. 4K primary monitor at
 
 ### 5.1 Hardware-Accelerated GPU Scheduling (HAGS)
 - **Context**: Windows 10/11 includes Hardware-Accelerated GPU Scheduling (`Settings > Display > Graphics > Default graphics settings`).
-- **Behavior**: On modern drivers (2023+), HAGS operates seamlessly with DWM exclusion. On dual-GPU laptops (NVIDIA Optimus with Intel/AMD iGPU), ensure that both OBS Studio and StealthPrompter are assigned to the same GPU tier (typically "High Performance" NVIDIA processor) to avoid cross-adapter frame copy overhead.
+- **Behavior**: On modern drivers (2023+), HAGS operates seamlessly with DWM exclusion. On dual-GPU laptops (NVIDIA Optimus with Intel/AMD iGPU), ensure that both OBS Studio and Stealth are assigned to the same GPU tier (typically "High Performance" NVIDIA processor) to avoid cross-adapter frame copy overhead.
 
 ### 5.2 Mouse Cursor Capture & Click-Through Mode
 - **Mouse Cursor Visibility**: If "Capture Cursor" is checked in OBS Display Capture, your mouse pointer is visible in the stream.

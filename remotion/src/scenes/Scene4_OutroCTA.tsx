@@ -179,7 +179,7 @@ export const Scene4_OutroCTA: React.FC = () => {
           </div>
           <div style={{ display: "flex", flexDirection: "column" }}>
             <span style={{ fontSize: 18, fontWeight: 800, color: "#FFFFFF" }}>
-              Star on GitHub • StealthPrompter
+              Star on GitHub • Stealth Prompter
             </span>
             <span style={{ fontSize: 13, color: "#00F0FF", fontFamily: THEME.typography.monoFamily }}>
               github.com/stealthprompter/stealthprompter

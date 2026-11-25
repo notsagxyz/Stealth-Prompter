@@ -59,7 +59,7 @@ export const Scene2_InvisibilityShield: React.FC = () => {
             marginBottom: 10,
           }}
         >
-          🛡️ INTRODUCING STEALTHPROMPTER
+          🛡️ INTRODUCING STEALTH PROMPTER
         </div>
         <h1
           style={{
@@ -77,7 +77,7 @@ export const Scene2_InvisibilityShield: React.FC = () => {
         </p>
       </div>
 
-      {/* The Real StealthPrompter Launcher Window */}
+      {/* The Real Stealth Launcher Window */}
       <div
         style={{
           transform: `scale(${interpolate(scale, [0, 1], [0.94, 1])})`,
