@@ -90,8 +90,10 @@ impl MockWindowPlatform {
 
     /// Creates a strict mock requiring explicit `register_window` calls before operations.
     pub fn new_strict() -> Self {
-        let mut inner = MockPlatformInner::default();
-        inner.auto_register = false;
+        let inner = MockPlatformInner {
+            auto_register: false,
+            ..Default::default()
+        };
         Self {
             inner: Arc::new(RwLock::new(inner)),
         }
@@ -99,9 +101,11 @@ impl MockWindowPlatform {
 
     /// Creates a mock with explicit OS build and DWM composition settings.
     pub fn with_options(os_build: u32, dwm_enabled: bool) -> Self {
-        let mut inner = MockPlatformInner::default();
-        inner.os_build = os_build;
-        inner.dwm_enabled = dwm_enabled;
+        let inner = MockPlatformInner {
+            os_build,
+            dwm_enabled,
+            ..Default::default()
+        };
         Self {
             inner: Arc::new(RwLock::new(inner)),
         }
@@ -268,10 +272,10 @@ impl MockWindowPlatform {
         Ok(())
     }
 
-    fn ensure_window_mut<'a>(
-        guard: &'a mut MockPlatformInner,
+    fn ensure_window_mut(
+        guard: &mut MockPlatformInner,
         hwnd: isize,
-    ) -> Result<&'a mut MockWindowState, Box<dyn Error>> {
+    ) -> Result<&mut MockWindowState, Box<dyn Error>> {
         Self::validate_hwnd(hwnd).map_err(|e| Box::new(e) as Box<dyn Error>)?;
 
         if !guard.windows.contains_key(&hwnd) {
@@ -293,10 +297,10 @@ impl MockWindowPlatform {
         Ok(win)
     }
 
-    fn check_window_read<'a>(
-        guard: &'a MockPlatformInner,
+    fn check_window_read(
+        guard: &MockPlatformInner,
         hwnd: isize,
-    ) -> Result<&'a MockWindowState, Box<dyn Error>> {
+    ) -> Result<&MockWindowState, Box<dyn Error>> {
         Self::validate_hwnd(hwnd).map_err(|e| Box::new(e) as Box<dyn Error>)?;
 
         let win = guard.windows.get(&hwnd).ok_or_else(|| {

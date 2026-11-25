@@ -53,6 +53,7 @@ export interface ScriptSummary {
   last_position: number;
   speed: number;
   word_count: number;
+  snippet?: string;
 }
 
 export type PrompterActionType = 'play' | 'pause' | 'speed_change' | 'rewind' | 'reset' | 'speed_up' | 'speed_down' | 'toggle_play';
