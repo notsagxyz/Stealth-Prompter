@@ -1,49 +1,56 @@
 ---
-title: Decisión Final de Naming e Identidad de Marca
+title: Decisión Final de Naming e Identidad de Marca — Stealth (Stealth Prompter)
 tags:
   - naming
   - branding
   - decision
+  - stealth
 created: 2026-11-23
-updated: 2026-11-23
+updated: 2026-11-25
 ---
 
-# 🎯 Decisión de Marca: StealthPrompter
+# 🎯 Decisión Final de Marca: Stealth (Stealth Prompter)
 
-## 1. Nombre Oficial
-**`StealthPrompter`**
+## 1. Arquitectura Dual de Marca (R4)
 
-- **Etimología / Concepto**: Fusión de **Stealth** (sigiloso, indetectable, invisible para la audiencia en Zoom/Meet/Teams/OBS/Discord) y **Prompter** (teleprompter / lector de guiones en vivo).
-- **Razón de elección**: Transmite de forma instantánea y sin ambigüedades qué hace la aplicación (leer guiones en pantalla) y su propuesta de valor única (permanecer invisible para cualquier captura o transmisión de pantalla).
+Para combinar máxima concisión dentro de la interfaz con claridad inmediata en el lanzamiento público, el proyecto adopta una identidad dual limpia bajo un **único slug técnico**:
 
----
-
-## 2. Disponibilidad Confirmada
-- **GitHub**: ✅ Repositorio libre (`StealthPrompter` / `stealth-prompter`).
-- **Twitter / X**: ✅ `@StealthPrompter` libre.
-- **Crates.io**: ✅ `stealth-prompter` / `stealthprompter` libre (404).
-- **npm**: ✅ `stealthprompter` libre (404).
-- **Conflictos de software**: Cero colisiones con marcas existentes en el ecosistema.
+| Contexto | Nombre Oficial | Uso Obligatorio |
+|---|---|---|
+| **Dentro de la App / Binario / Títulos** | **`Stealth`** | `productName: "Stealth"`, barra del Launcher (`Stealth`), ventana HUD (`Stealth HUD`), ejecutable (`stealth.exe`), instalador y diálogos internos. |
+| **Comercial / Público / Marketing** | **`Stealth Prompter`** | Título del `README.md`, descripción del repo, hilo de Twitter/X, Hacker News ("Show HN"), Product Hunt, Reddit y video de lanzamiento. |
+| **Slug Único (Repos, Paquetes, Handle)** | **`stealthprompter`** | Repositorio GitHub (`stealthprompter`), handle X (`@stealthprompter`), paquete npm (`stealthprompter`), crate Rust (`stealthprompter`), dominios `stealthprompter.{com,dev,app,io}`. |
+| **Identificador Tauri & Datos Locales** | **`com.stealth.desktop`** | `identifier` en `tauri.conf.json` y carpeta `%APPDATA%\com.stealth.desktop\` (con migración automática al arrancar desde la carpeta anterior para no perder guiones ni ajustes). |
 
 ---
 
-## 3. Elementos de Identidad
+## 2. Disponibilidad Verificada en Vivo (`2026-11-25T23:11:10Z`)
 
-### Tagline Principal
+- **GitHub (`github.com/stealthprompter`)**: ✅ **DISPONIBLE** (`HTTP 404`, `0` repositorios exactos). *(Nota: el slug con guion `stealth-prompter` resultó ocupado por el usuario `Stealth-prompter`, por lo que `stealthprompter` sin guion es la elección definitiva).*
+- **Twitter / X (`@stealthprompter`)**: ✅ **DISPONIBLE** (`HTTP 404` y 0 resultados en búsqueda web; sujeto a validación final al registrar la cuenta).
+- **Crates.io (`stealthprompter`)**: ✅ **DISPONIBLE** (`HTTP 404`).
+- **npm (`stealthprompter`)**: ✅ **DISPONIBLE** (`HTTP 404`).
+- **Dominios (`stealthprompter.com`, `.dev`, `.app`, `.io`)**: ✅ **TODOS DISPONIBLES** (`NXDOMAIN` + RDAP `HTTP 404`).
+- **Nota sobre colisión comercial no competidora**: Existe un widget móvil web llamado *"Stealth Prompter"* en la suite de marketing *Grow With Newman* (`growwithnewman.com`). No compite en escritorio nativo (Tauri 2 + Rust + exclusión DWM `WDA_EXCLUDEFROMCAPTURE`), es propietario y no posee `stealthprompter` en ningún registro técnico, dominio ni X.
+
+---
+
+## 3. Elementos de Identidad Visual & Mensajería
+
+### Tagline Principal (Inglés)
 > *"The open-source invisible teleprompter that stays hidden from screen sharing and recordings."*
 
 ### Tagline en Español
 > *"El teleprompter de código abierto invisible al compartir pantalla y grabar."*
 
 ### Descripción Corta para GitHub (< 120 caracteres)
-> `Open-source invisible teleprompter that stays hidden from screen sharing and recordings (Tauri 2 + Rust).` *(104 caracteres)*
+> `Stealth Prompter — Open-source invisible desktop teleprompter hidden from screen shares (Tauri 2 + Rust).` *(106 caracteres)*
 
-### Paleta de Color & Acento
-- **Fondo Base**: `#090A0F` (Dark Obsidian, negro profundo con tinte azul noche para vidrio glassmorphism).
-- **Vidrio Translúcido**: `rgba(18, 20, 29, 0.70)` con `backdrop-filter: blur(16px)`.
-- **Color de Acento**: `#00F0FF` (**Cyber Cyan / Electric Ghost**) y `#10B981` (**Stealth Emerald**). Simboliza precisión técnica, visibilidad clara para el orador y halo de invisibilidad.
-- **Texto Principal**: `#F8FAFC` (Slate 50, legibilidad óptima para lectura a distancia).
-- **Guía de Lectura**: `#00F0FF` con opacidad sutil del 25% y brillo de 1px.
+### Paleta Oficial (Alineada con `vault/04-Diseno/Design-System.md`)
+- **Fondo Base (`--bg`)**: `#0b0b12` (casi negro con leve matiz azulado/violeta).
+- **Vidrio Oscuro (`--surface`)**: `rgba(255, 255, 255, 0.04)` con borde `1px rgba(255, 255, 255, 0.08)` y radios `22px` (ventana), `14px` (tarjetas), `999px` (píldoras).
+- **Acento por Defecto (`--accent`)**: `#7c6cff` (**Violet**) + `--accent-glow: rgba(124, 108, 255, 0.35)`, configurable entre 6 presets (`Violet`, `Indigo`, `Crimson Stealth`, `Emerald`, `Amber`, `Cyan`).
+- **Texto Principal (`--text`)**: `#f4f4f8` (contraste >17:1 sobre `#0b0b12`).
 
-### Concepto de Isotipo / Logo
-- Un marco de HUD translúcido minimalista de proporciones panorámicas, dentro del cual tres líneas horizontales de texto dinámico se desvanecen gradualmente en un prisma de transparencia ("cloaking effect"), representando que el orador lo ve nítidamente mientras la lente de captura ve únicamente el fondo limpio.
+### Concepto de Icono (R5)
+- Icono **100% original** minimalista y reconocible a `16px`, con temática ninja / sigilo sobre tile redondeado oscuro, trazo limpio y un único color de acento (3 conceptos SVG + selección documentados en M5).
