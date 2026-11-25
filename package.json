@@ -7,14 +7,20 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "tauri": "tauri"
   },
   "dependencies": {
+    "@fontsource/inter": "^5.3.0",
+    "@fontsource/jetbrains-mono": "^5.3.0",
     "@tauri-apps/api": "^2.1.1",
     "@tauri-apps/plugin-global-shortcut": "^2.1.1",
+    "lucide-solid": "^1.79.0",
     "solid-js": "^1.9.3"
   },
   "devDependencies": {
+    "@resvg/resvg-js": "^2.6.2",
+    "@tauri-apps/cli": "^2.12.6",
     "@types/node": "^20.17.0",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.49",
