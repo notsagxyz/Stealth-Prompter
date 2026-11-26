@@ -341,6 +341,26 @@ export default function HudApp(): JSX.Element {
           '-webkit-backdrop-filter': 'blur(24px)',
         }}
       >
+        {/* Top Drag Handle Zone (allows dragging prompter from the top edge too) */}
+        {!settings().click_through && (
+          <div
+            data-tauri-drag-region
+            onMouseDown={(e) => {
+              if (e.button === 0) {
+                try {
+                  getCurrentWindow().startDragging();
+                } catch (err) {
+                  console.warn('startDragging error:', err);
+                }
+              }
+            }}
+            title="Drag to move prompter"
+            class="group absolute top-0 left-4 right-4 h-7 z-30 flex items-center justify-center cursor-grab active:cursor-grabbing"
+          >
+            <div class="w-10 h-1 rounded-full bg-white/15 group-hover:bg-white/40 transition-colors duration-150" />
+          </div>
+        )}
+
         {/* Subtle Horizontal Eye-line Reading Marker */}
         <ReadingMarker topPercent={32} heightPx={1} />
 

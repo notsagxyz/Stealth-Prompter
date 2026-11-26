@@ -33,8 +33,6 @@ import {
   LockIcon,
   PlayIcon,
   SettingsIcon,
-  PlusIcon,
-  FileTextIcon,
   HeartIcon,
   ExternalLinkIcon,
 } from '../components/Icons';
@@ -105,7 +103,7 @@ export default function LauncherApp(): JSX.Element {
   const [invisibilityActive, setInvisibilityActive] = createSignal<boolean>(true);
   const [hudVisible, setHudVisible] = createSignal<boolean>(false);
   const [hudSpeed, setHudSpeed] = createSignal<number>(3.0);
-  const [view, setView] = createSignal<'home' | 'editor' | 'settings'>('home');
+  const [view, setView] = createSignal<'workspace' | 'settings'>('workspace');
   const [supportMenuOpen, setSupportMenuOpen] = createSignal<boolean>(false);
 
   const t = () => getCopy(settings().language);
@@ -174,7 +172,6 @@ export default function LauncherApp(): JSX.Element {
       setSettings(updatedSettings);
       await saveSettings(updatedSettings);
       await emitUpdateScript(s);
-      setView('editor');
     } catch (e) {
       console.error('Failed to select script:', e);
     }
@@ -196,7 +193,7 @@ export default function LauncherApp(): JSX.Element {
     setScripts(updated);
     setActiveScript(newScript);
     await emitUpdateScript(newScript);
-    setView('editor');
+    setView('workspace');
   };
 
   const handleDeleteScript = async (id: string) => {
@@ -313,25 +310,23 @@ export default function LauncherApp(): JSX.Element {
 
   return (
     <div
-      class="w-screen h-screen overflow-hidden select-none relative font-sans bg-transparent p-1 box-border"
+      class="w-screen h-screen overflow-hidden select-none relative font-sans bg-transparent box-border"
       onClick={() => {
         if (supportMenuOpen()) setSupportMenuOpen(false);
       }}
     >
-      {/* Rounded Dark Glass Window Shell */}
-      <div
-        class="w-full h-full rounded-[22px] bg-[#0b0b12] border border-[var(--border)] overflow-hidden flex flex-col relative shadow-[0_24px_64px_rgba(0,0,0,0.78)] stealth-starfield"
-      >
-        {/* Subtle Corner Radial Glow using --accent-glow */}
+      {/* Full-bleed Rounded Window (no outer padding gap, zero Windows DWM border) */}
+      <div class="w-full h-full rounded-[22px] bg-[#0b0b12] border border-[var(--border)] overflow-hidden flex flex-col relative">
+        {/* Subtle Corner Ambient Glow */}
         <div
-          class="pointer-events-none absolute -top-24 -right-24 w-[440px] h-[440px] rounded-full blur-3xl opacity-65 transition-colors duration-300"
-          style={{ background: 'radial-gradient(circle, var(--accent-glow) 0%, transparent 70%)' }}
+          class="pointer-events-none absolute -top-28 -right-28 w-[380px] h-[380px] rounded-full blur-3xl opacity-40 transition-colors duration-300"
+          style={{ background: 'radial-gradient(circle, var(--accent-glow) 0%, transparent 72%)' }}
         />
 
         {/* Custom Frameless Draggable Titlebar */}
         <header
           data-tauri-drag-region
-          class="h-12 px-4 flex items-center justify-between border-b border-[var(--border)] bg-white/[0.02] backdrop-blur-md z-30 shrink-0 select-none"
+          class="h-12 px-4 flex items-center justify-between border-b border-[var(--border)] bg-white/[0.015] z-30 shrink-0 select-none"
         >
           {/* Left: Brand & View Pills */}
           <div data-tauri-drag-region class="flex items-center gap-3">
@@ -347,9 +342,9 @@ export default function LauncherApp(): JSX.Element {
             <nav class="flex items-center gap-1">
               <button
                 type="button"
-                onClick={() => setView('home')}
+                onClick={() => setView('workspace')}
                 class={`px-3 py-1 rounded-full text-xs font-medium transition-colors duration-150 ${
-                  view() !== 'settings'
+                  view() === 'workspace'
                     ? 'bg-white/[0.08] text-[var(--text)] border border-[var(--border)]'
                     : 'text-[var(--text-muted)] hover:text-[var(--text)]'
                 }`}
@@ -358,7 +353,7 @@ export default function LauncherApp(): JSX.Element {
               </button>
               <button
                 type="button"
-                onClick={() => setView(view() === 'settings' ? 'home' : 'settings')}
+                onClick={() => setView(view() === 'settings' ? 'workspace' : 'settings')}
                 class={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium transition-colors duration-150 ${
                   view() === 'settings'
                     ? 'bg-white/[0.08] text-[var(--text)] border border-[var(--accent)]'
@@ -385,14 +380,14 @@ export default function LauncherApp(): JSX.Element {
               </button>
             </Show>
 
-            {/* Support Pill Button (Only the heart is pink, matching user reference) */}
+            {/* Support Pill Button (Only the heart is pink) */}
             <div class="relative" onClick={(e) => e.stopPropagation()}>
               <button
                 type="button"
                 data-testid="support-button"
                 onClick={() => setSupportMenuOpen(!supportMenuOpen())}
                 title={t().supportTitle}
-                class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--surface)] hover:bg-[var(--surface-hover)] border border-[#ff4d8d]/45 text-xs font-medium text-[var(--text)] transition-all duration-150"
+                class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--surface)] hover:bg-[var(--surface-hover)] border border-[#ff4d8d]/45 text-xs font-medium text-[var(--text)] transition-colors duration-150"
               >
                 <HeartIcon class="w-3.5 h-3.5 text-[#ff4d8d]" />
                 <span>{t().support}</span>
@@ -437,7 +432,7 @@ export default function LauncherApp(): JSX.Element {
               title="Open / Close Prompter (Alt+H)"
               class={`h-7 px-3.5 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all duration-150 ${
                 hudVisible()
-                  ? 'bg-[var(--accent)] text-white shadow-[0_0_16px_var(--accent-glow)]'
+                  ? 'bg-[var(--accent)] text-white shadow-[0_0_14px_var(--accent-glow)]'
                   : 'bg-[var(--text)] text-[#0b0b12] hover:opacity-90'
               }`}
             >
@@ -480,50 +475,12 @@ export default function LauncherApp(): JSX.Element {
           </div>
         </header>
 
-        {/* Main Content Area */}
-        <main class="flex-1 min-h-0 p-6 flex flex-col relative z-10 overflow-hidden">
-          <Show when={view() === 'home'}>
-            <div class="flex flex-col h-full gap-6 max-w-4xl w-full mx-auto">
-              {/* Hero Header */}
-              <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pt-1">
-                <div>
-                  <h1 class="text-3xl sm:text-4xl font-semibold tracking-tight text-[var(--text)]">
-                    {t().heroPrefix}{' '}
-                    <em class="italic font-semibold text-[var(--accent)]">{t().heroAccent}</em>
-                    {t().heroSuffix}
-                  </h1>
-                  <p class="text-xs sm:text-sm text-[var(--text-muted)] mt-1.5">
-                    {t().heroSubtitle}
-                  </p>
-                </div>
-
-                <div class="flex items-center gap-2.5 shrink-0">
-                  <button
-                    type="button"
-                    onClick={handleCreateScript}
-                    class="flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--text)] text-[#0b0b12] hover:opacity-90 text-xs font-semibold shadow-lg transition-all duration-150"
-                  >
-                    <span class="relative inline-flex items-center justify-center w-4 h-4 rounded-full bg-[#0b0b12]/10">
-                      <FileTextIcon class="w-3 h-3 text-[#0b0b12]" />
-                      <span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-[var(--accent)] text-white flex items-center justify-center">
-                        <PlusIcon class="w-2 h-2" />
-                      </span>
-                    </span>
-                    <span>{t().newScript}</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => setView('settings')}
-                    class="px-4 py-2 rounded-full bg-[var(--surface)] hover:bg-[var(--surface-hover)] border border-[var(--border)] text-xs font-medium text-[var(--text)] transition-all duration-150"
-                  >
-                    {t().navSettings}
-                  </button>
-                </div>
-              </div>
-
-              {/* Recent Scripts Glass Cards */}
-              <div class="flex-1 min-h-0">
+        {/* Main Body: Calm Desktop Split Workspace or Settings */}
+        <main class="flex-1 min-h-0 p-4 flex flex-col relative z-10 overflow-hidden">
+          <Show when={view() === 'workspace'}>
+            <div class="flex-1 min-h-0 flex gap-4">
+              {/* Left Column: Compact Script Library */}
+              <div class="w-[248px] shrink-0 h-full">
                 <ScriptList
                   scripts={scripts()}
                   selectedId={activeScript()?.id || null}
@@ -533,24 +490,34 @@ export default function LauncherApp(): JSX.Element {
                   onDelete={handleDeleteScript}
                 />
               </div>
-            </div>
-          </Show>
 
-          <Show when={view() === 'editor'}>
-            <div class="h-full max-w-4xl w-full mx-auto">
-              <ScriptEditor
-                script={activeScript()}
-                language={settings().language}
-                onSave={handleSaveScript}
-                onBack={() => setView('home')}
-              />
+              {/* Right Column: Clean Distraction-Free Script Editor */}
+              <div class="flex-1 min-w-0 h-full flex flex-col gap-2.5">
+                <div class="flex items-center justify-between px-1 shrink-0">
+                  <h1 class="text-sm font-semibold text-[var(--text)] tracking-tight">
+                    {t().heroPrefix}{' '}
+                    <em class="italic font-semibold text-[var(--accent)]">{t().heroAccent}</em>
+                    {t().heroSuffix}
+                  </h1>
+                  <span class="text-[11px] text-[var(--text-muted)] hidden md:inline">
+                    {t().heroSubtitle}
+                  </span>
+                </div>
+                <div class="flex-1 min-h-0">
+                  <ScriptEditor
+                    script={activeScript()}
+                    language={settings().language}
+                    onSave={handleSaveScript}
+                  />
+                </div>
+              </div>
             </div>
           </Show>
 
           <Show when={view() === 'settings'}>
             <div class="h-full max-w-4xl w-full mx-auto flex flex-col gap-3">
               <div class="flex items-center justify-between shrink-0">
-                <h2 class="text-lg font-semibold text-[var(--text)] tracking-tight">
+                <h2 class="text-base font-semibold text-[var(--text)] tracking-tight">
                   {t().settingsTitle}
                 </h2>
               </div>
