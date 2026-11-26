@@ -123,7 +123,7 @@ export const SidebarIcon = (props: { class?: string }): JSX.Element => (
 );
 
 /**
- * Original Stealth Ninja-Play Brand Mark (Concept A: 4-point stealth shuriken + center play cue)
+ * Original Stealth Wing Brand Mark
  */
 export const StealthLogo = (props: { class?: string }): JSX.Element => (
   <svg
@@ -133,16 +133,9 @@ export const StealthLogo = (props: { class?: string }): JSX.Element => (
     class={props.class || 'w-5 h-5'}
     aria-hidden="true"
   >
-    <rect x="2" y="2" width="28" height="28" rx="8" fill="#13131d" stroke="currentColor" stroke-opacity="0.2" stroke-width="1.5" />
-    <path
-      d="M16 5.5L19.4 12.6L26.5 16L19.4 19.4L16 26.5L12.6 19.4L5.5 16L12.6 12.6L16 5.5Z"
-      stroke="currentColor"
-      stroke-width="1.75"
-      stroke-linejoin="round"
-    />
-    <path
-      d="M14.2 13.1L19.2 16L14.2 18.9V13.1Z"
-      fill="var(--accent, #7c6cff)"
-    />
+    <rect x="2" y="2" width="28" height="28" rx="7.5" fill="#13131d" stroke="currentColor" stroke-opacity="0.2" stroke-width="1.4" />
+    <path d="M16 6.6L25.8 20.9L19.8 18.5L16 22.2L12.2 18.5L6.2 20.9L16 6.6Z" fill="currentColor" />
+    <path d="M16 6.6L16 22.2L12.2 18.5L6.2 20.9L16 6.6Z" fill="var(--accent, #7c6cff)" fill-opacity="0.25" />
+    <path d="M16 22.8L19.1 19.9L16 25.1L12.9 19.9L16 22.8Z" fill="var(--accent, #7c6cff)" />
   </svg>
 );
