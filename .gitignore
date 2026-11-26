@@ -23,6 +23,7 @@ package.legacy.json
 **/target/
 src-tauri/target/
 src-tauri/gen/
+src-tauri/.cargo/config.toml
 **/*.rs.bk
 *.pdb
 *.exe
