@@ -1,11 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+<svg viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <radialGradient id="stealthGlow" cx="50%" cy="35%" r="65%">
-      <stop offset="0%" stop-color="#1d1a36" />
+    <radialGradient id="stealthGlow" cx="50%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#1c1934" />
       <stop offset="100%" stop-color="#0b0b12" />
     </radialGradient>
+    <linearGradient id="wing1" x1="120" y1="110" x2="392" y2="390" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="100%" stop-color="#b8b5d4" />
+    </linearGradient>
   </defs>
-  <rect x="24" y="24" width="464" height="464" rx="112" fill="url(#stealthGlow)" stroke="rgba(255,255,255,0.12)" stroke-width="10" />
-  <path d="M256 88L310 202L424 256L310 310L256 424L202 310L88 256L202 202L256 88Z" stroke="#f4f4f8" stroke-width="24" stroke-linejoin="round" />
-  <path d="M226 208L312 256L226 304V208Z" fill="#7c6cff" />
+  <rect x="24" y="24" width="464" height="464" rx="112" fill="url(#stealthGlow)" stroke="rgba(255,255,255,0.13)" stroke-width="10" />
+  <path d="M256 106L414 334L318 296L256 356L194 296L98 334L256 106Z" fill="url(#wing1)" />
+  <path d="M256 106L256 356L194 296L98 334L256 106Z" fill="rgba(124,108,255,0.22)" />
+  <path d="M256 364L306 318L256 402L206 318L256 364Z" fill="#7c6cff" />
 </svg>
