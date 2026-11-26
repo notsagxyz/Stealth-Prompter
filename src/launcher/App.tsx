@@ -343,7 +343,7 @@ export default function LauncherApp(): JSX.Element {
               <button
                 type="button"
                 onClick={() => setView('workspace')}
-                class={`px-3 py-1 rounded-full text-xs font-medium transition-colors duration-150 ${
+                class={`px-3 py-1 rounded-full text-xs font-medium transition-all duration-150 active:scale-95 ${
                   view() === 'workspace'
                     ? 'bg-white/[0.08] text-[var(--text)] border border-[var(--border)]'
                     : 'text-[var(--text-muted)] hover:text-[var(--text)]'
@@ -354,7 +354,7 @@ export default function LauncherApp(): JSX.Element {
               <button
                 type="button"
                 onClick={() => setView(view() === 'settings' ? 'workspace' : 'settings')}
-                class={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium transition-colors duration-150 ${
+                class={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium transition-all duration-150 active:scale-95 ${
                   view() === 'settings'
                     ? 'bg-white/[0.08] text-[var(--text)] border border-[var(--accent)]'
                     : 'text-[var(--text-muted)] hover:text-[var(--text)]'
@@ -394,14 +394,14 @@ export default function LauncherApp(): JSX.Element {
               </button>
 
               <Show when={supportMenuOpen()}>
-                <div class="absolute right-0 mt-2 w-56 rounded-[14px] bg-[#12121c]/95 backdrop-blur-xl border border-[var(--border)] shadow-2xl p-2 z-50 flex flex-col gap-1">
+                <div class="animate-pop-in absolute right-0 mt-2 w-56 rounded-[14px] bg-[#12121c]/95 backdrop-blur-xl border border-[var(--border)] shadow-2xl p-2 z-50 flex flex-col gap-1">
                   <div class="px-2.5 py-1.5 border-b border-white/[0.06]">
                     <p class="text-xs font-semibold text-[var(--text)]">{t().supportTitle}</p>
                     <p class="text-[11px] text-[var(--text-muted)]">{t().supportSubtitle}</p>
                   </div>
                   <button
                     type="button"
-                    onClick={() => handleOpenSupportUrl('https://cafecito.app/stealthprompter')}
+                    onClick={() => handleOpenSupportUrl('https://cafecito.app/notsagxyz')}
                     class="flex items-center justify-between px-2.5 py-2 rounded-lg text-xs text-[var(--text)] hover:bg-white/[0.07] transition-colors"
                   >
                     <span class="flex items-center gap-2">
@@ -412,7 +412,7 @@ export default function LauncherApp(): JSX.Element {
                   </button>
                   <button
                     type="button"
-                    onClick={() => handleOpenSupportUrl('https://ko-fi.com/stealthprompter')}
+                    onClick={() => handleOpenSupportUrl('https://ko-fi.com/notsag#checkoutModal')}
                     class="flex items-center justify-between px-2.5 py-2 rounded-lg text-xs text-[var(--text)] hover:bg-white/[0.07] transition-colors"
                   >
                     <span class="flex items-center gap-2">
@@ -478,7 +478,7 @@ export default function LauncherApp(): JSX.Element {
         {/* Main Body: Calm Desktop Split Workspace or Settings */}
         <main class="flex-1 min-h-0 p-4 flex flex-col relative z-10 overflow-hidden">
           <Show when={view() === 'workspace'}>
-            <div class="flex-1 min-h-0 flex gap-4">
+            <div class="animate-tab-in flex-1 min-h-0 flex gap-4">
               {/* Left Column: Compact Script Library */}
               <div class="w-[248px] shrink-0 h-full">
                 <ScriptList
@@ -508,6 +508,7 @@ export default function LauncherApp(): JSX.Element {
                     script={activeScript()}
                     language={settings().language}
                     onSave={handleSaveScript}
+                    onCreate={handleCreateScript}
                   />
                 </div>
               </div>
@@ -515,7 +516,7 @@ export default function LauncherApp(): JSX.Element {
           </Show>
 
           <Show when={view() === 'settings'}>
-            <div class="h-full max-w-4xl w-full mx-auto flex flex-col gap-3">
+            <div class="animate-tab-in h-full max-w-4xl w-full mx-auto flex flex-col gap-3">
               <div class="flex items-center justify-between shrink-0">
                 <h2 class="text-base font-semibold text-[var(--text)] tracking-tight">
                   {t().settingsTitle}

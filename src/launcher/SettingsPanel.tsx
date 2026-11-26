@@ -132,12 +132,20 @@ export function SettingsPanel(props: SettingsPanelProps): JSX.Element {
         {/* Mirror & Capture Stealth */}
         <div class="flex items-center justify-between pt-1 border-t border-white/[0.05]">
           <span class="text-xs text-[var(--text)]">{t().mirrorMode}</span>
-          <div class="grid grid-cols-2 bg-white/[0.04] border border-[var(--border)] rounded-full p-0.5 w-[104px]">
+          <div class="relative grid grid-cols-2 bg-white/[0.04] border border-[var(--border)] rounded-full p-0.5 w-[104px]">
+            <span
+              aria-hidden="true"
+              class={`pointer-events-none absolute top-0.5 bottom-0.5 left-0.5 w-[calc(50%-2px)] rounded-full transition-transform duration-200 ease-out ${
+                props.settings.mirror_mode
+                  ? 'translate-x-full bg-[var(--accent)] shadow-[0_0_12px_var(--accent-glow)]'
+                  : 'translate-x-0 bg-white/[0.14]'
+              }`}
+            />
             <button
               type="button"
               onClick={() => update('mirror_mode', false)}
-              class={`py-0.5 rounded-full text-[11px] font-medium transition-colors ${
-                !props.settings.mirror_mode ? 'bg-white/[0.14] text-white' : 'text-[var(--text-muted)]'
+              class={`relative z-10 py-0.5 rounded-full text-[11px] font-medium transition-colors duration-200 active:scale-95 ${
+                !props.settings.mirror_mode ? 'text-white' : 'text-[var(--text-muted)] hover:text-white/80'
               }`}
             >
               Off
@@ -145,8 +153,8 @@ export function SettingsPanel(props: SettingsPanelProps): JSX.Element {
             <button
               type="button"
               onClick={() => update('mirror_mode', true)}
-              class={`py-0.5 rounded-full text-[11px] font-medium transition-colors ${
-                props.settings.mirror_mode ? 'bg-[var(--accent)] text-white' : 'text-[var(--text-muted)]'
+              class={`relative z-10 py-0.5 rounded-full text-[11px] font-medium transition-colors duration-200 active:scale-95 ${
+                props.settings.mirror_mode ? 'text-white' : 'text-[var(--text-muted)] hover:text-white/80'
               }`}
             >
               On
@@ -156,15 +164,23 @@ export function SettingsPanel(props: SettingsPanelProps): JSX.Element {
 
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-1.5">
-            <span class={`w-2 h-2 rounded-full ${props.invisibilityActive ? 'bg-emerald-400' : 'bg-zinc-600'}`} />
+            <span class={`w-2 h-2 rounded-full transition-colors duration-200 ${props.invisibilityActive ? 'bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.7)]' : 'bg-zinc-600'}`} />
             <span class="text-xs text-[var(--text)]">{t().captureStealth}</span>
           </div>
-          <div class="grid grid-cols-2 bg-white/[0.04] border border-[var(--border)] rounded-full p-0.5 w-[128px]">
+          <div class="relative grid grid-cols-2 bg-white/[0.04] border border-[var(--border)] rounded-full p-0.5 w-[128px]">
+            <span
+              aria-hidden="true"
+              class={`pointer-events-none absolute top-0.5 bottom-0.5 left-0.5 w-[calc(50%-2px)] rounded-full transition-transform duration-200 ease-out ${
+                props.invisibilityActive
+                  ? 'translate-x-0 bg-[var(--accent)] shadow-[0_0_12px_var(--accent-glow)]'
+                  : 'translate-x-full bg-white/[0.14]'
+              }`}
+            />
             <button
               type="button"
               onClick={() => props.onToggleInvisibility(true)}
-              class={`py-0.5 rounded-full text-[11px] font-medium transition-colors ${
-                props.invisibilityActive ? 'bg-[var(--accent)] text-white' : 'text-[var(--text-muted)]'
+              class={`relative z-10 py-0.5 rounded-full text-[11px] font-medium transition-colors duration-200 active:scale-95 ${
+                props.invisibilityActive ? 'text-white' : 'text-[var(--text-muted)] hover:text-white/80'
               }`}
             >
               {t().captureHidden}
@@ -172,8 +188,8 @@ export function SettingsPanel(props: SettingsPanelProps): JSX.Element {
             <button
               type="button"
               onClick={() => props.onToggleInvisibility(false)}
-              class={`py-0.5 rounded-full text-[11px] font-medium transition-colors ${
-                !props.invisibilityActive ? 'bg-white/[0.14] text-white' : 'text-[var(--text-muted)]'
+              class={`relative z-10 py-0.5 rounded-full text-[11px] font-medium transition-colors duration-200 active:scale-95 ${
+                !props.invisibilityActive ? 'text-white' : 'text-[var(--text-muted)] hover:text-white/80'
               }`}
             >
               {t().captureVisible}
@@ -237,12 +253,18 @@ export function SettingsPanel(props: SettingsPanelProps): JSX.Element {
 
         <div class="flex items-center justify-between pt-2 border-t border-white/[0.05]">
           <span class="text-xs text-[var(--text)]">{t().languageLabel}</span>
-          <div class="grid grid-cols-2 bg-white/[0.04] border border-[var(--border)] rounded-full p-0.5 w-[132px]">
+          <div class="relative grid grid-cols-2 bg-white/[0.04] border border-[var(--border)] rounded-full p-0.5 w-[132px]">
+            <span
+              aria-hidden="true"
+              class={`pointer-events-none absolute top-0.5 bottom-0.5 left-0.5 w-[calc(50%-2px)] rounded-full bg-[var(--accent)] shadow-[0_0_12px_var(--accent-glow)] transition-transform duration-200 ease-out ${
+                props.settings.language === 'es' ? 'translate-x-full' : 'translate-x-0'
+              }`}
+            />
             <button
               type="button"
               onClick={() => update('language', 'en' as Locale)}
-              class={`py-1 rounded-full text-[11px] font-medium transition-colors ${
-                (props.settings.language || 'en') === 'en' ? 'bg-[var(--accent)] text-white' : 'text-[var(--text-muted)]'
+              class={`relative z-10 py-1 rounded-full text-[11px] font-medium transition-colors duration-200 active:scale-95 ${
+                (props.settings.language || 'en') === 'en' ? 'text-white' : 'text-[var(--text-muted)] hover:text-white/80'
               }`}
             >
               English
@@ -250,8 +272,8 @@ export function SettingsPanel(props: SettingsPanelProps): JSX.Element {
             <button
               type="button"
               onClick={() => update('language', 'es' as Locale)}
-              class={`py-1 rounded-full text-[11px] font-medium transition-colors ${
-                props.settings.language === 'es' ? 'bg-[var(--accent)] text-white' : 'text-[var(--text-muted)]'
+              class={`relative z-10 py-1 rounded-full text-[11px] font-medium transition-colors duration-200 active:scale-95 ${
+                props.settings.language === 'es' ? 'text-white' : 'text-[var(--text-muted)] hover:text-white/80'
               }`}
             >
               Español
@@ -308,7 +330,7 @@ export function SettingsPanel(props: SettingsPanelProps): JSX.Element {
         <div class="flex items-center gap-2 pt-2 border-t border-white/[0.05]">
           <button
             type="button"
-            onClick={() => props.onOpenSupportUrl('https://ko-fi.com/stealthprompter')}
+            onClick={() => props.onOpenSupportUrl('https://ko-fi.com/notsag#checkoutModal')}
             class="flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-[#ff4d8d]/40 text-xs font-medium text-[var(--text)] transition-colors"
           >
             <HeartIcon class="w-3.5 h-3.5 text-[#ff4d8d]" />
@@ -317,7 +339,7 @@ export function SettingsPanel(props: SettingsPanelProps): JSX.Element {
           </button>
           <button
             type="button"
-            onClick={() => props.onOpenSupportUrl('https://cafecito.app/stealthprompter')}
+            onClick={() => props.onOpenSupportUrl('https://cafecito.app/notsagxyz')}
             class="flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-[#ff4d8d]/40 text-xs font-medium text-[var(--text)] transition-colors"
           >
             <HeartIcon class="w-3.5 h-3.5 text-[#ff4d8d]" />

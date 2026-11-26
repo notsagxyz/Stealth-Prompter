@@ -10,7 +10,6 @@ pub mod shortcuts;
 pub mod storage;
 
 use std::sync::Arc;
-#[cfg(windows)]
 use tauri::Manager;
 
 // Re-export core platform types
@@ -89,6 +88,16 @@ pub fn run() {
             }
 
             Ok(())
+        })
+        .on_window_event(|window, event| {
+            if let tauri::WindowEvent::CloseRequested { .. } = event {
+                if window.label() == "launcher" {
+                    if let Some(prompter) = window.app_handle().get_webview_window("prompter") {
+                        let _ = prompter.close();
+                    }
+                    window.app_handle().exit(0);
+                }
+            }
         })
         .run(tauri::generate_context!())
         .expect("error while running Stealth application");

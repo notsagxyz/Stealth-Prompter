@@ -39,7 +39,7 @@ export function ScriptList(props: ScriptListProps): JSX.Element {
           type="button"
           onClick={props.onCreate}
           title={t().newScript}
-          class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-[var(--text)] text-[#0b0b12] hover:opacity-90 text-[11px] font-semibold transition-opacity"
+          class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-[var(--text)] text-[#0b0b12] hover:opacity-90 active:scale-95 text-[11px] font-semibold transition-opacity duration-150"
         >
           <PlusIcon class="w-3 h-3" />
           <span>{t().newScript}</span>
