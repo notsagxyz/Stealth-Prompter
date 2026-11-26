@@ -79,6 +79,9 @@ jobs:
       - name: Install Frontend Dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Build Frontend
+        run: pnpm build
+
       - name: Run Backend Unit Tests
         run: cargo test --manifest-path src-tauri/Cargo.toml --lib
 
@@ -123,8 +126,11 @@ jobs:
               "$hash  $($file.Name)" | Out-File -FilePath $checksumFile -Append -Encoding ascii
               Write-Host "Hashed: $($file.Name) -> $hash"
             }
-            # Upload checksum file to the release using gh CLI
+            # Upload checksum file and standalone portable exe to the release using gh CLI
             if (Test-Path $checksumFile) {
               gh release upload "${{ github.ref_name }}" $checksumFile --clobber
+            }
+            if (Test-Path "src-tauri/target/release/stealth.exe") {
+              gh release upload "${{ github.ref_name }}" "src-tauri/target/release/stealth.exe" --clobber
             }
           }
