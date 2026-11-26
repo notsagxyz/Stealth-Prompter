@@ -34,7 +34,7 @@ export const ThreeCanvasWrapper: React.FC<ThreeCanvasWrapperProps> = ({
     >
       <ambientLight intensity={0.7} color="#ffffff" />
       <directionalLight position={[5, 5, 5]} intensity={1.2} color="#e2e8f0" />
-      <pointLight position={[0, -2, 2]} intensity={2.5} color="#00f0ff" />
+      <pointLight position={[0, -2, 2]} intensity={2.5} color="#7c6cff" />
       {children}
     </ThreeCanvas>
   );

@@ -26,7 +26,7 @@ Para combinar máxima concisión dentro de la interfaz con claridad inmediata en
 
 ## 2. Disponibilidad Verificada en Vivo (`2026-11-25T23:11:10Z`)
 
-- **GitHub (`github.com/stealthprompter`)**: ✅ **DISPONIBLE** (`HTTP 404`, `0` repositorios exactos). *(Nota: el slug con guion `stealth-prompter` resultó ocupado por el usuario `Stealth-prompter`, por lo que `stealthprompter` sin guion es la elección definitiva).*
+- **GitHub (`github.com/stealthprompter`)**: ✅ **DISPONIBLE** (`HTTP 404`, `0` repositorios exactos). *(Nota: la variante con guion resultó ocupada en GitHub, por lo que `stealthprompter` sin guion es la elección definitiva).*
 - **Twitter / X (`@stealthprompter`)**: ✅ **DISPONIBLE** (`HTTP 404` y 0 resultados en búsqueda web; sujeto a validación final al registrar la cuenta).
 - **Crates.io (`stealthprompter`)**: ✅ **DISPONIBLE** (`HTTP 404`).
 - **npm (`stealthprompter`)**: ✅ **DISPONIBLE** (`HTTP 404`).

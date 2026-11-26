@@ -54,6 +54,7 @@ pub fn run() {
             commands::load_script,
             commands::save_script,
             commands::delete_script,
+            commands::open_external_url,
         ])
         .setup(move |app| {
             // Reset click-through lock on cold boot so the user never starts locked out

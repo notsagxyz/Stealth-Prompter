@@ -19,7 +19,7 @@ status: completed
 
 ## 1. Resumen Ejecutivo y Metodología (R4)
 
-Tras la directriz **R4** de renombrar la aplicación en pantalla a **Stealth** y comercializarla públicamente como **Stealth Prompter**, se realizó una auditoría en vivo de los slugs candidatos (`stealthprompter`, `stealth-prompter`, `stealth`, `getstealth`, `stealth-app`) en todos los registros técnicos y dominios:
+Tras la directriz **R4** de renombrar la aplicación en pantalla a **Stealth** y comercializarla públicamente como **Stealth Prompter**, se realizó una auditoría en vivo de los slugs candidatos (`stealthprompter`, variante con guion, `stealth`, `getstealth`, `stealth-app`) en todos los registros técnicos y dominios:
 
 1. **GitHub** (`api.github.com/users/<slug>` y `search/repositories?q=<slug>+in:name`)
 2. **npm** (`registry.npmjs.org/<slug>`)
@@ -36,7 +36,7 @@ Tras la directriz **R4** de renombrar la aplicación en pantalla a **Stealth** y
 | Slug | GitHub User/Org (`users/<slug>`) | GitHub Repos Exactos | npm | crates.io | X / Twitter | Veredicto |
 |---|---|---|---|---|---|---|
 | **`stealthprompter`** | ✅ **LIBRE (`HTTP 404`)** | ✅ **0 repos (`total_count: 0`)** | ✅ **LIBRE (`HTTP 404`)** | ✅ **LIBRE (`HTTP 404`)** | ✅ **LIBRE (`HTTP 404`, 0 resultados)** | **GANADOR UNIFICADO** |
-| `stealth-prompter` | ❌ **OCUPADO (`HTTP 200`)** — usuario `Stealth-prompter` (`id: 268882700`) | ❌ **OCUPADO (`total_count: 3`)** | ✅ LIBRE (`404`) | ✅ LIBRE (`404`) | `HTTP 404` (`@stealth_prompter` también `404`) | Descartado por colisión en GitHub |
+| `variante con guion` | ❌ **OCUPADO (`HTTP 200`)** — usuario ocupado en GitHub | ❌ **OCUPADO (`total_count: 3`)** | ✅ LIBRE (`404`) | ✅ LIBRE (`404`) | `HTTP 404` | Descartado por colisión en GitHub |
 | `stealth` | ❌ **OCUPADO (`HTTP 200`)** — usuario `stealth` (`id: 1227710`) | ❌ **OCUPADO (`11,380` repos)** | ❌ **OCUPADO (`200`)** | ✅ LIBRE (`404`) | ❌ **OCUPADO (`200`)** | Genérico saturado como slug; válido solo como nombre in-app **Stealth** |
 | `getstealth` | ✅ LIBRE (`404`) | ✅ 0 repos | ✅ LIBRE (`404`) | ✅ LIBRE (`404`) | ❌ **OCUPADO (`200`)** | Colisión en X y `.com`/`.app` |
 | `stealth-app` | ✅ LIBRE (`404`) | ❌ **OCUPADO (`111` repos)** | ✅ LIBRE (`404`) | ✅ LIBRE (`404`) | ❌ `@stealthapp` **OCUPADO (`200`)** | Saturado en GitHub/X/dominios |
@@ -49,7 +49,7 @@ Tras la directriz **R4** de renombrar la aplicación en pantalla a **Stealth** y
 | **`stealthprompter.dev`** | `NXDOMAIN` | `HTTP 404` | ✅ **DISPONIBLE** |
 | **`stealthprompter.app`** | `NXDOMAIN` | `HTTP 404` | ✅ **DISPONIBLE** |
 | **`stealthprompter.io`** | `NXDOMAIN` | `HTTP 404` | ✅ **DISPONIBLE** |
-| `stealth-prompter.{com,dev,app}` | `NXDOMAIN` | `HTTP 404` | Disponible (pero descartado por colisión GitHub) |
+| `variante-con-guion.{com,dev,app}` | `NXDOMAIN` | `HTTP 404` | Disponible (pero descartado por colisión GitHub) |
 | `getstealth.com` / `getstealth.app` | `NS_FOUND` | `HTTP 200 REGISTERED` | ❌ **OCUPADO** (`getstealth.dev` libre) |
 | `stealth.dev` / `stealth.app` | `NS_FOUND` | Registrado | ❌ **OCUPADO** |
 | `stealth-app.com` | `NS_FOUND` | Registrado | ❌ **OCUPADO** |

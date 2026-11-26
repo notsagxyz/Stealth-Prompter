@@ -37,7 +37,7 @@ export const GlassCard3D: React.FC<GlassCard3DProps> = ({
 
       {/* Cyber cyan glowing edge border */}
       <lineSegments geometry={edgesGeometry}>
-        <lineBasicMaterial color="#00F0FF" linewidth={2} transparent opacity={0.8} />
+        <lineBasicMaterial color="#7c6cff" linewidth={2} transparent opacity={0.8} />
       </lineSegments>
     </group>
   );

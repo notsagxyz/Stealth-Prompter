@@ -19,6 +19,12 @@ fn default_window_opacity() -> f64 {
 fn default_theme() -> String {
     "dark-glass".to_string()
 }
+fn default_accent_color() -> String {
+    "#7c6cff".to_string()
+}
+fn default_language() -> String {
+    "en".to_string()
+}
 fn default_speed() -> f64 {
     2.5
 }
@@ -37,6 +43,24 @@ fn default_speed_down() -> String {
 }
 fn default_toggle_window() -> String {
     "Alt+H".to_string()
+}
+fn default_scroll_up() -> String {
+    "Alt+PageUp".to_string()
+}
+fn default_scroll_down() -> String {
+    "Alt+PageDown".to_string()
+}
+fn default_opacity_up() -> String {
+    "Alt+Shift+Up".to_string()
+}
+fn default_opacity_down() -> String {
+    "Alt+Shift+Down".to_string()
+}
+fn default_toggle_click_through() -> String {
+    "Alt+L".to_string()
+}
+fn default_restart() -> String {
+    "Alt+R".to_string()
 }
 
 fn default_window_x() -> i32 {
@@ -93,6 +117,18 @@ pub struct HotkeysSettings {
     pub speed_down: String,
     #[serde(default = "default_toggle_window", alias = "toggleWindow")]
     pub toggle_window: String,
+    #[serde(default = "default_scroll_up", alias = "scrollUp")]
+    pub scroll_up: String,
+    #[serde(default = "default_scroll_down", alias = "scrollDown")]
+    pub scroll_down: String,
+    #[serde(default = "default_opacity_up", alias = "opacityUp")]
+    pub opacity_up: String,
+    #[serde(default = "default_opacity_down", alias = "opacityDown")]
+    pub opacity_down: String,
+    #[serde(default = "default_toggle_click_through", alias = "toggleClickThrough")]
+    pub toggle_click_through: String,
+    #[serde(default = "default_restart")]
+    pub restart: String,
 }
 
 impl Default for HotkeysSettings {
@@ -102,6 +138,12 @@ impl Default for HotkeysSettings {
             speed_up: default_speed_up(),
             speed_down: default_speed_down(),
             toggle_window: default_toggle_window(),
+            scroll_up: default_scroll_up(),
+            scroll_down: default_scroll_down(),
+            opacity_up: default_opacity_up(),
+            opacity_down: default_opacity_down(),
+            toggle_click_through: default_toggle_click_through(),
+            restart: default_restart(),
         }
     }
 }
@@ -188,6 +230,10 @@ pub struct Settings {
     // General Settings properties
     #[serde(default = "default_theme")]
     pub theme: String,
+    #[serde(default = "default_accent_color", alias = "accentColor")]
+    pub accent_color: String,
+    #[serde(default = "default_language")]
+    pub language: String,
     #[serde(default, alias = "lastScriptId")]
     pub last_script_id: Option<String>,
     #[serde(default = "default_true", alias = "offlineOnly")]
@@ -212,6 +258,8 @@ impl Default for Settings {
             mirror_mode: false,
             click_through: false,
             theme: default_theme(),
+            accent_color: default_accent_color(),
+            language: default_language(),
             last_script_id: None,
             offline_only: true,
             telemetry_enabled: false,
@@ -229,8 +277,8 @@ impl Settings {
         if self.font_size < 8 || self.font_size > 144 {
             return Err(format!("font_size {} out of range [8, 144]", self.font_size));
         }
-        if self.window_opacity < 0.05 || self.window_opacity > 1.0 {
-            return Err(format!("window_opacity {} out of range [0.05, 1.0]", self.window_opacity));
+        if self.window_opacity < 0.10 || self.window_opacity > 1.0 {
+            return Err(format!("window_opacity {} out of range [0.10, 1.0]", self.window_opacity));
         }
         if self.line_height < 0.5 || self.line_height > 5.0 {
             return Err(format!("line_height {} out of range [0.5, 5.0]", self.line_height));
@@ -241,7 +289,7 @@ impl Settings {
     pub fn clamp(&mut self) {
         self.scroll_speed = self.scroll_speed.clamp(0.1, 20.0);
         self.font_size = self.font_size.clamp(8, 144);
-        self.window_opacity = self.window_opacity.clamp(0.05, 1.0);
+        self.window_opacity = self.window_opacity.clamp(0.10, 1.0);
         self.line_height = self.line_height.clamp(0.5, 5.0);
     }
 

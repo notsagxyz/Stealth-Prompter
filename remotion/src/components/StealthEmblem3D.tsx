@@ -42,14 +42,14 @@ export const StealthEmblem3D: React.FC<StealthEmblem3DProps> = ({ scale = 1 }) =
 
       {/* Cyber cyan beveled edges */}
       <lineSegments geometry={outerEdgesGeo}>
-        <lineBasicMaterial color="#00F0FF" linewidth={2} />
+        <lineBasicMaterial color="#7c6cff" linewidth={2} />
       </lineSegments>
 
       {/* Script bar 1 (Top) */}
       <mesh geometry={barGeos[0]} position={[0, 0.45, 0.1]}>
         <meshStandardMaterial
-          color="#00F0FF"
-          emissive="#00F0FF"
+          color="#7c6cff"
+          emissive="#7c6cff"
           emissiveIntensity={0.6}
           roughness={0.2}
           metalness={0.8}
@@ -72,8 +72,8 @@ export const StealthEmblem3D: React.FC<StealthEmblem3DProps> = ({ scale = 1 }) =
       {/* Script bar 3 (Bottom) */}
       <mesh geometry={barGeos[2]} position={[0.1, -0.45, 0.1]}>
         <meshStandardMaterial
-          color="#00F0FF"
-          emissive="#00F0FF"
+          color="#7c6cff"
+          emissive="#7c6cff"
           emissiveIntensity={0.5}
           roughness={0.2}
           metalness={0.8}

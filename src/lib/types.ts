@@ -20,6 +20,8 @@ export interface Settings {
   mirror_mode: boolean;
   click_through: boolean;
   theme: string;
+  accent_color?: string;
+  language?: 'en' | 'es';
   last_script_id: string | null;
   offline_only: boolean;
   telemetry_enabled: boolean;
@@ -56,7 +58,19 @@ export interface ScriptSummary {
   snippet?: string;
 }
 
-export type PrompterActionType = 'play' | 'pause' | 'speed_change' | 'rewind' | 'reset' | 'speed_up' | 'speed_down' | 'toggle_play';
+export type PrompterActionType =
+  | 'play'
+  | 'pause'
+  | 'speed_change'
+  | 'rewind'
+  | 'reset'
+  | 'speed_up'
+  | 'speed_down'
+  | 'toggle_play'
+  | 'scroll_up'
+  | 'scroll_down'
+  | 'opacity_up'
+  | 'opacity_down';
 
 export interface PrompterActionPayload {
   type: PrompterActionType;

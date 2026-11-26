@@ -1,11 +1,14 @@
 import { createSignal, createEffect, type JSX } from 'solid-js';
 import { calculateScriptMetrics, ScriptSanitizer } from '../lib/sanitizer';
 import type { Script } from '../lib/types';
-import { Button } from '../components/Button';
+import { getCopy, type Locale } from '../lib/i18n';
+import { ChevronLeftIcon } from '../components/Icons';
 
 export interface ScriptEditorProps {
   script: Script | null;
+  language?: Locale;
   onSave: (script: Script) => void;
+  onBack?: () => void;
 }
 
 export function ScriptEditor(props: ScriptEditorProps): JSX.Element {
@@ -14,6 +17,7 @@ export function ScriptEditor(props: ScriptEditorProps): JSX.Element {
   const [metrics, setMetrics] = createSignal({ wordCount: 0, estimatedMinutes: 0 });
   const [isRtl, setIsRtl] = createSignal(false);
   const [isDirty, setIsDirty] = createSignal(false);
+  const t = () => getCopy(props.language);
 
   createEffect(() => {
     if (props.script) {
@@ -48,7 +52,7 @@ export function ScriptEditor(props: ScriptEditorProps): JSX.Element {
     const sanitized = ScriptSanitizer.sanitize(content());
     const updated: Script = {
       ...props.script,
-      title: title().trim() || 'Untitled Speech',
+      title: title().trim() || t().untitled,
       content: sanitized,
       updated_at: new Date().toISOString(),
     };
@@ -65,7 +69,7 @@ export function ScriptEditor(props: ScriptEditorProps): JSX.Element {
         const text = event.target?.result as string;
         if (text) {
           handleContentChange(text);
-          if (!title() || title() === 'Untitled Speech') {
+          if (!title() || title() === t().untitled || title() === 'New Speech') {
             const fileName = file.name.replace(/\.[^/.]+$/, '');
             handleTitleChange(fileName);
           }
@@ -76,31 +80,45 @@ export function ScriptEditor(props: ScriptEditorProps): JSX.Element {
   };
 
   return (
-    <div class="flex flex-col h-full bg-white/[0.025] backdrop-blur-xl border border-white/[0.07] rounded-2xl p-5 pb-20 select-none">
+    <div class="flex flex-col h-full rounded-[14px] bg-[var(--surface)] border border-[var(--border)] overflow-hidden select-none">
       {props.script ? (
-        <div class="flex flex-col h-full gap-4">
-          {/* Editor Header Bar (Match Image 1 & 2 Linear tags) */}
-          <div class="flex items-center justify-between gap-3 pb-3 border-b border-white/[0.06]">
-            <input
-              type="text"
-              value={title()}
-              onInput={(e) => handleTitleChange(e.currentTarget.value)}
-              onBlur={handleSave}
-              placeholder="Speech title..."
-              class="bg-transparent text-lg font-semibold text-white placeholder-white/30 focus:outline-none focus:ring-1 focus:ring-white/20 px-2.5 py-1 rounded-xl flex-1 transition-all tracking-tight"
-            />
+        <>
+          {/* Editor Header */}
+          <div class="px-4 py-3 flex items-center justify-between gap-3 border-b border-[var(--border)] shrink-0">
+            <div class="flex items-center gap-2.5 flex-1 min-w-0">
+              {props.onBack && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (isDirty()) handleSave();
+                    props.onBack?.();
+                  }}
+                  title={t().backToHome}
+                  class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-[var(--border)] text-xs text-[var(--text-muted)] hover:text-[var(--text)] transition-colors shrink-0"
+                >
+                  <ChevronLeftIcon class="w-3.5 h-3.5" />
+                  <span>{t().backToHome}</span>
+                </button>
+              )}
 
-            <div class="flex items-center gap-2">
-              {/* Word & Reading Time Pill */}
-              <div class="flex items-center gap-1.5 text-xs text-slate-300 font-mono bg-white/[0.05] px-3 py-1 rounded-full border border-white/[0.08]">
-                <span>{metrics().wordCount} words</span>
-                <span class="text-white/30">·</span>
-                <span>~{metrics().estimatedMinutes} min</span>
-              </div>
+              <span class="section-accent-bar" />
+              <input
+                type="text"
+                value={title()}
+                onInput={(e) => handleTitleChange(e.currentTarget.value)}
+                onBlur={handleSave}
+                placeholder={t().untitled}
+                class="bg-transparent text-sm font-semibold text-[var(--text)] placeholder-[var(--text-muted)] focus:outline-none px-2 py-1 rounded-lg flex-1 min-w-0"
+              />
+            </div>
 
-              {/* Import Action Pill */}
-              <label class="cursor-pointer text-xs font-medium text-slate-300 hover:text-white px-3 py-1 rounded-full border border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.08] transition-all">
-                Import .txt / .md
+            <div class="flex items-center gap-2 shrink-0">
+              <span class="micro-label tabular-nums hidden sm:inline">
+                {metrics().wordCount} {t().words} · ~{metrics().estimatedMinutes} {t().minRead}
+              </span>
+
+              <label class="cursor-pointer text-xs text-[var(--text-muted)] hover:text-[var(--text)] px-3 py-1 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-[var(--border)] transition-colors">
+                {t().importFile}
                 <input
                   type="file"
                   accept=".txt,.md"
@@ -109,38 +127,36 @@ export function ScriptEditor(props: ScriptEditorProps): JSX.Element {
                 />
               </label>
 
-              {/* Save Button (White Pill when dirty, subtle when saved) */}
-              <Button
-                variant={isDirty() ? 'primary' : 'secondary'}
-                size="sm"
+              <button
+                type="button"
                 onClick={handleSave}
-                class="!px-3.5 !py-1 !text-xs !rounded-full"
+                class={`px-3.5 py-1 rounded-full text-xs font-semibold transition-all duration-200 ${
+                  isDirty()
+                    ? 'bg-[var(--text)] text-[#0b0b12] hover:opacity-90'
+                    : 'text-[var(--text-muted)] bg-white/[0.04] border border-[var(--border)]'
+                }`}
               >
-                {isDirty() ? 'Save' : 'Saved'}
-              </Button>
+                {isDirty() ? t().save : t().saved}
+              </button>
             </div>
           </div>
 
-          {/* Editor Textarea with generous line-height */}
-          <div class="flex-1 relative min-h-0">
+          {/* Writing Area */}
+          <div class="flex-1 min-h-0 p-5 overflow-hidden">
             <textarea
               id="script-editor-textarea"
               value={content()}
               onInput={(e) => handleContentChange(e.currentTarget.value)}
               onBlur={handleSave}
-              placeholder="Paste or write your speech script here... The text synchronizes instantly with the invisible prompter overlay."
+              placeholder={t().editorPlaceholder}
               dir={isRtl() ? 'rtl' : 'ltr'}
-              class="w-full h-full bg-transparent text-slate-200 placeholder-white/20 font-sans text-sm leading-relaxed p-2 resize-none focus:outline-none custom-scrollbar select-text"
-              style={{
-                'line-height': '1.75',
-              }}
+              class="w-full h-full bg-transparent text-[var(--text)] placeholder-[var(--text-muted)] font-sans text-sm leading-[1.75] resize-none focus:outline-none custom-scrollbar select-text"
             />
           </div>
-        </div>
+        </>
       ) : (
-        <div class="flex-1 flex flex-col items-center justify-center text-slate-500 text-sm gap-2">
-          <p>No speech selected.</p>
-          <p class="text-xs text-slate-600">Select a speech from the sidebar or click New to begin.</p>
+        <div class="flex-1 flex flex-col items-center justify-center text-[var(--text-muted)] text-xs gap-1.5">
+          <p class="text-[var(--text)] font-medium">{t().noScriptsYet}</p>
         </div>
       )}
     </div>

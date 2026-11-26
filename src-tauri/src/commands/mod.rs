@@ -65,7 +65,7 @@ pub async fn get_capture_exclusion(
 pub async fn toggle_prompter_window(
     app: AppHandle,
     platform: State<'_, Arc<dyn WindowPlatform>>,
-) -> Result<(), String> {
+) -> Result<bool, String> {
     #[cfg(windows)]
     {
         if let Some(w) = app.get_webview_window("prompter") {
@@ -74,10 +74,13 @@ pub async fn toggle_prompter_window(
             if is_visible {
                 platform.hide(hwnd).map_err(|e| e.to_string())?;
                 let _ = app.emit("prompter:action", serde_json::json!({ "type": "pause" }));
+                let _ = app.emit("prompter:visibility_changed", false);
+                Ok(false)
             } else {
                 platform.show_unfocused(hwnd).map_err(|e| e.to_string())?;
+                let _ = app.emit("prompter:visibility_changed", true);
+                Ok(true)
             }
-            Ok(())
         } else {
             Err("Prompter window not found".to_string())
         }
@@ -87,7 +90,8 @@ pub async fn toggle_prompter_window(
     {
         let hwnd = 1001;
         platform.show_unfocused(hwnd).map_err(|e| e.to_string())?;
-        Ok(())
+        let _ = app.emit("prompter:visibility_changed", true);
+        Ok(true)
     }
 }
 
@@ -95,6 +99,7 @@ pub async fn toggle_prompter_window(
 pub async fn set_click_through(
     app: AppHandle,
     platform: State<'_, Arc<dyn WindowPlatform>>,
+    storage: State<'_, Arc<StorageEngine>>,
     enabled: bool,
 ) -> Result<(), String> {
     #[cfg(windows)]
@@ -104,9 +109,8 @@ pub async fn set_click_through(
             platform
                 .set_click_through(hwnd, enabled)
                 .map_err(|e| e.to_string())?;
-            Ok(())
         } else {
-            Err("Prompter window not found".to_string())
+            return Err("Prompter window not found".to_string());
         }
     }
 
@@ -116,8 +120,15 @@ pub async fn set_click_through(
         platform
             .set_click_through(hwnd, enabled)
             .map_err(|e| e.to_string())?;
-        Ok(())
     }
+
+    if let Ok(mut current) = storage.load_settings() {
+        current.click_through = enabled;
+        let _ = storage.save_settings(&current);
+        let _ = app.emit("prompter:settings_sync", &current);
+    }
+
+    Ok(())
 }
 
 #[tauri::command]
@@ -129,10 +140,13 @@ pub async fn load_settings(
 
 #[tauri::command]
 pub async fn save_settings(
+    app: AppHandle,
     storage: State<'_, Arc<StorageEngine>>,
     settings: Settings,
 ) -> Result<(), String> {
-    storage.save_settings(&settings).map_err(|e| e.to_string())
+    storage.save_settings(&settings).map_err(|e| e.to_string())?;
+    let _ = app.emit("prompter:settings_sync", &settings);
+    Ok(())
 }
 
 #[tauri::command]
@@ -167,6 +181,36 @@ pub async fn delete_script(
         .delete_script(&id)
         .map(|_| ())
         .map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+pub async fn open_external_url(url: String) -> Result<(), String> {
+    let trimmed = url.trim();
+    if !trimmed.starts_with("https://") {
+        return Err("Only https:// URLs are allowed".to_string());
+    }
+    #[cfg(windows)]
+    {
+        std::process::Command::new("cmd")
+            .args(["/C", "start", "", trimmed])
+            .spawn()
+            .map_err(|e| e.to_string())?;
+    }
+    #[cfg(target_os = "macos")]
+    {
+        std::process::Command::new("open")
+            .arg(trimmed)
+            .spawn()
+            .map_err(|e| e.to_string())?;
+    }
+    #[cfg(all(unix, not(target_os = "macos")))]
+    {
+        std::process::Command::new("xdg-open")
+            .arg(trimmed)
+            .spawn()
+            .map_err(|e| e.to_string())?;
+    }
+    Ok(())
 }
 
 #[cfg(test)]

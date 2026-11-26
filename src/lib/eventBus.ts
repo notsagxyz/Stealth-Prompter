@@ -1,5 +1,5 @@
 import { emit, listen } from '@tauri-apps/api/event';
-import type { PrompterActionPayload, PrompterUpdateScriptPayload, PrompterStateSyncPayload } from './types';
+import type { PrompterActionPayload, PrompterUpdateScriptPayload, PrompterStateSyncPayload, Settings } from './types';
 
 const isTauri = typeof window !== 'undefined' && '__TAURI_INTERNALS__' in window;
 const localEmitter = new EventTarget();
@@ -73,5 +73,25 @@ export async function onStateSync(callback: (payload: PrompterStateSyncPayload) 
     const handler = (e: Event) => callback((e as CustomEvent).detail.payload);
     localEmitter.addEventListener('prompter:state_sync', handler);
     return () => localEmitter.removeEventListener('prompter:state_sync', handler);
+  }
+}
+
+export async function onSettingsSync(callback: (settings: Settings) => void): Promise<() => void> {
+  if (isTauri) {
+    return await listen<Settings>('prompter:settings_sync', (e) => callback(e.payload));
+  } else {
+    const handler = (e: Event) => callback((e as CustomEvent).detail.payload);
+    localEmitter.addEventListener('prompter:settings_sync', handler);
+    return () => localEmitter.removeEventListener('prompter:settings_sync', handler);
+  }
+}
+
+export async function onVisibilityChanged(callback: (visible: boolean) => void): Promise<() => void> {
+  if (isTauri) {
+    return await listen<boolean>('prompter:visibility_changed', (e) => callback(e.payload));
+  } else {
+    const handler = (e: Event) => callback((e as CustomEvent).detail.payload);
+    localEmitter.addEventListener('prompter:visibility_changed', handler);
+    return () => localEmitter.removeEventListener('prompter:visibility_changed', handler);
   }
 }

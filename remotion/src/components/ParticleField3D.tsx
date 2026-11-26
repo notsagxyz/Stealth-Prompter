@@ -17,7 +17,7 @@ export const ParticleField3D: React.FC<ParticleField3DProps> = ({
     const pos = new Float32Array(count * 3);
     const col = new Float32Array(count * 3);
 
-    const cyan = new THREE.Color("#00F0FF");
+    const cyan = new THREE.Color("#7c6cff");
     const emerald = new THREE.Color("#10B981");
 
     for (let i = 0; i < count; i++) {

@@ -2,11 +2,11 @@ import { THEME } from "../types";
 
 export const glassCardStyle: React.CSSProperties = {
   backgroundColor: THEME.colors.surfaceGlass,
-  backdropFilter: "blur(16px)",
-  WebkitBackdropFilter: "blur(16px)",
+  backdropFilter: "blur(20px)",
+  WebkitBackdropFilter: "blur(20px)",
   border: `1px solid ${THEME.colors.glassBorder}`,
   borderRadius: "16px",
-  boxShadow: "0 20px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1)",
+  boxShadow: "0 20px 44px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.08)",
   color: THEME.colors.textPrimary,
 };
 
@@ -18,11 +18,11 @@ export const badgeStyle: React.CSSProperties = {
   borderRadius: "9999px",
   fontSize: "14px",
   fontWeight: 600,
-  letterSpacing: "0.04em",
+  letterSpacing: "0.06em",
   textTransform: "uppercase",
-  backgroundColor: "rgba(0, 240, 255, 0.1)",
+  backgroundColor: "rgba(124, 108, 255, 0.14)",
   border: `1px solid ${THEME.colors.glassBorderActive}`,
-  color: THEME.colors.cyanAccent,
+  color: THEME.colors.violetAccent,
 };
 
 export const codeBadgeStyle: React.CSSProperties = {
@@ -30,7 +30,7 @@ export const codeBadgeStyle: React.CSSProperties = {
   padding: "4px 10px",
   borderRadius: "8px",
   fontSize: "13px",
-  backgroundColor: "rgba(14, 17, 26, 0.8)",
-  border: "1px solid rgba(148, 163, 184, 0.2)",
-  color: THEME.colors.cyanAccent,
+  backgroundColor: "rgba(11, 11, 18, 0.85)",
+  border: "1px solid rgba(255, 255, 255, 0.12)",
+  color: THEME.colors.violetAccent,
 };

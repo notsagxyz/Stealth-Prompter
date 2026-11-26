@@ -1,0 +1,20 @@
+<svg viewBox="0 0 1280 640" fill="none">
+  <defs>
+    <radialGradient id="spGlow" cx="78%" cy="22%" r="55%">
+      <stop offset="0%" stop-color="#7c6cff" stop-opacity="0.32" />
+      <stop offset="100%" stop-color="#0b0b12" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <rect width="1280" height="640" fill="#0b0b12" />
+  <rect width="1280" height="640" fill="url(#spGlow)" />
+  <rect x="64" y="64" width="1152" height="512" rx="28" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.08)" stroke-width="2" />
+  <g transform="translate(128, 180)">
+    <rect x="0" y="0" width="128" height="128" rx="30" fill="#13131f" stroke="rgba(255,255,255,0.14)" stroke-width="3" />
+    <path d="M64 20L78 50L108 64L78 78L64 108L50 78L20 64L50 50L64 20Z" stroke="#f4f4f8" stroke-width="6" stroke-linejoin="round" />
+    <path d="M56 51L79 64L56 77V51Z" fill="#7c6cff" />
+  </g>
+  <text x="128" y="382" fill="#f4f4f8" font-family="Inter, Segoe UI, sans-serif" font-size="72" font-weight="700" letter-spacing="-2">Stealth <tspan fill="#7c6cff" font-style="italic">Prompter</tspan></text>
+  <text x="128" y="438" fill="rgba(244,244,248,0.62)" font-family="Inter, Segoe UI, sans-serif" font-size="28" font-weight="400">Open-source invisible teleprompter for calls, demos &amp; recordings.</text>
+  <rect x="128" y="476" width="236" height="44" rx="22" fill="rgba(124,108,255,0.16)" stroke="#7c6cff" stroke-opacity="0.5" stroke-width="1.5" />
+  <text x="156" y="504" fill="#f4f4f8" font-family="JetBrains Mono, monospace" font-size="16" font-weight="500">HIDDEN IN OBS &amp; ZOOM</text>
+</svg>

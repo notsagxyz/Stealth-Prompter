@@ -15,7 +15,7 @@ export const LaptopDesktopMockup: React.FC<LaptopDesktopMockupProps> = ({
   isAudienceView = false,
   prompterScrollOffset = 0,
   label = "PRESENTER VIEW",
-  badgeColor = "#00F0FF",
+  badgeColor = "#7c6cff",
   sublabel = "What you see on your monitor",
 }) => {
   return (
@@ -82,7 +82,7 @@ export const LaptopDesktopMockup: React.FC<LaptopDesktopMockupProps> = ({
         </div>
 
         {/* Status Callout */}
-        <div style={{ fontSize: 11, color: isAudienceView ? "#10B981" : "#00F0FF", fontWeight: 700 }}>
+        <div style={{ fontSize: 11, color: isAudienceView ? "#10B981" : "#7c6cff", fontWeight: 700 }}>
           {isAudienceView ? "🛡️ 100% INVISIBLE" : "👁️ PROMPTER ACTIVE"}
         </div>
       </div>

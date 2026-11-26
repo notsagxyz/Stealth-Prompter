@@ -25,6 +25,14 @@ export async function togglePrompterWindow(): Promise<void> {
   return await invoke('toggle_prompter_window');
 }
 
+export async function openExternalUrl(url: string): Promise<void> {
+  if (!isTauri) {
+    window.open(url, '_blank', 'noopener,noreferrer');
+    return;
+  }
+  return await invoke('open_external_url', { url });
+}
+
 export async function setClickThrough(enabled: boolean): Promise<void> {
   if (!isTauri) return;
   return await invoke('set_click_through', { enabled: Boolean(enabled) });
@@ -40,6 +48,8 @@ export async function loadSettings(): Promise<Settings> {
       mirror_mode: false,
       click_through: false,
       theme: 'dark-glass',
+      accent_color: '#7c6cff',
+      language: 'en',
       last_script_id: null,
       offline_only: true,
       telemetry_enabled: false,

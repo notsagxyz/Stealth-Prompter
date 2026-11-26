@@ -1,6 +1,7 @@
 import { createSignal, onMount, onCleanup, Show, type JSX } from 'solid-js';
 import { getCurrentWindow } from '@tauri-apps/api/window';
 import type { Script, ScriptSummary, Settings } from '../lib/types';
+import { getCopy } from '../lib/i18n';
 import {
   loadSettings,
   saveSettings,
@@ -12,6 +13,7 @@ import {
   getCaptureExclusion,
   togglePrompterWindow,
   setClickThrough,
+  openExternalUrl,
 } from '../lib/ipc';
 import {
   emitPrompterAction,
@@ -24,12 +26,17 @@ import { ScriptEditor } from './ScriptEditor';
 import { ScriptList } from './ScriptList';
 import { SettingsPanel } from './SettingsPanel';
 import {
-  EyeIcon,
-  TeleprompterLogo,
+  StealthLogo,
   MinimizeIcon,
   MaximizeIcon,
   CloseIcon,
   LockIcon,
+  PlayIcon,
+  SettingsIcon,
+  PlusIcon,
+  FileTextIcon,
+  HeartIcon,
+  ExternalLinkIcon,
 } from '../components/Icons';
 
 const stepSpeed = (current: number, direction: 'up' | 'down'): number => {
@@ -46,15 +53,41 @@ const stepSpeed = (current: number, direction: 'up' | 'down'): number => {
   }
 };
 
+const ACCENT_MAP: Record<string, string> = {
+  violet: '#7c6cff',
+  indigo: '#6366f1',
+  crimson: '#f43f5e',
+  emerald: '#10b981',
+  amber: '#f59e0b',
+  cyan: '#06b6d4',
+};
+
+function applyAccentToken(accent?: string) {
+  const key = (accent || '#7c6cff').toLowerCase().trim();
+  const color = ACCENT_MAP[key] || (key.startsWith('#') ? key : '#7c6cff');
+  if (typeof document !== 'undefined') {
+    document.documentElement.style.setProperty('--accent', color);
+    const hex = color.replace('#', '');
+    if (hex.length === 6) {
+      const r = parseInt(hex.slice(0, 2), 16);
+      const g = parseInt(hex.slice(2, 4), 16);
+      const b = parseInt(hex.slice(4, 6), 16);
+      document.documentElement.style.setProperty('--accent-glow', `rgba(${r}, ${g}, ${b}, 0.35)`);
+    }
+  }
+}
+
 export default function LauncherApp(): JSX.Element {
   const [settings, setSettings] = createSignal<Settings>({
     scroll_speed: 3.0,
     font_size: 28,
     line_height: 1.5,
-    window_opacity: 0.9,
+    window_opacity: 0.85,
     mirror_mode: false,
     click_through: false,
     theme: 'dark-glass',
+    accent_color: '#7c6cff',
+    language: 'en',
     last_script_id: null,
     offline_only: true,
     telemetry_enabled: false,
@@ -71,9 +104,11 @@ export default function LauncherApp(): JSX.Element {
   const [activeScript, setActiveScript] = createSignal<Script | null>(null);
   const [invisibilityActive, setInvisibilityActive] = createSignal<boolean>(true);
   const [hudVisible, setHudVisible] = createSignal<boolean>(false);
-  const [isPlaying, setIsPlaying] = createSignal<boolean>(false);
   const [hudSpeed, setHudSpeed] = createSignal<number>(3.0);
-  const [sidebarOpen, setSidebarOpen] = createSignal<boolean>(true);
+  const [view, setView] = createSignal<'home' | 'editor' | 'settings'>('home');
+  const [supportMenuOpen, setSupportMenuOpen] = createSignal<boolean>(false);
+
+  const t = () => getCopy(settings().language);
 
   let unlistenSync: (() => void) | null = null;
   let unlistenSettings: (() => void) | null = null;
@@ -83,6 +118,7 @@ export default function LauncherApp(): JSX.Element {
     try {
       const s = await loadSettings();
       setSettings(s);
+      applyAccentToken(s.accent_color);
       setHudSpeed(s.scroll_speed);
 
       const scriptSummaries = await listScripts();
@@ -110,12 +146,12 @@ export default function LauncherApp(): JSX.Element {
     }
 
     unlistenSync = await onStateSync((state) => {
-      setIsPlaying(state.playing);
       setHudSpeed(state.speed);
     });
 
     unlistenSettings = await onSettingsSync((synced) => {
       setSettings(synced);
+      applyAccentToken(synced.accent_color);
       setHudSpeed(synced.scroll_speed);
     });
 
@@ -138,6 +174,7 @@ export default function LauncherApp(): JSX.Element {
       setSettings(updatedSettings);
       await saveSettings(updatedSettings);
       await emitUpdateScript(s);
+      setView('editor');
     } catch (e) {
       console.error('Failed to select script:', e);
     }
@@ -146,7 +183,7 @@ export default function LauncherApp(): JSX.Element {
   const handleCreateScript = async () => {
     const newScript: Script = {
       id: `script_${Date.now()}`,
-      title: 'New Speech',
+      title: 'Untitled Speech',
       content: 'Write your speech script here...',
       last_position: 0,
       speed: settings().scroll_speed,
@@ -159,6 +196,7 @@ export default function LauncherApp(): JSX.Element {
     setScripts(updated);
     setActiveScript(newScript);
     await emitUpdateScript(newScript);
+    setView('editor');
   };
 
   const handleDeleteScript = async (id: string) => {
@@ -167,7 +205,8 @@ export default function LauncherApp(): JSX.Element {
     setScripts(updated);
     if (activeScript()?.id === id) {
       if (updated.length > 0) {
-        handleSelectScript(updated[0].id);
+        const next = await loadScript(updated[0].id);
+        setActiveScript(next);
       } else {
         setActiveScript(null);
       }
@@ -184,6 +223,7 @@ export default function LauncherApp(): JSX.Element {
 
   const handleSettingsChange = async (updated: Settings) => {
     setSettings(updated);
+    applyAccentToken(updated.accent_color);
     setHudSpeed(updated.scroll_speed);
     await saveSettings(updated);
   };
@@ -192,21 +232,13 @@ export default function LauncherApp(): JSX.Element {
     await togglePrompterWindow();
   };
 
-  const handlePlayPause = async () => {
-    await emitPrompterAction({ type: isPlaying() ? 'pause' : 'play' });
-    setIsPlaying(!isPlaying());
-  };
-
-  const handleRewind = async () => {
-    await emitPrompterAction({ type: 'rewind' });
-  };
-
   const handleSpeedStep = async (direction: 'up' | 'down') => {
     const next = stepSpeed(hudSpeed(), direction);
     setHudSpeed(next);
     const updatedSettings = { ...settings(), scroll_speed: next };
     setSettings(updatedSettings);
     await saveSettings(updatedSettings);
+    await emitPrompterAction({ type: 'speed_change', value: next });
   };
 
   const handleToggleClickThrough = async () => {
@@ -221,6 +253,15 @@ export default function LauncherApp(): JSX.Element {
       setInvisibilityActive(enabled);
     } catch (e) {
       console.error('Failed to toggle invisibility:', e);
+    }
+  };
+
+  const handleOpenSupportUrl = async (url: string) => {
+    setSupportMenuOpen(false);
+    try {
+      await openExternalUrl(url);
+    } catch (err) {
+      console.warn('openExternalUrl error:', err);
     }
   };
 
@@ -271,76 +312,149 @@ export default function LauncherApp(): JSX.Element {
     };
 
   return (
-    <div class="w-screen h-screen overflow-hidden select-none relative font-sans bg-transparent p-[1px] box-border">
-      {/* Main Frameless Matte Studio Shell */}
-      <div class="w-full h-full rounded-xl bg-[#09090B] border border-white/[0.08] overflow-hidden flex flex-col relative shadow-2xl">
-        {/* Custom Frameless Titlebar */}
+    <div
+      class="w-screen h-screen overflow-hidden select-none relative font-sans bg-transparent p-1 box-border"
+      onClick={() => {
+        if (supportMenuOpen()) setSupportMenuOpen(false);
+      }}
+    >
+      {/* Rounded Dark Glass Window Shell */}
+      <div
+        class="w-full h-full rounded-[22px] bg-[#0b0b12] border border-[var(--border)] overflow-hidden flex flex-col relative shadow-[0_24px_64px_rgba(0,0,0,0.78)] stealth-starfield"
+      >
+        {/* Subtle Corner Radial Glow using --accent-glow */}
+        <div
+          class="pointer-events-none absolute -top-24 -right-24 w-[440px] h-[440px] rounded-full blur-3xl opacity-65 transition-colors duration-300"
+          style={{ background: 'radial-gradient(circle, var(--accent-glow) 0%, transparent 70%)' }}
+        />
+
+        {/* Custom Frameless Draggable Titlebar */}
         <header
           data-tauri-drag-region
-          class="h-10 bg-[#0D0D10] border-b border-white/[0.07] flex items-center justify-between px-3 shrink-0 select-none"
+          class="h-12 px-4 flex items-center justify-between border-b border-[var(--border)] bg-white/[0.02] backdrop-blur-md z-30 shrink-0 select-none"
         >
-          {/* Left: App Brand + Sidebar Toggle */}
-          <div data-tauri-drag-region class="flex items-center gap-2.5">
-            <div data-tauri-drag-region class="flex items-center gap-2 pl-1">
-              <TeleprompterLogo class="w-4 h-4 text-white" />
-              <span class="text-xs font-semibold text-zinc-100 tracking-tight">
-                Stealth
+          {/* Left: Brand & View Pills */}
+          <div data-tauri-drag-region class="flex items-center gap-3">
+            <div data-tauri-drag-region class="flex items-center gap-2">
+              <StealthLogo class="w-5 h-5 text-[var(--text)]" />
+              <span class="text-xs font-semibold text-[var(--text)] tracking-tight">
+                {t().appName}
               </span>
             </div>
 
             <div class="h-3.5 w-[1px] bg-white/[0.08]" />
 
-            <button
-              type="button"
-              onClick={() => setSidebarOpen(!sidebarOpen())}
-              title={sidebarOpen() ? 'Hide Scripts Sidebar' : 'Show Scripts Sidebar'}
-              class={`px-2 py-1 rounded text-[11px] font-medium transition-colors ${
-                sidebarOpen()
-                  ? 'bg-white/[0.07] text-zinc-200'
-                  : 'text-zinc-500 hover:text-zinc-200 hover:bg-white/[0.04]'
-              }`}
-            >
-              Scripts
-            </button>
+            <nav class="flex items-center gap-1">
+              <button
+                type="button"
+                onClick={() => setView('home')}
+                class={`px-3 py-1 rounded-full text-xs font-medium transition-colors duration-150 ${
+                  view() !== 'settings'
+                    ? 'bg-white/[0.08] text-[var(--text)] border border-[var(--border)]'
+                    : 'text-[var(--text-muted)] hover:text-[var(--text)]'
+                }`}
+              >
+                {t().navScripts}
+              </button>
+              <button
+                type="button"
+                onClick={() => setView(view() === 'settings' ? 'home' : 'settings')}
+                class={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium transition-colors duration-150 ${
+                  view() === 'settings'
+                    ? 'bg-white/[0.08] text-[var(--text)] border border-[var(--accent)]'
+                    : 'text-[var(--text-muted)] hover:text-[var(--text)]'
+                }`}
+              >
+                <SettingsIcon class="w-3.5 h-3.5" />
+                <span>{t().navSettings}</span>
+              </button>
+            </nav>
           </div>
 
-          {/* Right: Lock Badge (when locked) + Show/Hide HUD + Monochrome Window Controls */}
-          <div class="flex items-center gap-2">
+          {/* Right: Support (Pink Heart Pill), Lock Pill, Start Prompter, Window Controls */}
+          <div class="flex items-center gap-2 relative">
             <Show when={settings().click_through}>
               <button
                 type="button"
                 onClick={handleToggleClickThrough}
-                title="Click-Through is active. Click to unlock or press Alt+L."
-                class="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 text-amber-300 text-[11px] font-medium transition-colors"
+                title="Click-Through locked. Click to unlock or press Alt+L."
+                class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/15 hover:bg-amber-500/25 border border-amber-400/40 text-amber-300 text-[11px] font-medium transition-colors"
               >
                 <LockIcon class="w-3 h-3" />
-                <span>HUD Locked · Unlock</span>
+                <span>{t().hudLockedBanner}</span>
               </button>
             </Show>
 
+            {/* Support Pill Button (Only the heart is pink, matching user reference) */}
+            <div class="relative" onClick={(e) => e.stopPropagation()}>
+              <button
+                type="button"
+                data-testid="support-button"
+                onClick={() => setSupportMenuOpen(!supportMenuOpen())}
+                title={t().supportTitle}
+                class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--surface)] hover:bg-[var(--surface-hover)] border border-[#ff4d8d]/45 text-xs font-medium text-[var(--text)] transition-all duration-150"
+              >
+                <HeartIcon class="w-3.5 h-3.5 text-[#ff4d8d]" />
+                <span>{t().support}</span>
+              </button>
+
+              <Show when={supportMenuOpen()}>
+                <div class="absolute right-0 mt-2 w-56 rounded-[14px] bg-[#12121c]/95 backdrop-blur-xl border border-[var(--border)] shadow-2xl p-2 z-50 flex flex-col gap-1">
+                  <div class="px-2.5 py-1.5 border-b border-white/[0.06]">
+                    <p class="text-xs font-semibold text-[var(--text)]">{t().supportTitle}</p>
+                    <p class="text-[11px] text-[var(--text-muted)]">{t().supportSubtitle}</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleOpenSupportUrl('https://cafecito.app/stealthprompter')}
+                    class="flex items-center justify-between px-2.5 py-2 rounded-lg text-xs text-[var(--text)] hover:bg-white/[0.07] transition-colors"
+                  >
+                    <span class="flex items-center gap-2">
+                      <HeartIcon class="w-3.5 h-3.5 text-[#ff4d8d]" />
+                      <span>{t().supportCafecito}</span>
+                    </span>
+                    <ExternalLinkIcon class="w-3 h-3 text-[var(--text-muted)]" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleOpenSupportUrl('https://ko-fi.com/stealthprompter')}
+                    class="flex items-center justify-between px-2.5 py-2 rounded-lg text-xs text-[var(--text)] hover:bg-white/[0.07] transition-colors"
+                  >
+                    <span class="flex items-center gap-2">
+                      <HeartIcon class="w-3.5 h-3.5 text-[#ff4d8d]" />
+                      <span>{t().supportKofi}</span>
+                    </span>
+                    <ExternalLinkIcon class="w-3 h-3 text-[var(--text-muted)]" />
+                  </button>
+                </div>
+              </Show>
+            </div>
+
+            {/* Start / Prompter Toggle Pill */}
             <button
               type="button"
               onClick={handleTogglePrompter}
-              title="Toggle Prompter HUD (Alt+H)"
-              class={`h-7 px-3 rounded-md text-xs font-medium flex items-center gap-1.5 transition-colors ${
+              title="Open / Close Prompter (Alt+H)"
+              class={`h-7 px-3.5 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all duration-150 ${
                 hudVisible()
-                  ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/25'
-                  : 'bg-white text-zinc-950 hover:bg-zinc-200'
+                  ? 'bg-[var(--accent)] text-white shadow-[0_0_16px_var(--accent-glow)]'
+                  : 'bg-[var(--text)] text-[#0b0b12] hover:opacity-90'
               }`}
             >
-              <EyeIcon class="w-3.5 h-3.5" />
-              <span>{hudVisible() ? 'Hide HUD' : 'Show HUD'}</span>
+              <PlayIcon class="w-3 h-3" />
+              <span>{hudVisible() ? t().prompterRunning : t().startPrompter}</span>
             </button>
 
-            <div class="h-3.5 w-[1px] bg-white/[0.08] mx-0.5" />
+            <div class="h-3.5 w-[1px] bg-white/[0.08]" />
 
-            {/* Clean Monochrome Window Controls (Minimize, Maximize, Close) */}
+            {/* Frameless Window Controls */}
             <div class="flex items-center gap-0.5">
               <button
                 type="button"
                 onClick={handleWindowMinimize}
                 title="Minimize"
-                class="w-7 h-7 rounded-md flex items-center justify-center text-zinc-400 hover:text-white hover:bg-white/[0.07] transition-colors"
+                aria-label="Minimize"
+                class="w-7 h-7 rounded-full flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-white/[0.07] transition-colors"
               >
                 <MinimizeIcon class="w-3.5 h-3.5" />
               </button>
@@ -348,7 +462,8 @@ export default function LauncherApp(): JSX.Element {
                 type="button"
                 onClick={handleWindowMaximize}
                 title="Maximize"
-                class="w-7 h-7 rounded-md flex items-center justify-center text-zinc-400 hover:text-white hover:bg-white/[0.07] transition-colors"
+                aria-label="Maximize"
+                class="w-7 h-7 rounded-full flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-white/[0.07] transition-colors"
               >
                 <MaximizeIcon class="w-3 h-3" />
               </button>
@@ -356,7 +471,8 @@ export default function LauncherApp(): JSX.Element {
                 type="button"
                 onClick={handleWindowClose}
                 title="Close"
-                class="w-7 h-7 rounded-md flex items-center justify-center text-zinc-400 hover:text-red-400 hover:bg-red-500/15 transition-colors"
+                aria-label="Close"
+                class="w-7 h-7 rounded-full flex items-center justify-center text-[var(--text-muted)] hover:text-rose-400 hover:bg-rose-500/15 transition-colors"
               >
                 <CloseIcon class="w-3.5 h-3.5" />
               </button>
@@ -364,53 +480,105 @@ export default function LauncherApp(): JSX.Element {
           </div>
         </header>
 
-        {/* 3-Column Studio Body */}
-        <div class="flex-1 flex min-h-0 overflow-hidden">
-          {/* Left Rail: Script Library */}
-          <Show when={sidebarOpen()}>
-            <div class="w-[228px] shrink-0 h-full border-r border-white/[0.07]">
-              <ScriptList
-                scripts={scripts()}
-                selectedId={activeScript()?.id || null}
-                onSelect={handleSelectScript}
-                onCreate={handleCreateScript}
-                onDelete={handleDeleteScript}
+        {/* Main Content Area */}
+        <main class="flex-1 min-h-0 p-6 flex flex-col relative z-10 overflow-hidden">
+          <Show when={view() === 'home'}>
+            <div class="flex flex-col h-full gap-6 max-w-4xl w-full mx-auto">
+              {/* Hero Header */}
+              <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pt-1">
+                <div>
+                  <h1 class="text-3xl sm:text-4xl font-semibold tracking-tight text-[var(--text)]">
+                    {t().heroPrefix}{' '}
+                    <em class="italic font-semibold text-[var(--accent)]">{t().heroAccent}</em>
+                    {t().heroSuffix}
+                  </h1>
+                  <p class="text-xs sm:text-sm text-[var(--text-muted)] mt-1.5">
+                    {t().heroSubtitle}
+                  </p>
+                </div>
+
+                <div class="flex items-center gap-2.5 shrink-0">
+                  <button
+                    type="button"
+                    onClick={handleCreateScript}
+                    class="flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--text)] text-[#0b0b12] hover:opacity-90 text-xs font-semibold shadow-lg transition-all duration-150"
+                  >
+                    <span class="relative inline-flex items-center justify-center w-4 h-4 rounded-full bg-[#0b0b12]/10">
+                      <FileTextIcon class="w-3 h-3 text-[#0b0b12]" />
+                      <span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-[var(--accent)] text-white flex items-center justify-center">
+                        <PlusIcon class="w-2 h-2" />
+                      </span>
+                    </span>
+                    <span>{t().newScript}</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setView('settings')}
+                    class="px-4 py-2 rounded-full bg-[var(--surface)] hover:bg-[var(--surface-hover)] border border-[var(--border)] text-xs font-medium text-[var(--text)] transition-all duration-150"
+                  >
+                    {t().navSettings}
+                  </button>
+                </div>
+              </div>
+
+              {/* Recent Scripts Glass Cards */}
+              <div class="flex-1 min-h-0">
+                <ScriptList
+                  scripts={scripts()}
+                  selectedId={activeScript()?.id || null}
+                  language={settings().language}
+                  onSelect={handleSelectScript}
+                  onCreate={handleCreateScript}
+                  onDelete={handleDeleteScript}
+                />
+              </div>
+            </div>
+          </Show>
+
+          <Show when={view() === 'editor'}>
+            <div class="h-full max-w-4xl w-full mx-auto">
+              <ScriptEditor
+                script={activeScript()}
+                language={settings().language}
+                onSave={handleSaveScript}
+                onBack={() => setView('home')}
               />
             </div>
           </Show>
 
-          {/* Center Canvas: Script Editor */}
-          <main class="flex-1 min-w-0 h-full">
-            <ScriptEditor
-              script={activeScript()}
-              onSave={handleSaveScript}
-            />
-          </main>
-
-          {/* Right Inspector: Controls & Settings */}
-          <SettingsPanel
-            settings={settings()}
-            isPlaying={isPlaying()}
-            speed={hudSpeed()}
-            invisibilityActive={invisibilityActive()}
-            onChange={handleSettingsChange}
-            onPlayPause={handlePlayPause}
-            onRewind={handleRewind}
-            onSpeedStep={handleSpeedStep}
-            onToggleClickThrough={handleToggleClickThrough}
-            onToggleInvisibility={handleToggleInvisibility}
-          />
-        </div>
+          <Show when={view() === 'settings'}>
+            <div class="h-full max-w-4xl w-full mx-auto flex flex-col gap-3">
+              <div class="flex items-center justify-between shrink-0">
+                <h2 class="text-lg font-semibold text-[var(--text)] tracking-tight">
+                  {t().settingsTitle}
+                </h2>
+              </div>
+              <div class="flex-1 min-h-0">
+                <SettingsPanel
+                  settings={settings()}
+                  speed={hudSpeed()}
+                  invisibilityActive={invisibilityActive()}
+                  onChange={handleSettingsChange}
+                  onSpeedStep={handleSpeedStep}
+                  onToggleClickThrough={handleToggleClickThrough}
+                  onToggleInvisibility={handleToggleInvisibility}
+                  onOpenSupportUrl={handleOpenSupportUrl}
+                />
+              </div>
+            </div>
+          </Show>
+        </main>
 
         {/* Native Frameless Edge & Corner Resize Handles */}
-        <div onMouseDown={handleResize('North')} class="absolute top-0 left-2 right-2 h-1 cursor-n-resize z-50" />
-        <div onMouseDown={handleResize('South')} class="absolute bottom-0 left-2 right-2 h-1 cursor-s-resize z-50" />
-        <div onMouseDown={handleResize('West')} class="absolute top-2 bottom-2 left-0 w-1 cursor-w-resize z-50" />
-        <div onMouseDown={handleResize('East')} class="absolute top-2 bottom-2 right-0 w-1 cursor-e-resize z-50" />
-        <div onMouseDown={handleResize('NorthWest')} class="absolute top-0 left-0 w-2 h-2 cursor-nw-resize z-50" />
-        <div onMouseDown={handleResize('NorthEast')} class="absolute top-0 right-0 w-2 h-2 cursor-ne-resize z-50" />
-        <div onMouseDown={handleResize('SouthWest')} class="absolute bottom-0 left-0 w-2 h-2 cursor-sw-resize z-50" />
-        <div onMouseDown={handleResize('SouthEast')} class="absolute bottom-0 right-0 w-2 h-2 cursor-se-resize z-50" />
+        <div onMouseDown={handleResize('North')} class="absolute top-0 left-3 right-3 h-1.5 cursor-n-resize z-50" />
+        <div onMouseDown={handleResize('South')} class="absolute bottom-0 left-3 right-3 h-1.5 cursor-s-resize z-50" />
+        <div onMouseDown={handleResize('West')} class="absolute top-3 bottom-3 left-0 w-1.5 cursor-w-resize z-50" />
+        <div onMouseDown={handleResize('East')} class="absolute top-3 bottom-3 right-0 w-1.5 cursor-e-resize z-50" />
+        <div onMouseDown={handleResize('NorthWest')} class="absolute top-0 left-0 w-3 h-3 cursor-nw-resize z-50" />
+        <div onMouseDown={handleResize('NorthEast')} class="absolute top-0 right-0 w-3 h-3 cursor-ne-resize z-50" />
+        <div onMouseDown={handleResize('SouthWest')} class="absolute bottom-0 left-0 w-3 h-3 cursor-sw-resize z-50" />
+        <div onMouseDown={handleResize('SouthEast')} class="absolute bottom-0 right-0 w-3 h-3 cursor-se-resize z-50" />
       </div>
     </div>
   );

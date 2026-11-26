@@ -1,7 +1,6 @@
 import React from "react";
 import { Composition } from "remotion";
 import { MainComposition } from "./Composition";
-import { COMPOSITION_CONFIG } from "./types";
 
 export const Root: React.FC = () => {
   return (
@@ -9,18 +8,18 @@ export const Root: React.FC = () => {
       <Composition
         id="LaunchVideo"
         component={MainComposition}
-        durationInFrames={COMPOSITION_CONFIG.totalFrames}
-        fps={COMPOSITION_CONFIG.fps}
-        width={COMPOSITION_CONFIG.width}
-        height={COMPOSITION_CONFIG.height}
+        durationInFrames={720}
+        fps={60}
+        width={1920}
+        height={1080}
       />
       <Composition
-        id="StealthLaunch"
+        id="LaunchVideoVertical"
         component={MainComposition}
-        durationInFrames={COMPOSITION_CONFIG.totalFrames}
-        fps={COMPOSITION_CONFIG.fps}
-        width={COMPOSITION_CONFIG.width}
-        height={COMPOSITION_CONFIG.height}
+        durationInFrames={720}
+        fps={60}
+        width={1080}
+        height={1920}
       />
     </>
   );

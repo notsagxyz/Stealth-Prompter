@@ -17,8 +17,8 @@ export const GlassBadge2D: React.FC<GlassBadge2DProps> = ({
   const colorMap = {
     cyan: {
       color: THEME.colors.cyanAccent,
-      bg: "rgba(0, 240, 255, 0.12)",
-      border: "rgba(0, 240, 255, 0.4)",
+      bg: "rgba(124, 108, 255, 0.12)",
+      border: "rgba(124, 108, 255, 0.4)",
     },
     emerald: {
       color: THEME.colors.emeraldAccent,

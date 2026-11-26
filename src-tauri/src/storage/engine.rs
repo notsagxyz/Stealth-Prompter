@@ -434,7 +434,12 @@ mod tests {
     struct TempDir(std::path::PathBuf);
     impl TempDir {
         fn new() -> Self {
-            let p = std::env::temp_dir().join(format!("sp_engine_test_{}", std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_nanos()));
+            let seq = TMP_COUNTER.fetch_add(1, Ordering::Relaxed);
+            let p = std::env::temp_dir().join(format!(
+                "sp_engine_test_{}_{}",
+                std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_nanos(),
+                seq
+            ));
             let _ = std::fs::create_dir_all(&p);
             Self(p)
         }
@@ -456,16 +461,18 @@ mod tests {
         let dir = tempdir().unwrap();
         let engine = StorageEngine::new(dir.path());
 
-        let mut settings = Settings::default();
-        settings.scroll_speed = 5.0;
-        settings.theme = "dark-glass".to_string();
+        let settings = Settings {
+            scroll_speed: 5.0,
+            theme: "dark-glass".to_string(),
+            ..Default::default()
+        };
 
         engine.save_settings(&settings).unwrap();
 
         let loaded = engine.load_settings().unwrap();
         assert_eq!(loaded.scroll_speed, 5.0);
         assert_eq!(loaded.theme, "dark-glass");
-        assert_eq!(loaded.mirror_mode, false);
+        assert!(!loaded.mirror_mode);
     }
 
     #[test]
@@ -552,8 +559,10 @@ mod tests {
         let dir = tempdir().unwrap();
         let engine = StorageEngine::new(dir.path());
 
-        let mut initial_settings = Settings::default();
-        initial_settings.scroll_speed = 4.0;
+        let initial_settings = Settings {
+            scroll_speed: 4.0,
+            ..Default::default()
+        };
         engine.save_settings(&initial_settings).unwrap();
 
         // Attempting to write un-serializable or failing write
@@ -578,7 +587,7 @@ mod tests {
         let settings_file = engine.settings_path();
         fs::create_dir_all(dir.path()).unwrap();
         let corrupt_bytes: [u8; 6] = [0xFF, 0xFE, 0x00, 0x41, 0x80, 0xBF];
-        fs::write(&settings_file, &corrupt_bytes).unwrap();
+        fs::write(&settings_file, corrupt_bytes).unwrap();
 
         // Must self-heal to default settings
         let loaded = engine.load_settings().unwrap();
@@ -599,7 +608,7 @@ mod tests {
         fs::create_dir_all(engine.scripts_dir()).unwrap();
         let script_file = engine.scripts_dir().join("bad-script.json");
         let corrupt_bytes: [u8; 5] = [0xFF, 0xFE, 0xFD, 0x80, 0x90];
-        fs::write(&script_file, &corrupt_bytes).unwrap();
+        fs::write(&script_file, corrupt_bytes).unwrap();
 
         // Must return typed StorageError::CorruptFile
         let result = engine.load_script("bad-script");
@@ -683,11 +692,13 @@ mod tests {
         let dir = tempdir().unwrap();
         let engine = StorageEngine::new(dir.path());
 
-        let mut settings = Settings::default();
-        settings.font_size = 120;
-        settings.scroll_speed = 15.0;
-        settings.window_opacity = 0.08;
-        settings.line_height = 4.5;
+        let settings = Settings {
+            font_size: 120,
+            scroll_speed: 15.0,
+            window_opacity: 0.12,
+            line_height: 4.5,
+            ..Default::default()
+        };
 
         // Verify that Settings::validate confirms these are valid
         assert!(settings.validate().is_ok());
@@ -699,25 +710,25 @@ mod tests {
         // Must NOT be clamped to old narrow ranges (12..72, 1.0..10.0)
         assert_eq!(loaded.font_size, 120);
         assert!((loaded.scroll_speed - 15.0).abs() < f64::EPSILON);
-        assert!((loaded.window_opacity - 0.08).abs() < f64::EPSILON);
+        assert!((loaded.window_opacity - 0.12).abs() < f64::EPSILON);
         assert!((loaded.line_height - 4.5).abs() < f64::EPSILON);
     }
 
     #[test]
     fn test_settings_clamp_harmonized_with_validate() {
-        let mut settings = Settings::default();
-
-        // Out-of-bounds lower
-        settings.scroll_speed = 0.01;
-        settings.font_size = 2;
-        settings.window_opacity = 0.01;
-        settings.line_height = 0.1;
+        let mut settings = Settings {
+            scroll_speed: 0.01,
+            font_size: 2,
+            window_opacity: 0.01,
+            line_height: 0.1,
+            ..Default::default()
+        };
         assert!(settings.validate().is_err());
 
         settings.clamp();
         assert!((settings.scroll_speed - 0.1).abs() < f64::EPSILON);
         assert_eq!(settings.font_size, 8);
-        assert!((settings.window_opacity - 0.05).abs() < f64::EPSILON);
+        assert!((settings.window_opacity - 0.10).abs() < f64::EPSILON);
         assert!((settings.line_height - 0.5).abs() < f64::EPSILON);
         assert!(settings.validate().is_ok());
 
@@ -743,8 +754,10 @@ mod tests {
         let target_dir = root.path().join(CURRENT_APP_ID);
 
         let legacy_engine = StorageEngine::new(&legacy_dir);
-        let mut settings = Settings::default();
-        settings.scroll_speed = 4.2;
+        let settings = Settings {
+            scroll_speed: 4.2,
+            ..Default::default()
+        };
         legacy_engine.save_settings(&settings).unwrap();
 
         let script = Script::new("script-1", "Keynote", "Hello Stealth", "2026-11-25T00:00:00Z");
@@ -793,13 +806,17 @@ mod tests {
         let target_dir = root.path().join(CURRENT_APP_ID);
 
         let legacy_engine = StorageEngine::new(&legacy_dir);
-        let mut legacy_settings = Settings::default();
-        legacy_settings.scroll_speed = 6.0;
+        let legacy_settings = Settings {
+            scroll_speed: 6.0,
+            ..Default::default()
+        };
         legacy_engine.save_settings(&legacy_settings).unwrap();
 
         let target_engine = StorageEngine::new(&target_dir);
-        let mut target_settings = Settings::default();
-        target_settings.scroll_speed = 2.0;
+        let target_settings = Settings {
+            scroll_speed: 2.0,
+            ..Default::default()
+        };
         target_engine.save_settings(&target_settings).unwrap();
 
         let migrated = StorageEngine::migrate_legacy_dir(&legacy_dir, &target_dir).unwrap();

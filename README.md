@@ -1,3 +1,5 @@
+![Stealth Prompter Logo](assets/stealth-icon.svg)
+
 # Stealth Prompter
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -9,6 +11,10 @@
 
 > **The open-source invisible teleprompter that stays hidden from screen sharing and recordings.**  
 > Built with **Tauri 2**, **Rust**, and **SolidJS**. Engineered for zero latency, minimal memory usage, and true OS-level screen capture exclusion on Windows.
+
+<p align="center">
+  <img src="assets/stealth-demo.gif" alt="Stealth Prompter Invisibility Demo" width="720" />
+</p>
 
 ---
 

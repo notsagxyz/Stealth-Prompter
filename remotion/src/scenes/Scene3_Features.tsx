@@ -86,7 +86,7 @@ export const Scene3_Features: React.FC = () => {
             isAudienceView={false}
             prompterScrollOffset={scrollOffset}
             label="YOUR MONITOR (PRESENTER VIEW)"
-            badgeColor="#00F0FF"
+            badgeColor="#7c6cff"
             sublabel="HUD floats right under your webcam"
           />
         </div>
@@ -113,13 +113,13 @@ export const Scene3_Features: React.FC = () => {
           backgroundColor: "rgba(15, 23, 42, 0.8)",
           padding: "8px 24px",
           borderRadius: 24,
-          border: "1px solid rgba(0, 240, 255, 0.3)",
+          border: "1px solid rgba(124, 108, 255, 0.3)",
           fontSize: 12,
           fontFamily: THEME.typography.monoFamily,
           color: "#E2E8F0",
         }}
       >
-        <span style={{ color: "#00F0FF", fontWeight: 700 }}>API: Win32 DWM</span>
+        <span style={{ color: "#7c6cff", fontWeight: 700 }}>API: Win32 DWM</span>
         <span>•</span>
         <span style={{ color: "#10B981", fontWeight: 700 }}>WDA_EXCLUDEFROMCAPTURE (0x11)</span>
         <span>•</span>

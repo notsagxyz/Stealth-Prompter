@@ -46,11 +46,11 @@ export const Scene4_OutroCTA: React.FC = () => {
             display: "inline-flex",
             alignItems: "center",
             gap: 8,
-            backgroundColor: "rgba(0, 240, 255, 0.12)",
-            border: "1px solid rgba(0, 240, 255, 0.4)",
+            backgroundColor: "rgba(124, 108, 255, 0.12)",
+            border: "1px solid rgba(124, 108, 255, 0.4)",
             padding: "6px 18px",
             borderRadius: 20,
-            color: "#00F0FF",
+            color: "#7c6cff",
             fontSize: 13,
             fontWeight: 800,
             letterSpacing: "0.08em",
@@ -88,14 +88,14 @@ export const Scene4_OutroCTA: React.FC = () => {
         <div
           style={{
             backgroundColor: "rgba(15, 23, 42, 0.7)",
-            border: "1px solid rgba(0, 240, 255, 0.3)",
+            border: "1px solid rgba(124, 108, 255, 0.3)",
             borderRadius: 14,
             padding: 24,
             textAlign: "center",
             boxShadow: "0 10px 30px rgba(0, 0, 0, 0.5)",
           }}
         >
-          <div style={{ fontSize: 32, fontWeight: 900, color: "#00F0FF" }}>5.0 MB</div>
+          <div style={{ fontSize: 32, fontWeight: 900, color: "#7c6cff" }}>5.0 MB</div>
           <div style={{ fontSize: 14, fontWeight: 700, color: "#FFFFFF", marginTop: 4 }}>Lightweight Binary</div>
           <div style={{ fontSize: 11, color: "#94A3B8", marginTop: 4 }}>Native Rust • 95% smaller than Electron</div>
         </div>
@@ -153,10 +153,10 @@ export const Scene4_OutroCTA: React.FC = () => {
           alignItems: "center",
           gap: 24,
           backgroundColor: "rgba(2, 6, 23, 0.9)",
-          border: "2px solid rgba(0, 240, 255, 0.5)",
+          border: "2px solid rgba(124, 108, 255, 0.5)",
           borderRadius: 20,
           padding: "18px 40px",
-          boxShadow: "0 20px 50px rgba(0, 0, 0, 0.8), 0 0 35px rgba(0, 240, 255, 0.25)",
+          boxShadow: "0 20px 50px rgba(0, 0, 0, 0.8), 0 0 35px rgba(124, 108, 255, 0.25)",
           transform: `scale(${pulse})`,
         }}
       >
@@ -181,8 +181,8 @@ export const Scene4_OutroCTA: React.FC = () => {
             <span style={{ fontSize: 18, fontWeight: 800, color: "#FFFFFF" }}>
               Star on GitHub • Stealth Prompter
             </span>
-            <span style={{ fontSize: 13, color: "#00F0FF", fontFamily: THEME.typography.monoFamily }}>
-              github.com/stealthprompter/stealthprompter
+            <span style={{ fontSize: 13, color: "#7c6cff", fontFamily: THEME.typography.monoFamily }}>
+              github.com/getstealth/stealth
             </span>
           </div>
         </div>

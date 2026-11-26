@@ -23,8 +23,8 @@ export const RealLauncherUI: React.FC<RealLauncherUIProps> = ({
         height: 680,
         backgroundColor: "#0B0F19",
         borderRadius: 16,
-        border: "1px solid rgba(0, 240, 255, 0.25)",
-        boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.75), 0 0 40px rgba(0, 240, 255, 0.15)",
+        border: "1px solid rgba(124, 108, 255, 0.25)",
+        boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.75), 0 0 40px rgba(124, 108, 255, 0.15)",
         display: "flex",
         flexDirection: "column",
         overflow: "hidden",
@@ -52,15 +52,15 @@ export const RealLauncherUI: React.FC<RealLauncherUIProps> = ({
               width: 30,
               height: 30,
               borderRadius: 8,
-              backgroundColor: "rgba(0, 240, 255, 0.15)",
-              border: "1px solid rgba(0, 240, 255, 0.4)",
+              backgroundColor: "rgba(124, 108, 255, 0.15)",
+              border: "1px solid rgba(124, 108, 255, 0.4)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              color: "#00F0FF",
+              color: "#7c6cff",
               fontWeight: 800,
               fontSize: 13,
-              boxShadow: "0 0 10px rgba(0, 240, 255, 0.3)",
+              boxShadow: "0 0 10px rgba(124, 108, 255, 0.3)",
             }}
           >
             SP
@@ -76,9 +76,9 @@ export const RealLauncherUI: React.FC<RealLauncherUIProps> = ({
                   fontFamily: THEME.typography.monoFamily,
                   padding: "1px 5px",
                   borderRadius: 4,
-                  backgroundColor: "rgba(0, 240, 255, 0.12)",
-                  color: "#00F0FF",
-                  border: "1px solid rgba(0, 240, 255, 0.3)",
+                  backgroundColor: "rgba(124, 108, 255, 0.12)",
+                  color: "#7c6cff",
+                  border: "1px solid rgba(124, 108, 255, 0.3)",
                 }}
               >
                 v0.1.0
@@ -114,9 +114,9 @@ export const RealLauncherUI: React.FC<RealLauncherUIProps> = ({
           </button>
           <button
             style={{
-              background: "rgba(0, 240, 255, 0.2)",
-              border: "1px solid rgba(0, 240, 255, 0.5)",
-              color: "#00F0FF",
+              background: "rgba(124, 108, 255, 0.2)",
+              border: "1px solid rgba(124, 108, 255, 0.5)",
+              color: "#7c6cff",
               fontSize: 12,
               borderRadius: 6,
               cursor: "pointer",
@@ -128,7 +128,7 @@ export const RealLauncherUI: React.FC<RealLauncherUIProps> = ({
           </button>
           <div style={{ display: "flex", alignItems: "center", gap: 4, color: "#CBD5E1", fontSize: 11, fontFamily: THEME.typography.monoFamily, marginLeft: 4 }}>
             <span>-</span>
-            <span style={{ color: "#00F0FF", fontWeight: 700, minWidth: 26, textAlign: "center" }}>
+            <span style={{ color: "#7c6cff", fontWeight: 700, minWidth: 26, textAlign: "center" }}>
               {speed.toFixed(1)}x
             </span>
             <span>+</span>
@@ -266,10 +266,10 @@ export const RealLauncherUI: React.FC<RealLauncherUIProps> = ({
                 padding: "6px 0",
                 fontSize: 11,
                 fontWeight: 600,
-                color: "#00F0FF",
-                backgroundColor: "rgba(0, 240, 255, 0.12)",
+                color: "#7c6cff",
+                backgroundColor: "rgba(124, 108, 255, 0.12)",
                 borderRadius: 6,
-                border: "1px solid rgba(0, 240, 255, 0.3)",
+                border: "1px solid rgba(124, 108, 255, 0.3)",
               }}
             >
               Scripts (4)
@@ -294,8 +294,8 @@ export const RealLauncherUI: React.FC<RealLauncherUIProps> = ({
               style={{
                 padding: "10px 12px",
                 borderRadius: 8,
-                backgroundColor: "rgba(0, 240, 255, 0.1)",
-                border: "1px solid rgba(0, 240, 255, 0.4)",
+                backgroundColor: "rgba(124, 108, 255, 0.1)",
+                border: "1px solid rgba(124, 108, 255, 0.4)",
                 display: "flex",
                 flexDirection: "column",
                 gap: 4,
@@ -379,11 +379,11 @@ export const RealLauncherUI: React.FC<RealLauncherUIProps> = ({
               border: "1px solid rgba(255, 255, 255, 0.05)",
             }}
           >
-            <span style={{ fontSize: 13, fontWeight: 700, color: "#00F0FF" }}>{activeScriptTitle}</span>
+            <span style={{ fontSize: 13, fontWeight: 700, color: "#7c6cff" }}>{activeScriptTitle}</span>
             <div style={{ display: "flex", alignItems: "center", gap: 14, fontSize: 11, color: "#94A3B8" }}>
               <span>Words: <strong style={{ color: "#FFFFFF" }}>428</strong></span>
               <span>Est. Time: <strong style={{ color: "#FFFFFF" }}>3m 15s</strong></span>
-              <span>Speed: <strong style={{ color: "#00F0FF" }}>130 WPM</strong></span>
+              <span>Speed: <strong style={{ color: "#7c6cff" }}>130 WPM</strong></span>
             </div>
           </div>
 
@@ -411,7 +411,7 @@ export const RealLauncherUI: React.FC<RealLauncherUIProps> = ({
             <p style={{ margin: "0 0 12px 0", color: "#94A3B8" }}>
               Have you ever shared your screen on Zoom or Teams and worried your audience would see your notes?
             </p>
-            <div style={{ color: "#00F0FF", fontSize: 12, fontWeight: 700, marginBottom: 8, fontFamily: THEME.typography.monoFamily }}>
+            <div style={{ color: "#7c6cff", fontSize: 12, fontWeight: 700, marginBottom: 8, fontFamily: THEME.typography.monoFamily }}>
               [CUE: Pause 2 seconds for effect]
             </div>
             <p style={{ margin: "0 0 12px 0", color: "#F8FAFC" }}>

@@ -24,8 +24,8 @@ export const RealPrompterHUD: React.FC<RealPrompterHUDProps> = ({
         backgroundColor: "rgba(10, 15, 29, 0.82)",
         backdropFilter: "blur(20px)",
         borderRadius: 16,
-        border: "1px solid rgba(0, 240, 255, 0.35)",
-        boxShadow: "0 20px 45px rgba(0, 0, 0, 0.8), 0 0 35px rgba(0, 240, 255, 0.2)",
+        border: "1px solid rgba(124, 108, 255, 0.35)",
+        boxShadow: "0 20px 45px rgba(0, 0, 0, 0.8), 0 0 35px rgba(124, 108, 255, 0.2)",
         display: "flex",
         flexDirection: "column",
         overflow: "hidden",
@@ -40,7 +40,7 @@ export const RealPrompterHUD: React.FC<RealPrompterHUDProps> = ({
         style={{
           height: 36,
           backgroundColor: "rgba(15, 23, 42, 0.9)",
-          borderBottom: "1px solid rgba(0, 240, 255, 0.2)",
+          borderBottom: "1px solid rgba(124, 108, 255, 0.2)",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
@@ -50,7 +50,7 @@ export const RealPrompterHUD: React.FC<RealPrompterHUDProps> = ({
       >
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <div style={{ width: 8, height: 8, borderRadius: "50%", backgroundColor: "#10B981", boxShadow: "0 0 8px #10B981" }} />
-          <span style={{ fontSize: 11, fontWeight: 700, color: "#00F0FF", letterSpacing: "0.05em" }}>
+          <span style={{ fontSize: 11, fontWeight: 700, color: "#7c6cff", letterSpacing: "0.05em" }}>
             STEALTH HUD • 144Hz SMOOTH SCROLL
           </span>
         </div>
@@ -60,7 +60,7 @@ export const RealPrompterHUD: React.FC<RealPrompterHUDProps> = ({
           <span style={{ backgroundColor: "rgba(16, 185, 129, 0.15)", color: "#10B981", padding: "2px 6px", borderRadius: 4, border: "1px solid rgba(16, 185, 129, 0.4)" }}>
             INVISIBLE TO CAPTURE
           </span>
-          <span style={{ backgroundColor: "rgba(0, 240, 255, 0.15)", color: "#00F0FF", padding: "2px 6px", borderRadius: 4 }}>
+          <span style={{ backgroundColor: "rgba(124, 108, 255, 0.15)", color: "#7c6cff", padding: "2px 6px", borderRadius: 4 }}>
             SPEED: 3.0x
           </span>
           <span style={{ color: "#94A3B8" }}>
@@ -78,8 +78,8 @@ export const RealPrompterHUD: React.FC<RealPrompterHUDProps> = ({
             left: 20,
             right: 20,
             height: 2,
-            backgroundColor: "rgba(0, 240, 255, 0.65)",
-            boxShadow: "0 0 10px rgba(0, 240, 255, 0.8)",
+            backgroundColor: "rgba(124, 108, 255, 0.65)",
+            boxShadow: "0 0 10px rgba(124, 108, 255, 0.8)",
             zIndex: 5,
             pointerEvents: "none",
           }}
@@ -93,7 +93,7 @@ export const RealPrompterHUD: React.FC<RealPrompterHUDProps> = ({
               height: 0,
               borderTop: "7px solid transparent",
               borderBottom: "7px solid transparent",
-              borderLeft: "10px solid #00F0FF",
+              borderLeft: "10px solid #7c6cff",
             }}
           />
         </div>
@@ -133,7 +133,7 @@ export const RealPrompterHUD: React.FC<RealPrompterHUDProps> = ({
             The lightning-fast, open-source teleprompter that stays 100% invisible during screen shares.
           </p>
 
-          <div style={{ color: "#00F0FF", fontSize: 13, fontWeight: 700, fontFamily: THEME.typography.monoFamily }}>
+          <div style={{ color: "#7c6cff", fontSize: 13, fontWeight: 700, fontFamily: THEME.typography.monoFamily }}>
             [CUE: Click next slide on presentation]
           </div>
 

@@ -9,6 +9,33 @@ updated: 2026-11-25
 
 # 📓 Bitácora Diaria de Trabajo (Work Log)
 
+## [2026-11-26] - M2–M7: Scroll Manual, Barra Flotante, Rediseño Glass Oscuro, Icono Ninja, Video 60fps y Verificación
+
+### M2 & M3 — Scroll Manual, Opacidad de Fondo (10–100%) y Barra Flotante (Sin "Show HUD")
+- Implementado `ScrollEngine.manualScroll(deltaPx, smooth)` en `src/hud/ScrollEngine.ts` con pausa automática del auto-scroll al interactuar con rueda del mouse, touchpad o arrastre vertical de texto, retomando suavemente desde la nueva posición al tocar Play.
+- Agregados atajos globales operativos incluso en modo Click-Through (`src-tauri/src/shortcuts/mod.rs` + `src-tauri/src/storage/models.rs`): `Alt+PageUp` / `Alt+PageDown` (scroll manual) y `Alt+Shift+Up` / `Alt+Shift+Down` (opacidad de fondo `10%–100%`), sincronizados en vivo mediante `prompter:settings_sync`.
+- Eliminado el botón `"Show HUD"`; nueva barra flotante en píldora (`src/hud/HudOverlayControls.tsx`) con Play/Pause principal destacado, Restart, Speed -/+, Font -/+, slider de opacidad de fondo (`10–100%`), Mirror, Click-Through con tooltip explicativo, botón de colapso con píldora persistente de Play, estado visible (`Playing`/`Paused`) y soporte completo EN/ES (`src/lib/i18n.ts`).
+
+### M4 — Rediseño Glass Oscuro, Tokens CSS, Fuentes Locales y Botón Support
+- Aplicados los 13 tokens CSS exactos (`--bg: #0b0b12`, `--accent: #7c6cff`, `--radius-window: 22px`, `--radius-card: 14px`, `--radius-pill: 999px`) con textura sutil `.stealth-starfield`, resplandor radial difuso, barrita vertical de acento, microetiquetas mono y fuentes locales `@fontsource/inter` y `@fontsource/jetbrains-mono` (cero CDN).
+- Selector de 6 colores de acento (`Violet`, `Indigo`, `Crimson`, `Emerald`, `Amber`, `Cyan`) e idioma (`English` / `Español`) en Ajustes (`src/launcher/SettingsPanel.tsx`).
+- Agregado botón en píldora **Support** / **Apoyar** con corazón rosado (`#ff4d8d`) y popover hacia **Cafecito** y **Ko-fi** (`open_external_url`).
+- Capturas *after* guardadas en `vault/04-Diseno/screenshots/after_launcher.png` y `after_hud.png`.
+
+### M5 — Icono Ninja Original & Branding Assets
+- Diseñados 3 conceptos SVG en `assets/concepts/` y elegido el Concepto A (Shuriken + Play Cue) en `assets/stealth-icon.svg` (documentado en [[02-Naming/Icono-Ninja|Icono-Ninja.md]]).
+- Exportados todos los tamaños con `pnpm tauri icon` hacia `src-tauri/icons/`, actualizado `public/favicon.svg`, `tauri.conf.json` (`bundle.icon`) y generado `assets/social-preview.png` (`1280×640`).
+
+### M6 — Video de Release (60 fps) & GIF README
+- Documentada la evaluación comparativa en [[06-Video/Evaluacion-HyperFrames-vs-Remotion|Evaluacion-HyperFrames-vs-Remotion.md]] y actualizado [[06-Video/Storyboard-3D|Storyboard-3D.md]].
+- Renderizados `remotion/out/launch.mp4` (`1920×1080` @ `60fps` `yuv420p`), `remotion/out/launch-vertical.mp4` (`1080×1920` @ `60fps` `yuv420p`) y `assets/stealth-demo.gif` (`720×405`, `4.5s`) enlazado en `README.md`.
+
+### M7 — Calidad, Clippy, Invisibilidad DWM y Build Final
+- `cargo clippy --all-targets -- -D warnings`: 0 warnings.
+- `cargo test`: 32/32 tests unitarios superados.
+- `scripts/verify_invisibility.ps1`: PASS (`0 / 37500` píxeles capturados con `WDA_EXCLUDEFROMCAPTURE`).
+- Guía de verificación manual para OBS Studio y Xbox Game Bar creada en `scripts/obs_verification_guide.md`.
+
 ## [2026-11-25] - M1: Renombre a Stealth, Dependencias, Skills y Documentación de Diseño
 
 ### 1. Capturas de Línea Base (*Before-Screenshots*)
